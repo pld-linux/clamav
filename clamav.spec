@@ -87,7 +87,7 @@ Biblioteki dzielone clamav.
 Summary:	ClamAV filter using milter interface
 Summary(pl):	Filtr ClamAV korzystaj±cy z interfejsu milter
 Group:		Daemons
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	sendmail >= 8.11
 Requires:	tcp_wrappers
 
