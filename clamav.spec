@@ -9,7 +9,7 @@
 #  may lead to DoS (memory usage up tu 1GB)
 #  It's configurable in CVS version of clamav, anyway.
 
-%define		database_version 20031115
+%define		database_version 20040210
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
@@ -21,9 +21,9 @@ Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
 # Source0-md5:	f2b8473190b6dc1fd9c64b9ebc49a5ad
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-# bziped from http://clamav.elektrapro.com/database/:
+# bziped from http://www.clamav.net/database/
 Source3:	%{name}-database-%{database_version}.tar.bz2
-# Source3-md5:	f1e7c6362a2c03439da41d237dc5d01c
+# Source3-md5:	4affa1cae8a0edaaaa084ea57702c1e8
 Source4:	%{name}-cron-updatedb
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-oversize_zip.patch
