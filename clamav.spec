@@ -12,6 +12,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # gziped from http://clamav.elektrapro.com/database/:
 Source3:	%{name}-database-%{database_version}.tar.gz
+# Source3-md5:	441127dddf4eb9e4bec578455b99e9b2
 URL:		http://clamav.elektrapro.com/
 Requires:	%{name}-database
 BuildRequires:	autoconf
