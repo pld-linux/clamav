@@ -1,0 +1,12 @@
+diff -urN clamav-0.14.org/clamscan/others.c clamav-0.14/clamscan/others.c
+--- clamav-0.14.org/clamscan/others.c	Fri Jun  7 00:46:58 2002
++++ clamav-0.14/clamscan/others.c	Fri Jun  7 00:47:42 2002
+@@ -443,6 +443,8 @@
+   char* ret;
+   FILE* fs;
+   fs = fopen("/proc/cpuinfo","r");
++  if (!fs)
++      return 1;
+   do
+     {
+       ret = fgets(line,1000,fs);

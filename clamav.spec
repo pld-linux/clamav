@@ -9,7 +9,8 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
 Version:	0.80
-Release:	4
+Release:	3.1
+Epoch:		0
 License:	GPL
 Group:		Applications
 Source0:	http://heanet.dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -33,6 +34,7 @@ Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 Patch2:		%{name}-nolibs.patch
+Patch3:		%{name}-clamd_conf.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -40,7 +42,7 @@ BuildRequires:	automake
 BuildRequires:	gmp-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libtool
-BuildRequires:	rpmbuild(macros) >= 1.159
+#BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
 Requires(pre):	/bin/id
@@ -49,10 +51,11 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
+Requires(postun):	sed >= 4.0
 Requires(postun,pre):	/usr/sbin/usermod
 Requires(post,preun):	/sbin/chkconfig
 Requires:	/usr/sbin/usermod
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{epoch}%{version}-%{release}
 Requires:	bc
 Provides:	group(clamav)
 Provides:	user(clamav)
@@ -87,7 +90,7 @@ Biblioteki dzielone clamav.
 Summary:	ClamAV filter using milter interface
 Summary(pl):	Filtr ClamAV korzystaj±cy z interfejsu milter
 Group:		Daemons
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	sendmail >= 8.11
 Requires:	tcp_wrappers
 
@@ -101,7 +104,7 @@ Filtr ClamAV dla sendmaila korzystaj±cy z interfejsu MILTER.
 Summary:	clamav - Development header files and libraries
 Summary(pl):	clamav - Pliki nag³ówkowe i biblioteki dla programistów
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
 Requires:	gmp-devel
 Requires:	zlib-devel
@@ -118,7 +121,7 @@ klienckich clamav.
 Summary:	clamav static libraris
 Summary(pl):	Biblioteki statyczne clamav
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 clamav static libraries.
@@ -144,6 +147,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version}).
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # kill old libtool.m4 copy
 head -n 489 acinclude.m4 > acinclude.m4.tmp
@@ -269,8 +273,10 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	%userremove clamav
-	%groupremove clamav
+	echo "Removing user clamav"
+	/usr/sbin/userdel clamav
+	echo "Removing group clamav"
+	/usr/sbin/groupdel clamav
 fi
 
 %triggerpostun -- %{name} <= 0.75.1
@@ -278,6 +284,8 @@ if [ -f /etc/clamav.conf.rpmsave ]; then
 	echo "Renaming config to new name /etc/clamd.conf"
 	mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
 	mv -f /etc/clamav.conf.rpmsave /etc/clamd.conf
+	echo "Changing config location in freshclam config"
+	sed -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
 fi
 
 %if %{with milter}
