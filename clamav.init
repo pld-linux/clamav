@@ -5,6 +5,10 @@
 # chkconfig:	345 60 40
 #
 # description:	clamd is a antivirus daemon.
+#
+# processname:	clamd
+# pidfile:      /var/run/clamav/clamd.pid
+#
 
 
 # Source function library
