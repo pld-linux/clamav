@@ -7,7 +7,7 @@ Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 %define		_ver	0.68-1
 Version:	0.68
-Release:	5
+Release:	4
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{_ver}.tar.gz
