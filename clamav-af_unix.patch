@@ -1,0 +1,13 @@
+diff -urN clamav-0.75.org/clamdscan/client.c clamav-0.75/clamdscan/client.c
+--- clamav-0.75.org/clamdscan/client.c	2004-07-24 13:57:26.102606184 +0200
++++ clamav-0.75/clamdscan/client.c	2004-07-24 13:59:43.402733392 +0200
+@@ -138,7 +138,8 @@
+ 	return -1;
+     }
+ 
+-    server.sin_addr.s_addr = peer.sin_addr.s_addr;
++    if (peer.sin_family == AF_INET)
++    	server.sin_addr.s_addr = peer.sin_addr.s_addr;
+ 
+     if(connect(wsockd, (struct sockaddr *) &server, sizeof(struct sockaddr_in)) < 0) {
+ 	close(wsockd);
