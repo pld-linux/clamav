@@ -306,7 +306,7 @@ fi
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
-%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/clamav.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/clamd.conf
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/freshclam.conf
 
 %attr(754,root,root) /etc/rc.d/init.d/clamd
