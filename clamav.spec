@@ -3,11 +3,11 @@ Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		clamav
 Version:	0.11
 Release:	4
-URL:		http://www.konarski.edu.pl/~zolw/clam.html
-Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
-Patch0:		%{name}-am_ac.patch
 License:	GPL
 Group:		Applications/Mail
+Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
+Patch0:		%{name}-am_ac.patch
+URL:		http://www.konarski.edu.pl/~zolw/clam.html
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -40,8 +40,7 @@ automake -a -c -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily
-install -d $RPM_BUILD_ROOT%{_var}/log/
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/cron.daily,%{_var}/log}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -50,9 +49,6 @@ echo -e '#!/bin/sh\n%{_bindir}/freshclam --quiet -l %{_var}/log/%{name}.log' \
 	> $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/%{name}
 
 touch $RPM_BUILD_ROOT%{_var}/log/%{name}.log
-
-gzip -9nf AUTHORS ChangeLog FAQ NEWS README TODO
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,7 +82,7 @@ touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clam
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz docs/*.pdf
+%doc AUTHORS ChangeLog FAQ NEWS README TODO docs/*.pdf
 %attr(755,root,root) %{_bindir}/*
 %attr(755,clamav,root) %dir %{_datadir}/clam
 %attr(644,clamav,root) %verify(not md5 size mtime) %{_datadir}/clam/*.db
