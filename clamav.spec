@@ -4,20 +4,20 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
-Version:	0.75
+Version:	0.75.1
 Release:	1
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	645d3d5b6d6bea2af6db92295b5c10af
+# Source0-md5:	2c85b7957eba9fd9e9ff8c2537ae006f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
-%define		database_version	20040724
+%define		database_version	20040731
 Source6:	http://www.clamav.net/database/daily.cvd
-# Source6-md5:	dba9adc5fba54e2a7b7575ea88d23f91
+# Source6-md5:	8aa799fff39b3dd7c36a7dd796890b66
 Source7:	http://www.clamav.net/database/main.cvd
 # Source7-md5:	fb569320447dff5b22acdbec2dbc5772
 Source8:	%{name}-post-updatedb
@@ -35,16 +35,17 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
-AMaViS, compressed files, uses the virus database from
-OpenAntivirus.org, and includes a program for auto-updating. The
-scanner is multithreaded, written in C, and POSIX compliant.
+AMaViS, compressed files, on-access scanning and includes a program
+for auto-updating with support for digital signatures.
+The virus database has over 20000 viruses, worms and trojans signatures.
+The scanner is multithreaded, written in C, and POSIX compliant.
 
 %description -l pl
 Clam Antivirus jest potê¿nym skanerem antywirusowym dla systemów
-uniksowych. Wspiera on AMaViSa, skompresowane pliki, u¿ywa bazy
-wirusów z OpenAntivirus.org, i posiada system automatycznej
-aktualizacji. Skaner jest wielow±tkowy, napisany w C i zgodny z
-POSIXem.
+uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie "on-access"
+i posiada system bezpiecznej, automatycznej aktualizacji.
+Baza wirusów zawiera ponad 20000 sygnatur. Skaner jest wielow±tkowy,
+napisany w C i zgodny z POSIXem.
 
 %package libs
 Summary:	Shared libraries for clamav
