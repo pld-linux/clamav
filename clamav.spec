@@ -63,8 +63,9 @@ Shared libraries for clamav.
 %description libs -l pl
 Biblioteki dzielone clamav.
 
-%package	milter
-Summary:	Clamav milter
+%package milter
+Summary:	ClamAV filter using milter interface
+Summary(pl):	Filtr ClamAV korzystaj±cy z interfejsu milter
 Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	sendmail >= 8.11
