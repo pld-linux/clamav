@@ -1,14 +1,14 @@
 /var/log/clamd.log {
     olddir /var/log/archiv
-    create 640 clamav clamav
+    create 640 clamav root
     postrotate
         /bin/killall -HUP clamd
     endscript
 }
 
-/var/log/clamav.log {
+/var/log/freshclam.log {
     olddir /var/log/archiv
-    create 640 clamav clamav
+    create 640 clamav root
     postrotate
         /bin/killall -HUP clamd
     endscript
