@@ -1,0 +1,11 @@
+--- clamscan/defaults.h.orig	Mon May 13 16:55:21 2002
++++ clamscan/defaults.h	Mon May 13 16:55:42 2002
+@@ -16,7 +16,7 @@
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
+-#define VIRUSDB "/usr/local/share/clam/viruses.db"
++#define VIRUSDB "/usr/share/clam/viruses.db"
+ 
+ /* better don't change default names */
+ 
