@@ -3,6 +3,7 @@
 #
 # Conditional build:
 %bcond_with	milter	# without milter subpackage
+%bcond_with	curl	# without curl
 #
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
@@ -35,9 +36,9 @@ Patch2:		%{name}-nolibs.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	curl-devel
+%{?with_curl:BuildRequires:	curl-devel}
 BuildRequires:	gmp-devel
-BuildRequires:	libidn-devel
+%{?with_curl:BuildRequires:	libidn-devel}
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libtool
 BuildRequires:	rpmbuild(macros) >= 1.159
@@ -54,6 +55,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	/usr/sbin/usermod
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	bc
+%{?with_curl:Requires:	curl}
 Provides:	group(clamav)
 Provides:	user(clamav)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -158,6 +160,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %{__automake}
 %configure \
 	--disable-clamav \
+	%{?!with_curl:--without-libcurl} \
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name}
 %{__make}
