@@ -137,6 +137,8 @@ install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 # If it is fixed use of dir will be unecesary
 install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
 
+touch $RPM_BUILD_ROOT%{_var}/log/freshclam.log
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -192,6 +194,9 @@ if [ -f /var/lock/subsys/clamd ]; then
 else
 	echo "Run \"/etc/rc.d/init.d/clamd start\" to start Clam Antivirus daemon." >&2
 fi
+touch %{_var}/log/freshclam.log
+chown clamav:root %{_var}/log/freshclam.log
+chmod 640 %{_var}/log/freshclam.log
 
 %preun
 if [ "$1" = "0" ]; then
@@ -220,7 +225,7 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,clamav,root) %dir /var/lib/%{name}
-#%%attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
+%attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
