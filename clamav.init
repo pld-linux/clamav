@@ -27,6 +27,7 @@ case "$1" in
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd		
 	else
 		msg_already_running clamd
+		exit 1
 	fi
 	;;
   stop)
@@ -52,7 +53,7 @@ case "$1" in
 	killproc clamd -HUP
 	;;
   *)
-	msg_usage "$0 {start|stop|init|status|restart|reload}"
+	msg_usage "$0 {start|stop|restart|reload|status}"
 	exit 1
 esac
 
