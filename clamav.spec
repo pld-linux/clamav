@@ -165,14 +165,14 @@ mv -f acinclude.m4.tmp acinclude.m4
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig,logrotate.d} \
-	$RPM_BUILD_ROOT{%{_sysconfdir}/cron.d,%{_var}/{log,spool/clamav}}
+install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
+	$RPM_BUILD_ROOT%{_var}/{log,spool/clamav}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
-cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
+cat <<EOF >$RPM_BUILD_ROOT/etc/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
 EOF
 
@@ -194,7 +194,7 @@ install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 # If it is fixed use of dir will be unecesary
 install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
 
-touch $RPM_BUILD_ROOT%{_var}/log/freshclam.log
+:> $RPM_BUILD_ROOT%{_var}/log/freshclam.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -203,16 +203,16 @@ rm -rf $RPM_BUILD_ROOT
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
 if [ $RESULT -eq 0 ]; then
-	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
 	echo "adding clamav to amavis group GID=$AMAVIS"
+	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
 fi
 
 %triggerin -- amavisd-new
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
 if [ $RESULT -eq 0 ]; then
-	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
 	echo "adding clamav to amavis group GID=$AMAVIS"
+	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
 fi
 
 %triggerin -- amavisd
