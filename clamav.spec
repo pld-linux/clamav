@@ -246,6 +246,7 @@ fi
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 %{_includedir}/*.h
+%{_pkgconfigdir}/*.pc
 
 %files static
 %defattr(644,root,root,755)
