@@ -9,3 +9,6 @@ UPDATE_HOUR=2
 # be quiet when updating?
 UPDATE_QUIET=no
 
+# try to download new databases after upgrade of databases?
+# Remember - you need good internet connection for that
+#FETCH_AFTER_UPGRADE=no
