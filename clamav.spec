@@ -163,7 +163,7 @@ if [ $RESULT -eq 0 ]; then
 fi
 
 
-%pre database
+%pre 
 if [ -n "`getgid clamav`" ]; then
 	if [ "`getgid clamav`" != "43" ]; then
 		echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
@@ -200,7 +200,7 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del clamd
 fi
 
-%postun database
+%postun
 if [ "$1" = "0" ]; then
 	echo "Removing user clamav"
 	/usr/sbin/userdel clamav
