@@ -1,5 +1,7 @@
 #!/bin/sh
 
+[ -f /etc/sysconfig/clamd ] && . /etc/sysconfig/clamd
+
 [ -z "$UPDATE_HOUR" ] && UPDATE_HOUR=2
 [ -z "$UPDATE_QUIET" ] && UPDATE_QUIET="yes"
 
