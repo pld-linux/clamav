@@ -13,7 +13,7 @@ fi
     
 if [ "$DIV" = "0" ]; then
 	umask 022
-	log=$(/usr/bin/freshclam $freshclamopt -l /var/log/clamav.log --daemon-notify 2>&1)
+	log=$(/usr/bin/freshclam $freshclamopt -l /var/log/freshclam.log --daemon-notify 2>&1)
 	if [ "$UPDATE_QUIET" != "yes" ]; then
 	    echo "$log"
 	fi
