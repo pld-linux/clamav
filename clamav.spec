@@ -35,11 +35,22 @@ BuildRequires:	automake
 BuildRequires:	gmp-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libtool
+BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(postun,pre):	/usr/sbin/usermod
 Requires(post,preun):	/sbin/chkconfig
+Requires:	/usr/sbin/usermod
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	bc
+Provides:	group(clamav)
+Provides:	user(clamav)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -202,28 +213,33 @@ fi
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
 if [ $RESULT -eq 0 ]; then
-	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
 	echo "adding clamav to amavis group GID=$AMAVIS"
+	/usr/sbin/usermod -G amavis clamav 1>&2
 fi
 
 %pre
-if [ -n "`getgid clamav`" ]; then
-	if [ "`getgid clamav`" != "43" ]; then
+if [ -n "`/usr/bin/getgid clamav`" ]; then
+	if [ "`/usr/bin/getgid clamav`" != 43 ]; then
 		echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
 		exit 1
 	fi
 else
 	echo "Adding group clamav GID=43"
-	/usr/sbin/groupadd -g 43 -r -f clamav
+	/usr/sbin/groupadd -g 43 clamav
 fi
-if [ -n "`id -u clamav 2>/dev/null`" ]; then
-	if [ "`id -u clamav`" != "43" ]; then
+if [ -n "`/bin/id -u clamav 2>/dev/null`" ]; then
+	if [ "`/bin/id -u clamav`" != 43 ]; then
 		echo "Warning: user clamav doesn't have uid=43. Correct this before installing clamav" 1>&2
 		exit 1
 	fi
 else
 	echo "Adding user clamav UID=43"
-	/usr/sbin/useradd -u 43 -r -d /tmp -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav 1>&2
+	/usr/sbin/useradd -u 43 -d /tmp -s /bin/false \
+		-c "Clam Anti Virus Checker" -g clamav clamav 1>&2
+	if [ -n "`/usr/bin/getgid amavis`" ]; then
+		echo "adding clamav to amavis group
+		/usr/sbin/usermod -G amavis clamav 1>&2
+	fi
 fi
 
 %post
@@ -247,10 +263,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	echo "Removing user clamav"
-	/usr/sbin/userdel clamav
-	echo "Removing group clamav"
-	/usr/sbin/groupdel clamav
+	%userremove clamav
+	%groupremove clamav
 fi
 
 %if %{with milter}
