@@ -88,8 +88,8 @@ echo -e '#!/bin/sh\n%{_bindir}/freshclam --quiet -l %{_var}/log/%{name}.log --da
 
 touch $RPM_BUILD_ROOT%{_var}/log/%{name}.log
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/clamd
-install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/clamd
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install etc/clamav.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 
 %clean
@@ -139,8 +139,8 @@ touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clam
 %attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
 %attr(750,root,root) %{_sysconfdir}/cron.daily/%{name}
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/clamd
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/sysconfig/clamd
+%attr(754,root,root) /etc/rc.d/init.d/clamd
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/clamd
 %{_mandir}/man?/*
 
 %files libs
