@@ -1,34 +1,25 @@
 # TODO:
-# - Fix inconsistency:
-#   clamd uses syslog but log from (crond) db update goes to
-#   /var/log/clamd.log
-
-# Conditional build:
-# _with_bigZIPOSDET  - increases zip file size
-#  should be used with samba scanning, on smtp-server
-#  may lead to DoS (memory usage up tu 1GB)
-#  It's configurable in CVS version of clamav, anyway.
+#   Make freshclam (script and daemon)
+#   log nicely via syslog to /var/log/freshclam.log
 
 %define		database_version 20040210
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
-Version:	0.65
-Release:	7
+Version:	0.67
+Release:	1
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	f2b8473190b6dc1fd9c64b9ebc49a5ad
+# Source0-md5:	6d854be864037f82fef1457bb9cabdff
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # bziped from http://www.clamav.net/database/
 Source3:	%{name}-database-%{database_version}.tar.bz2
 # Source3-md5:	4affa1cae8a0edaaaa084ea57702c1e8
 Source4:	%{name}-cron-updatedb
-Source5:        %{name}.logrotate
+Source5:	%{name}.logrotate
 Patch0:		%{name}-pld_config.patch
-Patch1:		%{name}-oversize_zip.patch
-Patch2:		%{name}-remote_dos_exploit.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -83,7 +74,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
 %description static
-clamav static libraris.
+clamav static libraries.
 
 %description static -l pl
 Biblioteki statyczne clamav.
@@ -104,8 +95,6 @@ Bazy wirusów dla clamav (aktualizowana %{database_version})
 %prep
 %setup -q -a 3
 %patch0 -p1
-%{!?_with_bigZIPOSDET:%patch1 -p1}
-%patch2 -p0
 
 %build
 rm -f missing
@@ -116,9 +105,6 @@ rm -f missing
 	--disable-clamav \
 	--with-dbdir=/var/lib/%{name}
 %{__make}
-mv database/mirrors.txt{,.old}
-echo clamav.sourceforge.net >database/mirrors.txt
-cat database/mirrors.txt.old >>database/mirrors.txt
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -132,7 +118,6 @@ cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
 EOF
 
-touch $RPM_BUILD_ROOT%{_var}/log/%{name}.log
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
@@ -145,7 +130,7 @@ install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 # So better keep it dir
 # If it is fixed use of dir will be unecesary
 install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
-# touch $RPM_BUILD_ROOT%{_var}/run/%{name}/clamd.pid
+touch $RPM_BUILD_ROOT%{_var}/log/freshclam.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -196,13 +181,15 @@ else
 fi
 
 %post
-touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clamav %{_var}/log/%{name}.log
 /sbin/chkconfig --add clamd
 if [ -f /var/lock/subsys/clamd ]; then
 	/etc/rc.d/init.d/clamd restart >&2
 else
 	echo "Run \"/etc/rc.d/init.d/clamd start\" to start Clam Antivirus daemon." >&2
 fi
+touch %{_var}/log/freshclam.log
+chown clamav:root %{_var}/log/freshclam.log
+chmod 640 %{_var}/log/freshclam.log
 
 %preun
 if [ "$1" = "0" ]; then
@@ -229,13 +216,14 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,clamav,root) %dir /var/lib/%{name}
-%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/mirrors.txt
-%attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
+#%%attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
+%attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
-# %%attr(666,clamav,clamav) %%ghost %{_var}/run/%{name}/clamd.pid
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
-%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/clamav.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/freshclam.conf
+
 %attr(754,root,root) /etc/rc.d/init.d/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/clamd
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/clamav
