@@ -3,21 +3,21 @@
 #   clamd uses syslog but log from (crond) db update goes to
 #   /var/log/clamd.log
 
-%define		database_version 20030813
+%define		database_version 20031115
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
-Version:	0.60
-Release:	4.5
+Version:	0.65
+Release:	0.9
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	eddeba4e1f399f65bc71aa2b3e901543
+# Source0-md5:	f2b8473190b6dc1fd9c64b9ebc49a5ad
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-# gziped from http://clamav.elektrapro.com/database/:
+# bziped from http://clamav.elektrapro.com/database/:
 Source3:	%{name}-database-%{database_version}.tar.gz
-# Source3-md5:	a8848904249edd97b873a43032c0208f
+# Source3-md5:	f652ec4cd999e30d171266e0e7a42312
 Source4:	%{name}-cron-updatedb
 Patch0:		%{name}-pld_config.patch
 URL:		http://www.clamav.net/
@@ -124,6 +124,7 @@ touch $RPM_BUILD_ROOT%{_var}/log/%{name}.log
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
+install database/viruses.db* $RPM_BUILD_ROOT/var/lib/%{name}/
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/clamav.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 
