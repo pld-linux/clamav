@@ -8,7 +8,7 @@ Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 %define	_ver	0.67-1
 Version:	%(echo %{_ver} | tr - .)
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{_ver}.tar.gz
@@ -16,7 +16,7 @@ Source0:	http://dl.sourceforge.net/clamav/%{name}-%{_ver}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # bziped from http://www.clamav.net/database/
-Source3:	%{name}-database-%{database_version}.tar.bz2
+# Source3:	%{name}-database-%{database_version}.tar.bz2
 # Source3-md5:	4affa1cae8a0edaaaa084ea57702c1e8
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
@@ -94,7 +94,7 @@ Virus database for clamav (updated %{database_version})
 Bazy wirusów dla clamav (aktualizowana %{database_version})
 
 %prep
-%setup -q -a 3 -n %{name}-%{_ver}
+%setup -q  -n %{name}-%{_ver}
 %patch0 -p1
 
 %build
@@ -122,7 +122,7 @@ EOF
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
-install database/viruses.db* $RPM_BUILD_ROOT/var/lib/%{name}/
+install database/*.cvd $RPM_BUILD_ROOT/var/lib/%{name}/
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/clamav.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
@@ -246,4 +246,4 @@ fi
 
 %files database
 %defattr(644,root,root,755)
-%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/*.db*
+%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/*.cvd
