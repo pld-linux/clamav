@@ -1,18 +1,16 @@
-Summary:	Antivirus for Unix
-Summary(pl):	Antywirus dla Unixów
+Summary:	A Mail Virus Scanner
+Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		clamav
 Version:	0.11
-Release:	3
-License:	GPL
-Group:		System/Tools
-Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
-Patch0:		%{name}-db_path.patch
+Release:	4
 URL:		http://www.konarski.edu.pl/~zolw/clam.html
+Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
+Patch0:		%{name}-am_ac.patch
+License:	GPL
+Group:		Applications/Mail
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-#%define		datadir		/var/lib
 
 %description
 Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
@@ -29,37 +27,69 @@ POSIXem.
 
 %prep
 %setup -q
-%patch0 -p0
+%patch0 -p1
 
 %build
-%configure2_13 \
-	--prefix=/usr \
-	--disable-clamav \
-	--datadir=/usr/share/clam
+rm -f missing
+aclocal
+autoconf
+automake -a -c -f
+%configure \
+	--disable-clamav
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_prefix},%{_bindir},%{_mandir},%{_datadir}/clam}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily
+install -d $RPM_BUILD_ROOT%{_var}/log/
 
-%{__make} prefix=$RPM_BUILD_ROOT%{_prefix} bindir=$RPM_BUILD_ROOT%{_bindir} mandir=$RPM_BUILD_ROOT%{_mandir} datadir=$RPM_BUILD_ROOT/usr/share/clam install
-gzip -9nf AUTHORS FAQ TODO
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
+echo -e '#!/bin/sh\n%{_bindir}/freshclam --quiet -l %{_var}/log/%{name}.log' \
+	> $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/%{name}
+
+touch $RPM_BUILD_ROOT%{_var}/log/%{name}.log
+
+gzip -9nf AUTHORS ChangeLog FAQ NEWS README TODO
+
 
 %clean
-rm -fr $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -z "`id -u clamav 2>/dev/null`" ]; then
-/usr/sbin/groupadd -g 200 clamav 
-/usr/sbin/useradd -M -g clamav -r -d /usr/share/clam -s /bin/false -c "ClamAV" clamav 1>&2
+if [ -n "`getgid clamav`" ]; then
+        if [ "`getgid clamav`" != "43" ]; then
+                echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/groupadd -g 43 -r -f clamav
+fi
+if [ -n "`id -u clamav 2>/dev/null`" ]; then
+	if [ "`id -u clamav`" != "43" ]; then
+		echo "Warning: user clamav doesn't have uid=43. Correct this before installing clamav" 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 43 -r -d /tmp  -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav 1>&2
 fi
 
 %postun
- /usr/sbin/userdel clamav
- /usr/sbin/groupdel clamav
+if [ "$1" = "0" ]; then
+	/usr/sbin/userdel clamav
+	/usr/sbin/groupdel clamav
+fi
+
+%post
+touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clamav %{_var}/log/%{name}.log
 
 %files
 %defattr(644,root,root,755)
-%{_datadir}
-%attr(751,root,root)%{_bindir}/
-#{clamscan,freshclam}
-%doc *.gz
+%doc *.gz docs/*.pdf
+%attr(755,root,root) %{_bindir}/*
+%attr(755,clamav,root) %dir %{_datadir}/clam
+%attr(644,clamav,root) %verify(not md5 size mtime) %{_datadir}/clam/*.db
+%attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
+%attr(750,root,root) %{_sysconfdir}/cron.daily/%{name}
+%{_mandir}/man?/*
