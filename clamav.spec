@@ -27,8 +27,9 @@ BuildRequires:	automake
 BuildRequires:	zlib-devel
 BuildRequires:	gmp-devel
 Requires(post,preun):	/sbin/chkconfig
-Requires:	%{name}-libs = %{version}-%{release}
 Requires:	bc
+# 0.67 and earlier doesn't seem to be binary compatible (while having same SONAME)
+Requires:	%{name}-libs >= 0.67
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -59,7 +60,7 @@ Biblioteki dzielone clamav.
 Summary:	clamav - Development header files and libraries
 Summary(pl):	clamav - Pliki nag³ówkowe i biblioteki dla programistów
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{version}
 
 %description devel
 This package contains the development header files and libraries
@@ -73,7 +74,7 @@ klienckich clamav.
 Summary:	clamav static libraris
 Summary(pl):	Biblioteki statyczne clamav
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel = %{version}
 
 %description static
 clamav static libraries.
@@ -99,6 +100,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version})
 %patch0 -p1
 
 %build
+rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__automake}
