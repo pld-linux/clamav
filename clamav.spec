@@ -25,6 +25,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
+Requires:	bc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
