@@ -1,6 +1,6 @@
-diff -urN clamav-0.60.orig/etc/clamav.conf clamav-0.60/etc/clamav.conf
---- clamav-0.60.orig/etc/clamav.conf	Thu Aug 28 14:14:08 2003
-+++ clamav-0.60/etc/clamav.conf	Thu Aug 28 14:15:09 2003
+diff -urN clamav-0.65.orig/etc/clamav.conf clamav-0.65/etc/clamav.conf
+--- clamav-0.65.orig/etc/clamav.conf	Mon Dec  1 14:59:35 2003
++++ clamav-0.65/etc/clamav.conf	Mon Dec  1 14:57:07 2003
 @@ -5,12 +5,12 @@
   
  
@@ -41,7 +41,7 @@ diff -urN clamav-0.60.orig/etc/clamav.conf clamav-0.60/etc/clamav.conf
   
  # The daemon works in local or network mode. Currently the local mode is
  # recommended for security reasons.
-@@ -50,7 +51,9 @@
+@@ -50,10 +51,12 @@
  # Path to the local socket. The daemon doesn't change the mode of the
  # created file (portability reasons). You may want to create it in a directory
  # which is only accessible for a user running daemon.
@@ -50,9 +50,13 @@ diff -urN clamav-0.60.orig/etc/clamav.conf clamav-0.60/etc/clamav.conf
 +
 +LocalSocket /var/lib/clamav/clamd.socket
  
+ # Remove stale socket after unclean shutdown.
+-#FixStaleSocket
++FixStaleSocket
+ 
  # TCP port address.
  #TCPSocket 3310
-@@ -93,11 +96,11 @@
+@@ -111,11 +114,11 @@
  
  # Run as selected user (clamd must be started by root).
  # By default it doesn't drop privileges.
@@ -66,7 +70,7 @@ diff -urN clamav-0.60.orig/etc/clamav.conf clamav-0.60/etc/clamav.conf
  
  # Don't fork into background. Useful in debugging.
  #Foreground
-@@ -107,13 +110,12 @@
+@@ -128,13 +131,12 @@
  ##
  
  # Uncomment this option if you are planning to scan mail files.
