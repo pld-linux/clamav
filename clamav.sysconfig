@@ -1,4 +1,0 @@
-# Customized setings
-
-# Define nice level
-SERVICE_RUN_NICE_LEVEL="+0"
