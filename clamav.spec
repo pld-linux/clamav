@@ -2,11 +2,12 @@ Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		clamav
 Version:	0.14
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/Mail
 Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
 URL:		http://www.konarski.edu.pl/~zolw/clam.html
+Patch0:		%{name}-proc.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -26,6 +27,7 @@ POSIXem.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 rm -f missing
