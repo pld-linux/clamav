@@ -38,6 +38,7 @@ Patch3:		%{name}-clamd_conf.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	bzip2-devel
 %{?with_curl:BuildRequires:	curl-devel}
 BuildRequires:	gmp-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
