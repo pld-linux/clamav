@@ -92,10 +92,10 @@ Version:	%{version}.%{database_version}
 PreReq:		%{name}
 
 %description database
-Virus database for clamav (updated %{database_version})
+Virus database for clamav (updated %{database_version}).
 
 %description database -l pl
-Bazy wirusów dla clamav (aktualizowana %{database_version})
+Bazy wirusów dla clamav (aktualizowana %{database_version}).
 
 %prep
 %setup -q -n %{name}-%{_ver}
