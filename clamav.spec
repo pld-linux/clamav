@@ -8,7 +8,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.60
-Release:	4.1
+Release:	4.2
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -109,15 +109,13 @@ cat database/mirrors.txt.old >>database/mirrors.txt
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig} \
-	$RPM_BUILD_ROOT{%{_sysconfdir}/cron.daily,%{_var}/log}
+	$RPM_BUILD_ROOT{%{_sysconfdir}/cron.d,%{_var}/log}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/%{name}
-#!/bin/sh
-umask 022
-%{_bindir}/freshclam --quiet -l %{_var}/log/%{name}.log --daemon-notify
+cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
+0 */6 * * *	root	umask 022; %{_bindir}/freshclam --quiet -l %{_var}/log/%{name}.log --daemon-notify
 EOF
 
 touch $RPM_BUILD_ROOT%{_var}/log/%{name}.log
@@ -222,7 +220,7 @@ fi
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 # %%attr(666,clamav,clamav) %%ghost %{_var}/run/%{name}/clamd.pid
 
-%attr(750,root,root) %{_sysconfdir}/cron.daily/%{name}
+%attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
 %attr(754,root,root) /etc/rc.d/init.d/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/clamd
