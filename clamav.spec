@@ -25,6 +25,7 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}-database-%{database_version}.tar.bz2
 # Source3-md5:	4affa1cae8a0edaaaa084ea57702c1e8
 Source4:	%{name}-cron-updatedb
+Source5:        %{name}.logrotate
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-oversize_zip.patch
 Patch2:		%{name}-remote_dos_exploit.patch
@@ -121,7 +122,7 @@ cat database/mirrors.txt.old >>database/mirrors.txt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig} \
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig,logrotate.d} \
 	$RPM_BUILD_ROOT{%{_sysconfdir}/cron.d,%{_var}/log}
 
 %{__make} install \
@@ -138,6 +139,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install database/viruses.db* $RPM_BUILD_ROOT/var/lib/%{name}/
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/clamav.conf $RPM_BUILD_ROOT%{_sysconfdir}/
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
@@ -236,6 +238,7 @@ fi
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
 %attr(754,root,root) /etc/rc.d/init.d/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/clamd
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/clamav
 %{_mandir}/man?/*
 
 %files libs
