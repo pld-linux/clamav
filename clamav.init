@@ -1,0 +1,61 @@
+#!/bin/sh
+#
+# clamd		clamd (antyvirus daemon)
+#
+# chkconfig:	345 60 40
+#
+# description:	clamd (secure shell daemon) is a server part of the ssh suite.
+#		Ssh can be used for remote login, remote file copying, TCP port
+#		forwarding etc. Ssh offers strong encryption and authentication.
+
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Get service config
+[ -f /etc/sysconfig/clamd ] && . /etc/sysconfig/clamd
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/clamd ]; then
+		msg_starting clamd
+		daemon /usr/sbin/clamd 
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd		
+	else
+		msg_already_running clamd
+	fi
+	;;
+  stop)
+        if [ -f /var/lock/subsys/clamd ]; then
+		msg_stopping clamd
+		killproc clamd
+		rm -f /var/run/clamd.pid /var/lock/subsys/clamd >/dev/null 2>&1
+	else
+		msg_not_running clamd
+		exit 1
+	fi	
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  status)
+	status clamd
+	exit $?
+	;;
+  reload)
+	msg_reloading clamd
+	killproc clamd -HUP
+	;;
+  *)
+	msg_usage "$0 {start|stop|init|status|restart|reload}"
+	exit 1
+esac
+
+exit $RETVAL
