@@ -2,22 +2,26 @@
 #   Make freshclam (script and daemon)
 #   log nicely via syslog to /var/log/freshclam.log
 
-%define		database_version 20040210
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
+%define		_ver	0.68-1
 Version:	0.68
-Release:	3
+Release:	4
 License:	GPL
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	6739b5fb4056d4a7505ef5c8edcd8eaf
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{_ver}.tar.gz
+# Source0-md5:	3986d26d2fd17bcd133def5d73665b0f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-# bziped from http://www.clamav.net/database/
-# Source3:	%{name}-database-%{database_version}.tar.bz2
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
+# Remember to update date on each rebuild!!
+%define		database_version 20040416
+Source6:	http://www.clamav.net/database/daily.cvd
+# Source6-md5:	2a95e0986a83da6ada14da8bc1f65ac9
+Source7:	http://www.clamav.net/database/main.cvd
+# Source7-md5:	e85d9a1c57005458c3208bf94a888706
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 URL:		http://www.clamav.net/
@@ -94,7 +98,7 @@ Virus database for clamav (updated %{database_version})
 Bazy wirusów dla clamav (aktualizowana %{database_version})
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{_ver}
 %patch0 -p1
 %patch1 -p1
 
@@ -122,10 +126,11 @@ EOF
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
-install database/*.cvd $RPM_BUILD_ROOT/var/lib/%{name}/
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install %{SOURCE6} $RPM_BUILD_ROOT/var/lib/%{name}/
+install %{SOURCE7} $RPM_BUILD_ROOT/var/lib/%{name}/
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
