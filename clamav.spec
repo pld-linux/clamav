@@ -98,7 +98,7 @@ Requires:	tcp_wrappers
 %description milter
 ClamAV sendmail filter using MILTER interface.
 
-%description -l pl milter
+%description milter -l pl
 Filtr ClamAV dla sendmaila korzystaj±cy z interfejsu MILTER.
 
 %package devel
