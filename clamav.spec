@@ -85,6 +85,9 @@ Summary:	clamav - Development header files and libraries
 Summary(pl):	clamav - Pliki nag³ówkowe i biblioteki dla programistów
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	bzip2-devel
+Requires:	gmp-devel
+Requires:	zlib-devel
 
 %description devel
 This package contains the development header files and libraries
