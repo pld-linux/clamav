@@ -2,10 +2,9 @@ Summary:	Antivirus for Unix
 Summary(pl):	Antywirus dla Unixów
 Name:		clamav
 Version:	0.11
-Release:	2
+Release:	3
 License:	GPL
 Group:		System/Tools
-######		/home/mick3y/rpm/SOURCES/rpm.groups: no such file
 Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
 URL:		http://www.konarski.edu.pl/~zolw/clam.html
 BuildRequires:	autoconf
@@ -32,8 +31,8 @@ POSIXem.
 
 %build
 %configure2_13 \
-	--disable-clamav \
-	--with-datadir=%{_datadir}/clam
+	--disable-clamav
+
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_prefix},%{_bindir},%{_mandir},%{_datadir}/clam}
@@ -45,12 +44,14 @@ gzip -9nf AUTHORS FAQ TODO
 rm -fr $RPM_BUILD_ROOT
 
 %pre
-if [ -z "`id -u clanav 2>/dev/null`" ]; then
- /usr/sbin/useradd -u 95 -r -d /usr/share/clam -s /bin/false -c "ClamAV" -g nobody clamav 1>&2
+if [ -z "`id -u clamav 2>/dev/null`" ]; then
+/usr/sbin/groupadd -g 200 clamav 
+/usr/sbin/useradd -M -g clamav -r -d /usr/share/clam -s /bin/false -c "ClamAV" clamav 1>&2
 fi
 
-%post
+%postun
  /usr/sbin/userdel clamav
+ /usr/sbin/groupdel clamav
 
 %files
 %defattr(644,root,root,755)
