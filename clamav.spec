@@ -8,7 +8,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.65
-Release:	0.9
+Release:	0.10
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -16,14 +16,15 @@ Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # bziped from http://clamav.elektrapro.com/database/:
-Source3:	%{name}-database-%{database_version}.tar.gz
-# Source3-md5:	f652ec4cd999e30d171266e0e7a42312
+Source3:	%{name}-database-%{database_version}.tar.bz2
+# Source3-md5:	f1e7c6362a2c03439da41d237dc5d01c
 Source4:	%{name}-cron-updatedb
 Patch0:		%{name}-pld_config.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	zlib-devel
+BuildRequires:	gmp-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	bc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
