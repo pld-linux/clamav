@@ -95,7 +95,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version})
 %prep
 %setup -q -a 3
 %patch0 -p1
- 
+
 %build
 rm -f missing
 %{__aclocal}
