@@ -34,7 +34,7 @@ case "$1" in
         if [ -f /var/lock/subsys/clamd ]; then
 		msg_stopping clamd
 		killproc clamd
-		rm -f /var/run/clamd.pid /var/lock/subsys/clamd >/dev/null 2>&1
+		rm -f /var/run/clamav/clamd.pid /var/lock/subsys/clamd >/dev/null 2>&1
 	else
 		msg_not_running clamd
 	fi	
