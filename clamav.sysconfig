@@ -1,4 +1,4 @@
-# Customized setings
+# Customized settings
 
 # Define nice level
 SERVICE_RUN_NICE_LEVEL="+0"
