@@ -27,9 +27,9 @@ aktualizacji. Skaner jest wielow±tkowy, napisany w C i zgodny z
 POSIXem.
 
 %package libs
-Summary:        Shared libraries for clamav
-Summary(pl):    Biblioteki dzielone clamav
-Group:          Libraries
+Summary:	Shared libraries for clamav
+Summary(pl):	Biblioteki dzielone clamav
+Group:		Libraries
 
 %description libs
 Shared libraries for clamav.
@@ -38,10 +38,10 @@ Shared libraries for clamav.
 Biblioteki dzielone clamav.
 
 %package devel
-Summary:        clamav - Development header files and libraries
-Summary(pl):    clamav - Pliki nag³ówkowe i biblioteki dla programistów
-Group:          Development/Libraries
-Requires:       %{name}-libs = %{version}
+Summary:	clamav - Development header files and libraries
+Summary(pl):	clamav - Pliki nag³ówkowe i biblioteki dla programistów
+Group:		Development/Libraries
+Requires:	%{name}-libs = %{version}
 
 %description devel
 This package contains the development header files and libraries
@@ -52,10 +52,10 @@ Pliki nag³ówkowe i biblioteki konieczne do kompilacji aplikacji
 klienckich clamav.
 
 %package static
-Summary:        clamav staic libraris
-Summary(pl):    Biblioteki statyczne clamav
-Group:          Development/Libraries
-Requires:       %{name}-devel = %{version}
+Summary:	clamav staic libraris
+Summary(pl):	Biblioteki statyczne clamav
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}
 
 %description static
 clamav static libraris.
