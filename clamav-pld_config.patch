@@ -1,6 +1,6 @@
-diff -uN clamav-0.80-orig/etc/clamd.conf clamav-0.80/etc/clamd.conf
---- clamav-0.80-orig/etc/clamd.conf	2004-10-11 03:14:30.000000000 +0200
-+++ clamav-0.80/etc/clamd.conf	2005-01-21 15:03:26.335610128 +0100
+diff -urN clamav-0.80rc4.orig/etc/clamd.conf clamav-0.80rc4/etc/clamd.conf
+--- clamav-0.80rc4.orig/etc/clamd.conf	2004-10-11 03:14:30.000000000 +0200
++++ clamav-0.80rc4/etc/clamd.conf	2004-10-16 23:14:10.722021576 +0200
 @@ -5,13 +5,13 @@
  
  
@@ -78,9 +78,9 @@ diff -uN clamav-0.80-orig/etc/clamd.conf clamav-0.80/etc/clamd.conf
  #ClamukoIncludePath /students
  
  # Set the exclude paths. All subdirectories are also excluded.
-diff -uN clamav-0.80-orig/etc/freshclam.conf clamav-0.80/etc/freshclam.conf
---- clamav-0.80-orig/etc/freshclam.conf	2004-09-27 22:35:01.000000000 +0200
-+++ clamav-0.80/etc/freshclam.conf	2005-01-21 15:03:26.376602687 +0100
+diff -urN clamav-0.80rc4.orig/etc/freshclam.conf clamav-0.80rc4/etc/freshclam.conf
+--- clamav-0.80rc4.orig/etc/freshclam.conf	2004-09-27 22:35:01.000000000 +0200
++++ clamav-0.80rc4/etc/freshclam.conf	2004-10-16 23:17:04.467608232 +0200
 @@ -3,10 +3,14 @@
  ## Please read the freshclam.conf(5) manual before editing this file.
  ## This file may be optionally merged with clamd.conf.
@@ -135,7 +135,7 @@ diff -uN clamav-0.80-orig/etc/freshclam.conf clamav-0.80/etc/freshclam.conf
  # By default it uses the hardcoded configuration file but you can force an
  # another one.
 -#NotifyClamd /config/file/path
-+NotifyClamd /etc/clamd.conf
++NotifyClamd /etc/clamav.conf
  
  # Run command after successful database update.
  # Default: disabled
