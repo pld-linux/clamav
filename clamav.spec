@@ -1,4 +1,4 @@
-%define		database_version 20030621
+%define		database_version 20030813
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
@@ -96,6 +96,9 @@ rm -f missing
 	--disable-clamav \
 	--with-dbdir=/var/lib/%{name}
 %{__make}
+mv database/mirrors.txt{,.old}
+echo clamav.sourceforge.net >database/mirrors.txt
+cat database/mirrors.txt.old >>database/mirrors.txt
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -174,6 +177,7 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,clamav,root) %dir /var/lib/%{name}
+%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/mirrors.txt
 %attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
 %attr(750,root,root) %{_sysconfdir}/cron.daily/%{name}
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
@@ -198,4 +202,3 @@ fi
 %files database
 %defattr(644,root,root,755)
 %attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/*.db*
-%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/mirrors.txt
