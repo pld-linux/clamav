@@ -35,6 +35,7 @@ Patch2:		%{name}-nolibs.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	curl-devel
 BuildRequires:	gmp-devel
 BuildRequires:	libidn-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
@@ -61,14 +62,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
 AMaViS, compressed files, on-access scanning and includes a program
 for auto-updating with support for digital signatures. The virus
-database has over 20000 viruses, worms and trojans signatures. The
+database has over 25000 viruses, worms and trojans signatures. The
 scanner is multithreaded, written in C, and POSIX compliant.
 
 %description -l pl
 Clam Antivirus jest potê¿nym skanerem antywirusowym dla systemów
 uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
 "on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
-Baza wirusów zawiera ponad 20000 sygnatur. Skaner jest wielow±tkowy,
+Baza wirusów zawiera ponad 25000 sygnatur. Skaner jest wielow±tkowy,
 napisany w C i zgodny z POSIXem.
 
 %package libs
@@ -241,7 +242,7 @@ else
 	/usr/sbin/useradd -u 43 -d /tmp -s /bin/false \
 		-c "Clam Anti Virus Checker" -g clamav clamav 1>&2
 	if [ -n "`/usr/bin/getgid amavis`" ]; then
-		echo "adding clamav to amavis group
+		echo "adding clamav to amavis group"
 		/usr/sbin/usermod -G amavis clamav 1>&2
 	fi
 fi
