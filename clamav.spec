@@ -9,7 +9,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
 Version:	0.80
-Release:	4
+Release:	3
 License:	GPL
 Group:		Applications
 Source0:	http://heanet.dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -40,7 +40,7 @@ BuildRequires:	automake
 BuildRequires:	gmp-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libtool
-BuildRequires:	rpmbuild(macros) >= 1.159
+#BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
 Requires(pre):	/bin/id
@@ -269,8 +269,10 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	%userremove clamav
-	%groupremove clamav
+	echo "Removing user clamav"
+	/usr/sbin/userdel clamav
+	echo "Removing group clamav"
+	/usr/sbin/groupdel clamav
 fi
 
 %triggerpostun -- %{name} <= 0.75.1
