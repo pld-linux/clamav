@@ -3,7 +3,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.60
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -102,8 +102,8 @@ cat database/mirrors.txt.old >>database/mirrors.txt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig}
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/cron.daily,%{_var}/log}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig} \
+	$RPM_BUILD_ROOT{%{_sysconfdir}/cron.daily,%{_var}/log}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
