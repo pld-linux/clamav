@@ -32,6 +32,8 @@ URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gmp-devel
+BuildRequires:	sendmail-devel >= 8.11
+BuildRequires:	tcp_wrappers
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
@@ -70,8 +72,6 @@ Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	sendmail >= 8.11
 Requires:	tcp_wrappers
-BuildRequires:	sendmail-devel >= 8.11
-BuildRequires:	tcp_wrappers
 
 %description milter
 ClamAV sendmail filter using MILTER interface.
@@ -91,7 +91,7 @@ necessary to develop clamav client applications.
 
 %description devel -l pl
 Pliki nag³ówkowe i biblioteki konieczne do kompilacji aplikacji
-klienckich lclamav.
+klienckich clamav.
 
 %package static
 Summary:	clamav static libraris
@@ -129,7 +129,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version}).
 %{__automake}
 %configure \
 	--disable-clamav \
-	%{?_with_milter:--enable-milter} \
+	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name}
 %{__make}
 
@@ -140,7 +140,7 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig,logrotate.d} \
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-%{?_without_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
+%{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
 cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
@@ -151,10 +151,10 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamav-milter
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install %{SOURCE9} $RPM_BUILD_ROOT/etc/sysconfig/clamav-milter
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
-install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/
+install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install %{SOURCE6} $RPM_BUILD_ROOT/var/lib/%{name}/
-install %{SOURCE7} $RPM_BUILD_ROOT/var/lib/%{name}/
+install %{SOURCE6} $RPM_BUILD_ROOT/var/lib/%{name}
+install %{SOURCE7} $RPM_BUILD_ROOT/var/lib/%{name}
 install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
