@@ -15,7 +15,7 @@ Source2:	%{name}.sysconfig
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date on each rebuild!!
-%define		database_version 20040420
+%define		database_version	%(date -r %{SOURCE6} +%Y%m%d)
 Source6:	http://www.clamav.net/database/daily.cvd
 # Source6-md5:	91fae748a9702545492d1a045db4c630
 Source7:	http://www.clamav.net/database/main.cvd
