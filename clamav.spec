@@ -5,7 +5,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
 Version:	0.75
-Release:	3
+Release:	4
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -15,9 +15,9 @@ Source2:	%{name}.sysconfig
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
-%define		database_version	20040724
+%define		database_version	20040728
 Source6:	http://www.clamav.net/database/daily.cvd
-# Source6-md5:	dba9adc5fba54e2a7b7575ea88d23f91
+# Source6-md5:	bf499d957b93ad5d72084a8552dd07d9
 Source7:	http://www.clamav.net/database/main.cvd
 # Source7-md5:	fb569320447dff5b22acdbec2dbc5772
 Source8:	%{name}-post-updatedb
@@ -27,8 +27,8 @@ Patch2:		%{name}-af_unix.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	zlib-devel
 BuildRequires:	gmp-devel
+BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	bc
@@ -169,7 +169,7 @@ if [ $RESULT -eq 0 ]; then
 fi
 
 
-%pre 
+%pre
 if [ -n "`getgid clamav`" ]; then
 	if [ "`getgid clamav`" != "43" ]; then
 		echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
