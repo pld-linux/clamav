@@ -280,7 +280,7 @@ if [ -f /etc/clamav.conf.rpmsave ]; then
     echo "Renaming config to new name /etc/clamd.conf"
     mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
     mv -f /etc/clamav.conf.rpmsave /etc/clamd.conf
-done
+fi
 
 %if %{with milter}
 %post milter
