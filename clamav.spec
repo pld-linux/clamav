@@ -275,9 +275,9 @@ fi
 
 %triggerpostun -- %{name} <= 0.75.1
 if [ -f /etc/clamav.conf.rpmsave ]; then
-    echo "Renaming config to new name /etc/clamd.conf"
-    mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
-    mv -f /etc/clamav.conf.rpmsave /etc/clamd.conf
+	echo "Renaming config to new name /etc/clamd.conf"
+	mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
+	mv -f /etc/clamav.conf.rpmsave /etc/clamd.conf
 fi
 
 %if %{with milter}
