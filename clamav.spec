@@ -2,8 +2,8 @@
 #   Make freshclam (script and daemon)
 #
 # Conditional build:
-%bcond_with	milter	# without milter subpackage
-%bcond_with	curl	# without curl
+%bcond_with	milter	# build milter subpackage
+%bcond_with	curl	# enable curl support
 #
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
@@ -38,7 +38,6 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_curl:BuildRequires:	curl-devel}
 BuildRequires:	gmp-devel
-%{?with_curl:BuildRequires:	libidn-devel}
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libtool
 BuildRequires:	rpmbuild(macros) >= 1.159
@@ -55,7 +54,6 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	/usr/sbin/usermod
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	bc
-%{?with_curl:Requires:	curl}
 Provides:	group(clamav)
 Provides:	user(clamav)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -160,7 +158,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %{__automake}
 %configure \
 	--disable-clamav \
-	%{?!with_curl:--without-libcurl} \
+	%{!?with_curl:--without-libcurl} \
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name}
 %{__make}
