@@ -9,32 +9,28 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
 Version:	0.80
-Release:	6
+Release:	7
 Epoch:		0
 License:	GPL
 Group:		Applications
-Source0:	http://heanet.dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
 # Source0-md5:	59bf21e169a35d7e9c27a34435f9b870
-# Source0-size:	2668125
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
-%define		database_version	20041019
+%define		database_version	20050121
 Source6:	http://db.local.clamav.net/daily.cvd
 # Source6-md5:	cee37166f11f509143d61b0e9d3cfeff
-# Source6-size:	100250
 Source7:	http://db.local.clamav.net/main.cvd
 # Source7-md5:	f006a1f55722c2ff9d50e61cfb938bc7
-# Source7-size:	1284637
 Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 Patch2:		%{name}-nolibs.patch
-Patch3:		%{name}-clamd_conf.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -148,7 +144,6 @@ Bazy wirusów dla clamav (aktualizowana %{database_version}).
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 # kill old libtool.m4 copy
 head -n 489 acinclude.m4 > acinclude.m4.tmp
