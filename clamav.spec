@@ -119,7 +119,7 @@ if [ -n "`getgid clamav`" ]; then
                 exit 1
         fi
 else
-	echo "adding group clamav GID=43"
+	echo "Adding group clamav GID=43"
         /usr/sbin/groupadd -g 43 -r -f clamav
 fi
 if [ -n "`id -u clamav 2>/dev/null`" ]; then
