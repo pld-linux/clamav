@@ -19,11 +19,11 @@ Source3:	%{name}-milter.init
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
-%define		database_version	20040731
-Source6:	http://www.clamav.net/database/daily.cvd
-# Source6-md5:	8aa799fff39b3dd7c36a7dd796890b66
-Source7:	http://www.clamav.net/database/main.cvd
-# Source7-md5:	fb569320447dff5b22acdbec2dbc5772
+%define		database_version	20040925
+Source6:	http://db.local.clamav.net/daily.cvd
+# Source6-md5:	33008e54fb1d1a987f9953a0fd245d20
+Source7:	http://db.local.clamav.net/main.cvd
+# Source7-md5:	f006a1f55722c2ff9d50e61cfb938bc7
 Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
@@ -278,8 +278,12 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog FAQ NEWS README TODO docs/html/
-%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_bindir}/clamdscan
+%attr(755,root,root) %{_bindir}/clamscan
+%attr(755,root,root) %{_bindir}/freshclam
+%attr(755,root,root) %{_bindir}/sigtool
+%attr(755,root,root) %{_sbindir}/clamd
+%attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,clamav,root) %dir /var/lib/%{name}
 %attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
@@ -313,6 +317,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/clamav-config
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 %{_includedir}/*.h
@@ -324,4 +329,5 @@ fi
 
 %files database
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/clamav-post-updatedb
 %attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/*.cvd
