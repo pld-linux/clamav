@@ -2,7 +2,7 @@
 #   Make freshclam (script and daemon)
 #
 # Conditional build:
-%bcond_without	milter	# without milter subpackage
+%bcond_with	milter	# without milter subpackage
 #
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
@@ -32,8 +32,8 @@ URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gmp-devel
-BuildRequires:	sendmail-devel >= 8.11
-BuildRequires:	tcp_wrappers
+%{?with_milter:BuildRequires:	libwrap-devel}
+%{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
@@ -65,6 +65,7 @@ Shared libraries for clamav.
 %description libs -l pl
 Biblioteki dzielone clamav.
 
+%if %{with milter}
 %package milter
 Summary:	ClamAV filter using milter interface
 Summary(pl):	Filtr ClamAV korzystaj±cy z interfejsu milter
@@ -78,6 +79,7 @@ ClamAV sendmail filter using MILTER interface.
 
 %description -l pl milter
 Filtr ClamAV dla sendmaila korzystaj±cy z interfejsu MILTER.
+%endif
 
 %package devel
 Summary:	clamav - Development header files and libraries
@@ -147,9 +149,11 @@ cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
 EOF
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
+%if %{with milter}
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamav-milter
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install %{SOURCE9} $RPM_BUILD_ROOT/etc/sysconfig/clamav-milter
+%endif
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
@@ -238,6 +242,7 @@ if [ "$1" = "0" ]; then
 	/usr/sbin/groupdel clamav
 fi
 
+%if %{with milter}
 %post milter
 /sbin/chkconfig --add clamav-milter
 if [ -f /var/lock/subsys/clamav-milter ]; then
@@ -253,7 +258,7 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del clamav-milter
 fi
-
+%endif
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
