@@ -1,3 +1,4 @@
+%define		database_version 20030117
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
@@ -8,7 +9,10 @@ Group:		Applications
 Source0:	http://clamav.elektrapro.com/stable/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+# gziped from http://clamav.elektrapro.com/database/:
+Source3:	%{name}-database-%{database_version}.tar.gz
 URL:		http://clamav.elektrapro.com/
+Requires:	%{name}-database
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -63,8 +67,21 @@ clamav static libraris.
 %description static -l pl
 Biblioteki statyczne clamav.
 
+%package database
+Summary:	Virus database for clamav
+Summary(pl):	Bazy wirusów dla clamav
+Group:		Applications
+Version:	%{version}.%{database_version}
+
+%description database
+Virus database for clamav
+
+%description database -l pl
+Bazy wirusów dla clamav
+
 %prep
 %setup -q
+%setup -q -n clamav-0.54 -a 3
 
 %build
 rm -f missing
@@ -135,7 +152,6 @@ touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clam
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,clamav,root) %dir %{_datadir}/%{name}
-%attr(644,clamav,root) %verify(not md5 size mtime) %{_datadir}/%{name}/*.db*
 %attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
 %attr(750,root,root) %{_sysconfdir}/cron.daily/%{name}
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
@@ -156,3 +172,7 @@ touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clam
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/*.a
+
+%files database
+%defattr(644,root,root,755)
+%attr(644,clamav,root) %verify(not md5 size mtime) %{_datadir}/%{name}/*.db*
