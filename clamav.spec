@@ -3,12 +3,18 @@
 #   clamd uses syslog but log from (crond) db update goes to
 #   /var/log/clamd.log
 
+# Conditional build:
+# _with_bigZIPOSDET  - increases zip file size
+#  should be used with samba scanning, on smtp-server
+#  may lead to DoS (memory usage up tu 1GB)
+#  It's configurable in CVS version of clamav, anyway.
+
 %define		database_version 20031115
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.65
-Release:	4
+Release:	5
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -20,6 +26,7 @@ Source3:	%{name}-database-%{database_version}.tar.bz2
 # Source3-md5:	f1e7c6362a2c03439da41d237dc5d01c
 Source4:	%{name}-cron-updatedb
 Patch0:		%{name}-pld_config.patch
+Patch1:		%{name}-oversize_zip.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -95,6 +102,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version})
 %prep
 %setup -q -a 3
 %patch0 -p1
+%{!?_with_bigZIPOSDET:%patch1 -p1}
 
 %build
 rm -f missing
