@@ -245,7 +245,7 @@ else
 	echo "Run \"/etc/rc.d/init.d/clamav-milter start\" to start Clam Antivirus daemon." >&2
 fi
 
-%preun
+%preun milter
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/clamav-milter ]; then
 		/etc/rc.d/init.d/clamav-milter stop
