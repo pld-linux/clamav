@@ -20,6 +20,7 @@ Source2:	%{name}.sysconfig
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 Patch0:		%{name}-pld_config.patch
+Patch1:		%{name}-no_auto_libwrap.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -96,6 +97,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version})
 %prep
 %setup -q -n %{name}-%{_ver}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__aclocal}
