@@ -1,8 +1,8 @@
 Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		clamav
-Version:	0.11
-Release:	4
+Version:	0.12
+Release:	1
 License:	GPL
 Group:		Applications/Mail
 Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
@@ -84,8 +84,8 @@ touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clam
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog FAQ NEWS README TODO docs/*.pdf
 %attr(755,root,root) %{_bindir}/*
-%attr(755,clamav,root) %dir %{_datadir}/clam
-%attr(644,clamav,root) %verify(not md5 size mtime) %{_datadir}/clam/*.db
+%attr(755,clamav,root) %dir %{_datadir}/%{name}
+%attr(644,clamav,root) %verify(not md5 size mtime) %{_datadir}/%{name}/*.db
 %attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
 %attr(750,root,root) %{_sysconfdir}/cron.daily/%{name}
 %{_mandir}/man?/*
