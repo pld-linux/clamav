@@ -15,6 +15,8 @@ URL:		http://clamav.elektrapro.com/
 Requires:	%{name}-database
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	zlib-devel
+Requires(poest,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -132,6 +134,15 @@ else
 	/usr/sbin/useradd -u 43 -r -d /tmp  -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav 1>&2
 fi
 
+%post
+touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clamav %{_var}/log/%{name}.log
+/sbin/chkconfig --add clamd
+if [ -f /var/lock/subsys/clamd ]; then
+	/etc/rc.d/init.d/clamd restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/clamd start\" to start Clam Antivirus daemon." >&2
+fi
+
 %postun
 if [ "$1" = "0" ]; then
 	echo "Removing user clamav"
@@ -140,8 +151,13 @@ if [ "$1" = "0" ]; then
 	/usr/sbin/groupdel clamav
 fi
 
-%post
-touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clamav %{_var}/log/%{name}.log
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/clamd ]; then
+		/etc/rc.d/init.d/clamd stop
+	fi
+	/sbin/chkconfig --del clamd
+fi
 
 %post   libs -p /sbin/ldconfig
 %postun libs -p /sbin/ldconfig
