@@ -331,7 +331,7 @@ fi
 %files milter
 %defattr(644,root,root,755)
 %config(noreplace) %{_sysconfdir}/sysconfig/clamav-milter
-%attr(755,root,root) /etc/rc.d/init.d/clamav-milter
+%attr(754,root,root) /etc/rc.d/init.d/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
 #%{_sysconfdir}/log.d/conf/services/clamav-milter.conf
