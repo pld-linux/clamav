@@ -2,12 +2,12 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
-Version:	0.54
-Release:	4
+Version:	0.60
+Release:	1
 License:	GPL
 Group:		Applications
 Source0:	http://clamav.elektrapro.com/stable/%{name}-%{version}.tar.gz
-# Source0-md5:	1c2e2adffe9ed4d15fe2167dd7bad591
+# Source0-md5:	eddeba4e1f399f65bc71aa2b3e901543
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # gziped from http://clamav.elektrapro.com/database/:
