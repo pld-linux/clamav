@@ -1,9 +1,9 @@
-%define		database_version 20030117
+%define		database_version 20030207
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.54
-Release:	3
+Release:	4
 License:	GPL
 Group:		Applications
 Source0:	http://clamav.elektrapro.com/stable/%{name}-%{version}.tar.gz
@@ -74,16 +74,16 @@ Summary:	Virus database for clamav
 Summary(pl):	Bazy wirusów dla clamav
 Group:		Applications
 Version:	%{version}.%{database_version}
+Requires:	%{name}
 
 %description database
-Virus database for clamav
+Virus database for clamav (updated %{database_version})
 
 %description database -l pl
-Bazy wirusów dla clamav
+Bazy wirusów dla clamav (aktualizowana %{database_version})
 
 %prep
-%setup -q
-%setup -q -n clamav-0.54 -a 3
+%setup -q -a 3
 
 %build
 rm -f missing
@@ -91,7 +91,8 @@ rm -f missing
 %{__autoconf}
 %{__automake}
 %configure \
-	--disable-clamav
+	--disable-clamav \
+	--with-dbdir=/var/lib/%{name}
 %{__make}
 
 %install
@@ -102,8 +103,11 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir}/cron.daily,%{_var}/log}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-echo -e '#!/bin/sh\n%{_bindir}/freshclam --quiet -l %{_var}/log/%{name}.log --daemon-notify' \
-	> $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/%{name}
+cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/%{name}
+#!/bin/sh
+umask 022
+%{_bindir}/freshclam --quiet -l %{_var}/log/%{name}.log --daemon-notify
+EOF
 
 touch $RPM_BUILD_ROOT%{_var}/log/%{name}.log
 
@@ -167,7 +171,7 @@ fi
 %doc AUTHORS ChangeLog FAQ NEWS README TODO docs/html/
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
-%attr(755,clamav,root) %dir %{_datadir}/%{name}
+%attr(755,clamav,root) %dir /var/lib/%{name}
 %attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
 %attr(750,root,root) %{_sysconfdir}/cron.daily/%{name}
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
@@ -191,4 +195,4 @@ fi
 
 %files database
 %defattr(644,root,root,755)
-%attr(644,clamav,root) %verify(not md5 size mtime) %{_datadir}/%{name}/*.db*
+%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/*.db*
