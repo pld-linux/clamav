@@ -1,6 +1,9 @@
 # TODO:
 #   Make freshclam (script and daemon)
-
+#
+# Conditional build:
+%bcond_without	milter	# without milter subpackage
+#
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
@@ -12,6 +15,7 @@ Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
 # Source0-md5:	2c85b7957eba9fd9e9ff8c2537ae006f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Source3:	%{name}-milter.init
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
@@ -21,6 +25,7 @@ Source6:	http://www.clamav.net/database/daily.cvd
 Source7:	http://www.clamav.net/database/main.cvd
 # Source7-md5:	fb569320447dff5b22acdbec2dbc5772
 Source8:	%{name}-post-updatedb
+Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 URL:		http://www.clamav.net/
@@ -36,14 +41,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
 AMaViS, compressed files, on-access scanning and includes a program
-for auto-updating with support for digital signatures.
-The virus database has over 20000 viruses, worms and trojans signatures.
-The scanner is multithreaded, written in C, and POSIX compliant.
+for auto-updating with support for digital signatures. The virus
+database has over 20000 viruses, worms and trojans signatures. The
+scanner is multithreaded, written in C, and POSIX compliant.
 
 %description -l pl
 Clam Antivirus jest potê¿nym skanerem antywirusowym dla systemów
-uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie "on-access"
-i posiada system bezpiecznej, automatycznej aktualizacji.
+uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
+"on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
 Baza wirusów zawiera ponad 20000 sygnatur. Skaner jest wielow±tkowy,
 napisany w C i zgodny z POSIXem.
 
@@ -58,6 +63,21 @@ Shared libraries for clamav.
 %description libs -l pl
 Biblioteki dzielone clamav.
 
+%package	milter
+Summary:	Clamav milter
+Group:		Daemons
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	sendmail >= 8.11
+Requires:	tcp_wrappers
+BuildRequires:	sendmail-devel >= 8.11
+BuildRequires:	tcp_wrappers
+
+%description milter
+ClamAV sendmail filter using MILTER interface.
+
+%description -l pl milter
+Filtr ClamAV dla sendmaila korzystaj±cy z interfejsu MILTER.
+
 %package devel
 Summary:	clamav - Development header files and libraries
 Summary(pl):	clamav - Pliki nag³ówkowe i biblioteki dla programistów
@@ -70,7 +90,7 @@ necessary to develop clamav client applications.
 
 %description devel -l pl
 Pliki nag³ówkowe i biblioteki konieczne do kompilacji aplikacji
-klienckich clamav.
+klienckich lclamav.
 
 %package static
 Summary:	clamav static libraris
@@ -108,6 +128,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version}).
 %{__automake}
 %configure \
 	--disable-clamav \
+	%{?_with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name}
 %{__make}
 
@@ -118,14 +139,16 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig,logrotate.d} \
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+%{?_without_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
 cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
 EOF
 
-
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamav-milter
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
+install %{SOURCE9} $RPM_BUILD_ROOT/etc/sysconfig/clamav-milter
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
@@ -166,7 +189,6 @@ if [ $RESULT -eq 0 ]; then
 	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
 	echo "adding clamav to amavis group GID=$AMAVIS"
 fi
-
 
 %pre
 if [ -n "`getgid clamav`" ]; then
@@ -215,6 +237,22 @@ if [ "$1" = "0" ]; then
 	/usr/sbin/groupdel clamav
 fi
 
+%post milter
+/sbin/chkconfig --add clamav-milter
+if [ -f /var/lock/subsys/clamav-milter ]; then
+	/etc/rc.d/init.d/clamd restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/clamav-milter start\" to start Clam Antivirus daemon." >&2
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/clamav-milter ]; then
+		/etc/rc.d/init.d/clamav-milter stop
+	fi
+	/sbin/chkconfig --del clamav-milter
+fi
+
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
@@ -236,7 +274,21 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/clamd
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/clamav
-%{_mandir}/man?/*
+%{_mandir}/man[15]/*
+%{_mandir}/man8/clamd*
+
+%if %{with milter}
+%files milter
+%defattr(644,root,root,755)
+%config(noreplace) %{_sysconfdir}/sysconfig/clamav-milter
+%attr(755,root,root) /etc/rc.d/init.d/clamav-milter
+#%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
+#%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
+#%{_sysconfdir}/log.d/conf/services/clamav-milter.conf
+%attr(755,root,root) %{_sbindir}/clamav-milter
+%{_mandir}/man8/clamav-milter.8*
+%attr(700,clamav,clamav) /var/spool/clamav/
+%endif
 
 %files libs
 %defattr(644,root,root,755)
