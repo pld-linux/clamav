@@ -20,6 +20,7 @@ Source6:	http://www.clamav.net/database/daily.cvd
 # Source6-md5:	91fae748a9702545492d1a045db4c630
 Source7:	http://www.clamav.net/database/main.cvd
 # Source7-md5:	e85d9a1c57005458c3208bf94a888706
+Source8:	%{name}-post-updatedb
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 URL:		http://www.clamav.net/
@@ -129,6 +130,7 @@ install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 install %{SOURCE6} $RPM_BUILD_ROOT/var/lib/%{name}/
 install %{SOURCE7} $RPM_BUILD_ROOT/var/lib/%{name}/
+install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
@@ -209,6 +211,8 @@ fi
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
+
+%post	database -p %{_sbindir}/%{name}-post-updatedb
 
 %files
 %defattr(644,root,root,755)
