@@ -94,7 +94,7 @@ Virus database for clamav (updated %{database_version})
 Bazy wirusów dla clamav (aktualizowana %{database_version})
 
 %prep
-%setup -q  -n %{name}-%{_ver}
+%setup -q -n %{name}-%{_ver}
 %patch0 -p1
 
 %build
