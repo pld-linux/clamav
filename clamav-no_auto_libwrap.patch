@@ -1,0 +1,12 @@
+diff -Nura clamav-0.67-1.before/configure.in clamav-0.67-1/configure.in
+--- clamav-0.67-1.before/configure.in	2004-03-20 21:20:30.000000000 +0100
++++ clamav-0.67-1/configure.in	2004-03-20 21:22:28.000000000 +0100
+@@ -216,7 +216,7 @@
+   yes|no) tcpw="$withval" ;;
+   *)      AC_MSG_ERROR([--with-tcpwrappers does not take an argument]) ;;
+   esac],
+-[ tcpw=auto ])
++[ tcpw=no ])
+ 
+ if test x"$tcpw" != xno; then
+   err=no
