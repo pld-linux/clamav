@@ -34,6 +34,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gmp-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
+BuildRequires:	libtool
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
@@ -148,7 +149,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig,logrotate.d} \
-	$RPM_BUILD_ROOT{%{_sysconfdir}/cron.d,%{_var}/log}
+	$RPM_BUILD_ROOT{%{_sysconfdir}/cron.d,%{_var}/{log,spool/clamav}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
