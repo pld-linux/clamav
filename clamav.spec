@@ -5,7 +5,7 @@ Version:	0.15
 Release:	1
 License:	GPL
 Group:		Applications/Mail
-Source0:	http://clamav.elektrapro.com/stable/clamav-0.15.tar.gz
+Source0:	http://clamav.elektrapro.com/stable/%{name}-%{version}.tar.gz
 URL:		http://clamav.elektrapro.com/
 Patch0:		%{name}-proc.patch
 BuildRequires:	autoconf
@@ -60,6 +60,7 @@ if [ -n "`getgid clamav`" ]; then
                 exit 1
         fi
 else
+	echo "adding group clamav GID=43"
         /usr/sbin/groupadd -g 43 -r -f clamav
 fi
 if [ -n "`id -u clamav 2>/dev/null`" ]; then
@@ -68,12 +69,15 @@ if [ -n "`id -u clamav 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
+	echo "Adding user clamav UID=43"
 	/usr/sbin/useradd -u 43 -r -d /tmp  -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav 1>&2
 fi
 
 %postun
 if [ "$1" = "0" ]; then
+	echo "Removing user clamav"
 	/usr/sbin/userdel clamav
+	echo "Removing group clamav"
 	/usr/sbin/groupdel clamav
 fi
 
