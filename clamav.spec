@@ -1,6 +1,5 @@
 # TODO:
 #   Make freshclam (script and daemon)
-#   log nicely via syslog to /var/log/freshclam.log
 
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
@@ -98,7 +97,6 @@ Bazy wirusów dla clamav (aktualizowana %{database_version}).
 
 %prep
 %setup -q
-# -n %{name}-%{_ver}
 %patch0 -p1
 %patch1 -p1
 
@@ -136,7 +134,6 @@ install %{SOURCE7} $RPM_BUILD_ROOT/var/lib/%{name}/
 # So better keep it dir
 # If it is fixed use of dir will be unecesary
 install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
-touch $RPM_BUILD_ROOT%{_var}/log/freshclam.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -193,9 +190,6 @@ if [ -f /var/lock/subsys/clamd ]; then
 else
 	echo "Run \"/etc/rc.d/init.d/clamd start\" to start Clam Antivirus daemon." >&2
 fi
-touch %{_var}/log/freshclam.log
-chown clamav:root %{_var}/log/freshclam.log
-chmod 640 %{_var}/log/freshclam.log
 
 %preun
 if [ "$1" = "0" ]; then
@@ -223,7 +217,6 @@ fi
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,clamav,root) %dir /var/lib/%{name}
 #%%attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
-%attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
