@@ -312,7 +312,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog FAQ NEWS README TODO
+%doc AUTHORS ChangeLog FAQ NEWS README TODO docs/*.pdf
 %attr(755,root,root) %{_bindir}/clamdscan
 %attr(755,root,root) %{_bindir}/clamscan
 %attr(755,root,root) %{_bindir}/freshclam
