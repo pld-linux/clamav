@@ -28,6 +28,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	gmp-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	bc
+# 0.67 and earlier doesn't seem to be binary compatible (while having same SONAME)
+Requires:	%{name}-libs >= 0.67
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
