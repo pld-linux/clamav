@@ -6,14 +6,14 @@ Version:	0.60
 Release:	1
 License:	GPL
 Group:		Applications
-Source0:	http://clamav.elektrapro.com/stable/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
 # Source0-md5:	eddeba4e1f399f65bc71aa2b3e901543
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # gziped from http://clamav.elektrapro.com/database/:
 Source3:	%{name}-database-%{database_version}.tar.gz
 # Source3-md5:	26ba23c5a6e6131e1a8efb397e4be9f2
-URL:		http://clamav.elektrapro.com/
+URL:		http://www.clamav.net/
 Requires:	%{name}-database
 BuildRequires:	autoconf
 BuildRequires:	automake
