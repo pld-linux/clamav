@@ -8,7 +8,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.65
-Release:	3
+Release:	4
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -138,9 +138,6 @@ install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-# FIXME: Does %triggerin -- amavis-ng really have to written three times ?
-# It's stolen from mksd.spec - if it's wrong fix mksd.spec too
-
 %triggerin -- amavis-ng
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
@@ -166,7 +163,7 @@ if [ $RESULT -eq 0 ]; then
 fi
 
 
-%pre
+%pre database
 if [ -n "`getgid clamav`" ]; then
 	if [ "`getgid clamav`" != "43" ]; then
 		echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
@@ -203,7 +200,7 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del clamd
 fi
 
-%postun
+%postun database
 if [ "$1" = "0" ]; then
 	echo "Removing user clamav"
 	/usr/sbin/userdel clamav
