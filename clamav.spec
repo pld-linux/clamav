@@ -9,7 +9,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
 Version:	0.80
-Release:	3
+Release:	3.1
 Epoch:		0
 License:	GPL
 Group:		Applications
@@ -34,6 +34,7 @@ Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 Patch2:		%{name}-nolibs.patch
+Patch3:		%{name}-clamd_conf.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -50,6 +51,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
+Requires(postun):	sed >= 4.0
 Requires(postun,pre):	/usr/sbin/usermod
 Requires(post,preun):	/sbin/chkconfig
 Requires:	/usr/sbin/usermod
@@ -145,6 +147,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version}).
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # kill old libtool.m4 copy
 head -n 489 acinclude.m4 > acinclude.m4.tmp
@@ -281,6 +284,8 @@ if [ -f /etc/clamav.conf.rpmsave ]; then
 	echo "Renaming config to new name /etc/clamd.conf"
 	mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
 	mv -f /etc/clamav.conf.rpmsave /etc/clamd.conf
+	echo "Changing config location in freshclam config"
+	sed -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
 fi
 
 %if %{with milter}
