@@ -78,19 +78,18 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
  
  ##
  ## Archive support
-diff -urN clamav-0.66.org/etc/freshclam.conf clamav-0.66/etc/freshclam.conf
---- clamav-0.66.org/etc/freshclam.conf	Wed Feb 11 11:51:14 2004
-+++ clamav-0.66/etc/freshclam.conf	Wed Feb 11 12:47:55 2004
-@@ -3,20 +3,24 @@
+--- clamav-0.70/etc/freshclam.conf.orig	2004-04-17 00:42:13.000000000 +0200
++++ clamav-0.70/etc/freshclam.conf	2004-04-20 03:27:50.230380664 +0200
+@@ -3,23 +3,28 @@
  ## Please read the clamav.conf(5) manual before editing this file.
  ## This file may be optionally merged with clamav.conf.
  ##
--
 +## PLD NOTE: Note that freshclam is called periodically via cron
 +## Check /etc/sysconfig/clamd for details
 +## Seems better to run task once per period than keep daemon running
 +## only for that. 
 +## But if you have arguments please tell us.
+ 
  
  # You can change the default database directory here.
  #DatabaseDirectory /var/lib/clamav
@@ -103,6 +102,9 @@ diff -urN clamav-0.66.org/etc/freshclam.conf clamav-0.66/etc/freshclam.conf
 -#LogVerbose
 +LogVerbose
  
+ # Use system logger (can work together with UpdateLogFile).
+ #LogSyslog
+ 
  # By default when freshclam is started by root it drops privileges and
  # switches to the "clamav" user. You can change this behaviour here.
 -#DatabaseOwner clamav
@@ -110,7 +112,7 @@ diff -urN clamav-0.66.org/etc/freshclam.conf clamav-0.66/etc/freshclam.conf
  
  # The main database mirror is database.clamav.net (this is a round-robin
  # DNS that points to many mirrors on the world) and in most cases you
-@@ -28,7 +32,7 @@
+@@ -31,7 +36,7 @@
  
  # How often check for a new database. We suggest checking for it every
  # two hours.
@@ -119,7 +121,7 @@ diff -urN clamav-0.66.org/etc/freshclam.conf clamav-0.66/etc/freshclam.conf
  
  # Proxy settings
  #HTTPProxyServer myproxy.com
-@@ -38,6 +42,7 @@
+@@ -41,6 +46,7 @@
  
  # Send the RELOAD command to clamd.
  #NotifyClamd [/optional/config/file/path]
