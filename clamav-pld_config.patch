@@ -1,6 +1,6 @@
-diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
---- clamav-0.66.org/etc/clamav.conf	Wed Feb 11 11:51:14 2004
-+++ clamav-0.66/etc/clamav.conf	Wed Feb 11 11:52:00 2004
+diff -Nur clamav-0.71-orig/etc/clamav.conf clamav-0.71/etc/clamav.conf
+--- clamav-0.71-orig/etc/clamav.conf	Thu May 13 01:59:21 2004
++++ clamav-0.71/etc/clamav.conf	Thu May 20 00:04:51 2004
 @@ -5,12 +5,12 @@
  
  
@@ -12,19 +12,20 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
  # LogFile must be writable for the user running the daemon.
  # Full path is required.
 -#LogFile /tmp/clamd.log
-+# LogFile /var/log/clamd.log
++#LogFile /var/log/clamd.log
  
  # By default the log file is locked for writing - the lock protects against
  # running clamd multiple times (if want to run another clamd, please
-@@ -34,14 +34,14 @@
+@@ -34,7 +34,7 @@
  #LogClean
  
  # Use system logger (can work together with LogFile).
 -#LogSyslog
 +LogSyslog
  
- # Enable verbose logging.
- #LogVerbose
+ # Specify the type of syslog messages - please refer to 'man syslog'
+ # for facility names. Default is LOG_LOCAL6.
+@@ -45,7 +45,7 @@
  
  # This option allows you to save the process identifier of the listening
  # daemon (main thread).
@@ -33,7 +34,7 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
  
  # Optional path to the global temporary directory.
  # Default is system specific - usually /var/tmp or /tmp.
-@@ -58,10 +58,10 @@
+@@ -62,10 +62,10 @@
  # Path to the local socket. The daemon doesn't change the mode of the
  # created file (portability reasons). You may want to create it in a directory
  # which is only accessible for a user running daemon.
@@ -46,16 +47,16 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
  
  # TCP port address.
  #TCPSocket 3310
-@@ -86,7 +86,7 @@
+@@ -90,7 +90,7 @@
  # Maximal number of a threads running at the same time.
  # Default is 5, and it should be sufficient for a typical workstation.
  # You may need to increase threads number for a server machine.
 -#MaxThreads 10
 +MaxThreads 10
  
- # Thread (scanner - single task) will be stopped after this time (seconds).
- # Default is 180. Value of 0 disables the timeout. SECURITY HINT: Increase the
-@@ -119,11 +119,11 @@
+ # Waiting for data from a client socket will timeout after this time (seconds).
+ # Default is 120. Value of 0 disables the timeout.
+@@ -118,11 +118,11 @@
  
  # Run as selected user (clamd must be started by root).
  # By default it doesn't drop privileges.
@@ -69,7 +70,7 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
  
  # Don't fork into background. Useful in debugging.
  #Foreground
-@@ -136,7 +136,7 @@
+@@ -145,7 +145,7 @@
  ##
  
  # Uncomment this option if you are planning to scan mail files.
@@ -78,21 +79,10 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
  
  ##
  ## Archive support
---- clamav-0.70/etc/freshclam.conf.orig	2004-04-17 00:42:13.000000000 +0200
-+++ clamav-0.70/etc/freshclam.conf	2004-04-20 04:22:51.208555704 +0200
-@@ -3,6 +3,11 @@
- ## Please read the clamav.conf(5) manual before editing this file.
- ## This file may be optionally merged with clamav.conf.
- ##
-+## PLD NOTE: Note that freshclam is called periodically via cron
-+## Check /etc/sysconfig/clamd for details
-+## Seems better to run task once per period than keep daemon running
-+## only for that. 
-+## But if you have arguments please tell us.
- 
- 
- # You can change the default database directory here.
-@@ -12,14 +17,14 @@
+diff -Nur clamav-0.71-orig/etc/freshclam.conf clamav-0.71/etc/freshclam.conf
+--- clamav-0.71-orig/etc/freshclam.conf	Tue May 11 01:19:48 2004
++++ clamav-0.71/etc/freshclam.conf	Thu May 20 00:03:30 2004
+@@ -12,10 +12,10 @@
  #UpdateLogFile /var/log/freshclam.log
  
  # Enable verbose logging.
@@ -103,6 +93,10 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
 -#LogSyslog
 +LogSyslog
  
+ # Specify the type of syslog messages - please refer to 'man syslog'
+ # for facility names. Default is LOG_LOCAL6.
+@@ -23,7 +23,7 @@
+ 
  # By default when freshclam is started by root it drops privileges and
  # switches to the "clamav" user. You can change this behaviour here.
 -#DatabaseOwner clamav
@@ -110,7 +104,7 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
  
  # The main database mirror is database.clamav.net (this is a round-robin
  # DNS that points to many mirrors on the world) and in most cases you
-@@ -31,7 +36,7 @@
+@@ -35,7 +35,7 @@
  
  # How often check for a new database. We suggest checking for it every
  # two hours.
@@ -119,7 +113,7 @@ diff -urN clamav-0.66.org/etc/clamav.conf clamav-0.66/etc/clamav.conf
  
  # Proxy settings
  #HTTPProxyServer myproxy.com
-@@ -41,6 +46,7 @@
+@@ -45,6 +45,7 @@
  
  # Send the RELOAD command to clamd.
  #NotifyClamd [/optional/config/file/path]
