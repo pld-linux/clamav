@@ -6,7 +6,7 @@
 %bcond_with	curl	# enable curl support
 #
 Summary:	An anti-virus utility for Unix
-Summary(pl):	Antywirusowe narzêdzie dla Uniksów
+Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.83
 Release:	2
