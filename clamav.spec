@@ -36,6 +36,7 @@ URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gmp-devel
+BuildRequires:	libidn-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libtool
 BuildRequires:	rpmbuild(macros) >= 1.159
