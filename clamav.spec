@@ -17,20 +17,17 @@ License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{clamav_version}%{_rc}.tar.gz
 # Source0-md5:	f38933eb64d108a9ab3f0e5d6c0a69c1
-# Source0-size:	2668125
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
-%define		database_version	20050120
+%define		database_version	20050121
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	160e671d3cdf6af54e825477c259fab9
-# Source6-size:	100250
+# Source6-md5:	e5d94792aa097666a82d2952db76c6f4
 Source7:	http://db.local.clamav.net/main.cvd
 # Source7-md5:	59f425f2dffe9a98926bfae94f299880
-# Source7-size:	1284637
 Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
