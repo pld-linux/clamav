@@ -16,7 +16,7 @@ Requires:	%{name}-database
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	zlib-devel
-Requires(poest,preun):	/sbin/chkconfig
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
