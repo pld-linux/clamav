@@ -10,6 +10,7 @@ Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
 Version:	0.80
 Release:	3
+Epoch:		0
 License:	GPL
 Group:		Applications
 Source0:	http://heanet.dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -52,7 +53,7 @@ Requires(postun):	/usr/sbin/userdel
 Requires(postun,pre):	/usr/sbin/usermod
 Requires(post,preun):	/sbin/chkconfig
 Requires:	/usr/sbin/usermod
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{epoch}%{version}-%{release}
 Requires:	bc
 Provides:	group(clamav)
 Provides:	user(clamav)
@@ -101,7 +102,7 @@ Filtr ClamAV dla sendmaila korzystaj±cy z interfejsu MILTER.
 Summary:	clamav - Development header files and libraries
 Summary(pl):	clamav - Pliki nag³ówkowe i biblioteki dla programistów
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
 Requires:	gmp-devel
 Requires:	zlib-devel
@@ -118,7 +119,7 @@ klienckich clamav.
 Summary:	clamav static libraris
 Summary(pl):	Biblioteki statyczne clamav
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 clamav static libraries.
