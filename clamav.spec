@@ -6,6 +6,7 @@ Release:	3
 License:	GPL
 Group:		System/Tools
 Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
+Patch0:		%{name}-db_path.patch
 URL:		http://www.konarski.edu.pl/~zolw/clam.html
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -28,16 +29,19 @@ POSIXem.
 
 %prep
 %setup -q
+%patch0 -p0
 
 %build
 %configure2_13 \
-	--disable-clamav
+	--prefix=/usr \
+	--disable-clamav \
+	--datadir=/usr/share/clam
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_prefix},%{_bindir},%{_mandir},%{_datadir}/clam}
 
-%{__make} prefix=$RPM_BUILD_ROOT%{_prefix} bindir=$RPM_BUILD_ROOT%{_bindir} mandir=$RPM_BUILD_ROOT%{_mandir} datadir=$RPM_BUILD_ROOT%{_datadir}/clam install
+%{__make} prefix=$RPM_BUILD_ROOT%{_prefix} bindir=$RPM_BUILD_ROOT%{_bindir} mandir=$RPM_BUILD_ROOT%{_mandir} datadir=$RPM_BUILD_ROOT/usr/share/clam install
 gzip -9nf AUTHORS FAQ TODO
 
 %clean
