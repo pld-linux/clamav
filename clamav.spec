@@ -6,12 +6,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
-Version:	0.67
-Release:	2
+%define	_ver	0.67-1
+Version:	%(echo %{_ver} | tr - .)
+Release:	1
 License:	GPL
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	6d854be864037f82fef1457bb9cabdff
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{_ver}.tar.gz
+# Source0-md5:	e53d65fe2f7d4146f146c5720313381e
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # bziped from http://www.clamav.net/database/
@@ -93,7 +94,7 @@ Virus database for clamav (updated %{database_version})
 Bazy wirusów dla clamav (aktualizowana %{database_version})
 
 %prep
-%setup -q -a 3
+%setup -q -a 3 -n %{name}-%{_ver}
 %patch0 -p1
 
 %build
@@ -187,6 +188,9 @@ if [ -f /var/lock/subsys/clamd ]; then
 else
 	echo "Run \"/etc/rc.d/init.d/clamd start\" to start Clam Antivirus daemon." >&2
 fi
+touch %{_var}/log/freshclam.log
+chown clamav:root %{_var}/log/freshclam.log
+chmod 640 %{_var}/log/freshclam.log
 
 %preun
 if [ "$1" = "0" ]; then
@@ -214,7 +218,7 @@ fi
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,clamav,root) %dir /var/lib/%{name}
 #%%attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
-%attr(640,clamav,root) %{_var}/log/freshclam.log
+%attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
