@@ -8,24 +8,24 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
-Version:	0.80
-Release:	7
+Version:	0.81
+Release:	2
 Epoch:		0
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	59bf21e169a35d7e9c27a34435f9b870
+# Source0-md5:	60081ddd9f29cbb8f0a2fe575e5a8afa
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
-%define		database_version	20050121
+%define		database_version	20050128
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	cee37166f11f509143d61b0e9d3cfeff
+# Source6-md5:	7cde580e2d1ba336dbd0abf86ea9fa93
 Source7:	http://db.local.clamav.net/main.cvd
-# Source7-md5:	f006a1f55722c2ff9d50e61cfb938bc7
+# Source7-md5:	59f425f2dffe9a98926bfae94f299880
 Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
@@ -147,7 +147,7 @@ Bazy wirusów dla clamav (aktualizowana %{database_version}).
 
 # kill old libtool.m4 copy
 head -n 489 acinclude.m4 > acinclude.m4.tmp
-tail -n +4064 acinclude.m4 >> acinclude.m4.tmp
+tail -n +4089 acinclude.m4 >> acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
 
 %build
@@ -306,7 +306,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog FAQ NEWS README TODO docs/html/
+%doc AUTHORS ChangeLog FAQ NEWS README TODO
 %attr(755,root,root) %{_bindir}/clamdscan
 %attr(755,root,root) %{_bindir}/clamscan
 %attr(755,root,root) %{_bindir}/freshclam
