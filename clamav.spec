@@ -17,7 +17,6 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # bziped from http://www.clamav.net/database/
 # Source3:	%{name}-database-%{database_version}.tar.bz2
-# Source3-md5:	4affa1cae8a0edaaaa084ea57702c1e8
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 Patch0:		%{name}-pld_config.patch
