@@ -36,14 +36,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
 AMaViS, compressed files, on-access scanning and includes a program
-for auto-updating with support for digital signatures.
-The virus database has over 20000 viruses, worms and trojans signatures.
-The scanner is multithreaded, written in C, and POSIX compliant.
+for auto-updating with support for digital signatures. The virus
+database has over 20000 viruses, worms and trojans signatures. The
+scanner is multithreaded, written in C, and POSIX compliant.
 
 %description -l pl
 Clam Antivirus jest potê¿nym skanerem antywirusowym dla systemów
-uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie "on-access"
-i posiada system bezpiecznej, automatycznej aktualizacji.
+uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
+"on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
 Baza wirusów zawiera ponad 20000 sygnatur. Skaner jest wielow±tkowy,
 napisany w C i zgodny z POSIXem.
 
