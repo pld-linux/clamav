@@ -7,6 +7,7 @@ Release:	4
 License:	GPL
 Group:		Applications
 Source0:	http://clamav.elektrapro.com/stable/%{name}-%{version}.tar.gz
+# Source0-md5:	1c2e2adffe9ed4d15fe2167dd7bad591
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # gziped from http://clamav.elektrapro.com/database/:
