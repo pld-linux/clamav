@@ -1,9 +1,14 @@
+# TODO:
+# - Fix inconsistency:
+#   clamd uses syslog but log from (crond) db update goes to
+#   /var/log/clamd.log
+
 %define		database_version 20030813
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.60
-Release:	3
+Release:	4
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -13,6 +18,7 @@ Source2:	%{name}.sysconfig
 # gziped from http://clamav.elektrapro.com/database/:
 Source3:	%{name}-database-%{database_version}.tar.gz
 # Source3-md5:	a8848904249edd97b873a43032c0208f
+Patch0:         %{name}-pld_config.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -86,7 +92,8 @@ Bazy wirusów dla clamav (aktualizowana %{database_version})
 
 %prep
 %setup -q -a 3
-
+%patch0 -p1
+ 
 %build
 rm -f missing
 %{__aclocal}
@@ -120,8 +127,42 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install etc/clamav.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 
+# NOTE: clamd uses sane rights to it's clamd.pid file
+# So better keep it dir
+# If it is fixed use of dir will be unecesary
+install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
+# touch $RPM_BUILD_ROOT%{_var}/run/%{name}/clamd.pid
+
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+# FIXME: Does %triggerin -- amavis-ng really have to written three times ?
+# It's stolen from mksd.spec - if it's wrong fix mksd.spec too
+
+%triggerin -- amavis-ng
+AMAVIS=$(/usr/bin/getgid amavis)
+RESULT=$?
+if  [ $RESULT -eq 0 ]; then
+        /usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
+        echo "adding clamav to amavis group GID=$AMAVIS"
+fi
+
+%triggerin -- amavisd-new
+AMAVIS=$(/usr/bin/getgid amavis)
+RESULT=$?
+if  [ $RESULT -eq 0 ]; then
+        /usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
+        echo "adding clamav to amavis group GID=$AMAVIS"
+fi
+
+%triggerin -- amavisd
+AMAVIS=$(/usr/bin/getgid amavis)
+RESULT=$?
+if  [ $RESULT -eq 0 ]; then
+        /usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
+        echo "adding clamav to amavis group GID=$AMAVIS"
+fi
+
 
 %pre
 if [ -n "`getgid clamav`" ]; then
@@ -179,6 +220,9 @@ fi
 %attr(755,clamav,root) %dir /var/lib/%{name}
 %attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/mirrors.txt
 %attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
+%attr(750,clamav,clamav) %dir %{_var}/run/%{name}
+# %%attr(666,clamav,clamav) %%ghost %{_var}/run/%{name}/clamd.pid
+
 %attr(750,root,root) %{_sysconfdir}/cron.daily/%{name}
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
 %attr(754,root,root) /etc/rc.d/init.d/clamd
