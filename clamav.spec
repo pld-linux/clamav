@@ -12,7 +12,7 @@ Release:	2
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{_ver}.tar.gz
-# Source0-md5:	6d854be864037f82fef1457bb9cabdff
+# Source0-md5:	e53d65fe2f7d4146f146c5720313381e
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # bziped from http://www.clamav.net/database/
