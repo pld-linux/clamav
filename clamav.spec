@@ -8,7 +8,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
 Version:	0.75.1
-Release:	2
+Release:	3
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -28,6 +28,7 @@ Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
+Patch2:		%{name}-nolibs.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -65,7 +66,6 @@ Shared libraries for clamav.
 %description libs -l pl
 Biblioteki dzielone clamav.
 
-%if %{with milter}
 %package milter
 Summary:	ClamAV filter using milter interface
 Summary(pl):	Filtr ClamAV korzystaj±cy z interfejsu milter
@@ -79,7 +79,6 @@ ClamAV sendmail filter using MILTER interface.
 
 %description -l pl milter
 Filtr ClamAV dla sendmaila korzystaj±cy z interfejsu MILTER.
-%endif
 
 %package devel
 Summary:	clamav - Development header files and libraries
@@ -124,10 +123,18 @@ Bazy wirusów dla clamav (aktualizowana %{database_version}).
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+
+# kill old libtool.m4 copy
+head -n 489 acinclude.m4 > acinclude.m4.tmp
+tail -n +4064 acinclude.m4 >> acinclude.m4.tmp
+mv -f acinclude.m4.tmp acinclude.m4
 
 %build
+%{__libtoolize}
 %{__aclocal}
 %{__autoconf}
+%{__autoheader}
 %{__automake}
 %configure \
 	--disable-clamav \
