@@ -1,133 +1,141 @@
---- clamav-0.66.org/etc/clamav.conf	Wed Feb 11 11:51:14 2004
-+++ clamav-0.66/etc/clamav.conf	Wed Feb 11 11:52:00 2004
-@@ -5,12 +5,12 @@
+diff -urN clamav-0.80rc4.orig/etc/clamd.conf clamav-0.80rc4/etc/clamd.conf
+--- clamav-0.80rc4.orig/etc/clamd.conf	2004-10-11 03:14:30.000000000 +0200
++++ clamav-0.80rc4/etc/clamd.conf	2004-10-16 23:14:10.722021576 +0200
+@@ -5,13 +5,13 @@
  
  
  # Comment or remove the line below.
 -Example
-+# Example
++#Example
  
  # Uncomment this option to enable logging.
- # LogFile must be writable for the user running the daemon.
- # Full path is required.
+ # LogFile must be writable for the user running daemon.
+ # A full path is required.
+ # Default: disabled
 -#LogFile /tmp/clamd.log
-+# LogFile /var/log/clamd.log
++#LogFile /var/log/clamd.log
  
  # By default the log file is locked for writing - the lock protects against
  # running clamd multiple times (if want to run another clamd, please
-@@ -34,7 +34,7 @@
- #LogClean
+@@ -40,7 +40,7 @@
  
  # Use system logger (can work together with LogFile).
+ # Default: disabled
 -#LogSyslog
 +LogSyslog
  
  # Specify the type of syslog messages - please refer to 'man syslog'
- # for facility names. Default is LOG_LOCAL6.
-@@ -45,7 +45,7 @@
- 
- # This option allows you to save the process identifier of the listening
+ # for facility names.
+@@ -54,7 +54,7 @@
+ # This option allows you to save a process identifier of the listening
  # daemon (main thread).
+ # Default: disabled
 -#PidFile /var/run/clamd.pid
 +PidFile /var/run/clamav/clamd.pid
  
  # Optional path to the global temporary directory.
- # Default is system specific - usually /var/tmp or /tmp.
-@@ -62,10 +62,10 @@
- # Path to the local socket. The daemon doesn't change the mode of the
- # created file (portability reasons). You may want to create it in a directory
- # which is only accessible for a user running daemon.
+ # Default: system specific (usually /tmp or /var/tmp).
+@@ -69,7 +69,7 @@
+ 
+ # Path to a local socket file the daemon will listen on.
+ # Default: disabled
 -LocalSocket /tmp/clamd
 +LocalSocket /var/lib/clamav/clamd.socket
  
  # Remove stale socket after unclean shutdown.
--#FixStaleSocket
-+FixStaleSocket
+ # Default: disabled
+@@ -130,11 +130,11 @@
  
- # TCP port address.
- #TCPSocket 3310
-@@ -90,7 +90,7 @@
- # Maximal number of a threads running at the same time.
- # Default is 5, and it should be sufficient for a typical workstation.
- # You may need to increase threads number for a server machine.
--#MaxThreads 10
-+MaxThreads 10
- 
- # Waiting for data from a client socket will timeout after this time (seconds).
- # Default is 120. Value of 0 disables the timeout.
-@@ -118,11 +118,11 @@
- 
- # Run as selected user (clamd must be started by root).
- # By default it doesn't drop privileges.
+ # Run as a selected user (clamd must be started by root).
+ # Default: disabled
 -#User clamav
 +User clamav
  
- # Initialize the supplementary group access (for all groups in /etc/group
- # user is added in. clamd must be started by root).
+ # Initialize supplementary group access (clamd must be started by root).
+ # Default: disabled
 -#AllowSupplementaryGroups
 +AllowSupplementaryGroups
  
- # Don't fork into background. Useful in debugging.
- #Foreground
-@@ -145,7 +145,7 @@
- ##
+ # Don't fork into background.
+ # Default: disabled
+@@ -273,15 +273,15 @@
  
- # Uncomment this option if you are planning to scan mail files.
--#ScanMail
-+ScanMail
+ # Set access mask for Clamuko.
+ # Default: disabled
+-#ClamukoScanOnOpen
+-#ClamukoScanOnClose
+-#ClamukoScanOnExec
++ClamukoScanOnOpen
++ClamukoScanOnClose
++ClamukoScanOnExec
  
+ # Set the include paths (all files in them will be scanned). You can have
+ # multiple ClamukoIncludePath directives but each directory must be added
+ # in a seperate line.
+ # Default: disabled
+-#ClamukoIncludePath /home
++ClamukoIncludePath /home
+ #ClamukoIncludePath /students
+ 
+ # Set the exclude paths. All subdirectories are also excluded.
+diff -urN clamav-0.80rc4.orig/etc/freshclam.conf clamav-0.80rc4/etc/freshclam.conf
+--- clamav-0.80rc4.orig/etc/freshclam.conf	2004-09-27 22:35:01.000000000 +0200
++++ clamav-0.80rc4/etc/freshclam.conf	2004-10-16 23:17:04.467608232 +0200
+@@ -3,10 +3,14 @@
+ ## Please read the freshclam.conf(5) manual before editing this file.
+ ## This file may be optionally merged with clamd.conf.
  ##
- ## Archive support
---- clamav-0.70/etc/freshclam.conf.orig	2004-04-17 00:42:13.000000000 +0200
-+++ clamav-0.70/etc/freshclam.conf	2004-04-20 04:22:51.208555704 +0200
-@@ -3,6 +3,11 @@
- ## Please read the clamav.conf(5) manual before editing this file.
- ## This file may be optionally merged with clamav.conf.
- ##
+-
 +## PLD NOTE: Note that freshclam is called periodically via cron
 +## Check /etc/sysconfig/clamd for details
 +## Seems better to run task once per period than keep daemon running
-+## only for that. 
++## only for that.
 +## But if you have arguments please tell us.
  
- # It should match clamav.conf's directive ! (in most cases you shouldn't
- # change it)
-@@ -12,10 +17,10 @@
- #UpdateLogFile /var/log/freshclam.log
+ # Comment or remove the line below.
+-Example
++#Example
+ 
+ # Path to the database directory.
+ # WARNING: It must match clamd.conf's directive!
+@@ -19,11 +23,11 @@
  
  # Enable verbose logging.
+ # Default: disabled
 -#LogVerbose
 +LogVerbose
  
  # Use system logger (can work together with UpdateLogFile).
+ # Default: disabled
 -#LogSyslog
 +LogSyslog
  
  # Specify the type of syslog messages - please refer to 'man syslog'
- # for facility names. Default is LOG_LOCAL6.
-@@ -23,7 +28,7 @@
- 
- # By default when freshclam is started by root it drops privileges and
- # switches to the "clamav" user. You can change this behaviour here.
+ # for facility names.
+@@ -37,7 +41,7 @@
+ # By default when started freshclam drops privileges and switches to the
+ # "clamav" user. This directive allows you to change the database owner.
+ # Default: clamav (may depend on installation options)
 -#DatabaseOwner clamav
 +DatabaseOwner clamav
  
- # The main database mirror is database.clamav.net (this is a round-robin
- # DNS that points to many mirrors on the world) and in most cases you
-@@ -35,7 +40,7 @@
+ # Use DNS to verify virus database version. Freshclam uses DNS TXT records
+ # to verify database and software versions. We highly recommend enabling
+@@ -62,7 +66,7 @@
  
- # How often check for a new database. We suggest checking for it every
- # two hours.
--Checks 12
+ # Number of database checks per day.
+ # Default: 12 (every two hours)
+-#Checks 24
 +Checks 2
  
  # Proxy settings
- #HTTPProxyServer myproxy.com
-@@ -45,6 +50,7 @@
- 
- # Send the RELOAD command to clamd.
- #NotifyClamd [/optional/config/file/path]
+ # Default: disabled
+@@ -76,7 +80,7 @@
+ #NotifyClamd
+ # By default it uses the hardcoded configuration file but you can force an
+ # another one.
+-#NotifyClamd /config/file/path
 +NotifyClamd /etc/clamav.conf
  
- # Run command after database update.
- #OnUpdateExecute command
+ # Run command after successful database update.
+ # Default: disabled
