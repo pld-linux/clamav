@@ -1,5 +1,5 @@
-Summary:	A Mail Virus Scanner
-Summary(pl):	Antywirusowy skaner poczty elektronicznej
+Summary:	An anti-virus utility for Unix
+Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.14
 Release:	2
