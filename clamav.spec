@@ -143,7 +143,7 @@ fi
 %post
 touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clamav %{_var}/log/%{name}.log
 
-%post libs -p /sbin/ldconfig
+%post   libs -p /sbin/ldconfig
 %postun libs -p /sbin/ldconfig
 
 %files
@@ -161,7 +161,7 @@ touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clam
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*
+%attr(755,root,root) %{_libdir}/lib*.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
