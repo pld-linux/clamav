@@ -1,0 +1,100 @@
+diff -urN clamav-0.11.org/clamscan/Makefile.am clamav-0.11/clamscan/Makefile.am
+--- clamav-0.11.org/clamscan/Makefile.am	Sun May 19 22:51:40 2002
++++ clamav-0.11/clamscan/Makefile.am	Sun May 19 23:33:33 2002
+@@ -15,6 +15,8 @@
+ #  along with this program; if not, write to the Free Software
+ #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
++DEFS = @DEFS@ -DVIRUSDB=\"$(datadir)/clam/viruses.db\"
++
+ bin_PROGRAMS = clamscan
+ 
+ clamscan_SOURCES = \
+@@ -41,18 +43,6 @@
+     md5.h \
+     threadarg.h
+ 
+-CFLAGS = -O3 -Wall
+ LIBS = @CLAM_LIBS@
+ 
+-install-binPROGRAMS: $(bin_PROGRAMS)
+-	@if test -x $(bin_PROGRAMS) -a ! -r clamscan.exe; then \
+-	    strip $(bin_PROGRAMS); \
+-	fi
+-	@$(NORMAL_INSTALL)
+-	$(mkinstalldirs) $(DESTDIR)$(bindir)
+-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+-	  if test -f $$p; then \
+-	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+-	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+-	  else :; fi; \
+-	done
++
+diff -urN clamav-0.11.org/clamscan/defaults.h clamav-0.11/clamscan/defaults.h
+--- clamav-0.11.org/clamscan/defaults.h	Sun May 19 22:51:40 2002
++++ clamav-0.11/clamscan/defaults.h	Sun May 19 23:33:33 2002
+@@ -16,7 +16,9 @@
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
++#ifndef VIRUSDB
+ #define VIRUSDB "/usr/local/share/clam/viruses.db"
++#endif
+ 
+ /* better don't change default names */
+ 
+diff -urN clamav-0.11.org/database/Makefile.am clamav-0.11/database/Makefile.am
+--- clamav-0.11.org/database/Makefile.am	Sun May 19 22:51:40 2002
++++ clamav-0.11/database/Makefile.am	Sun May 19 23:35:04 2002
+@@ -18,16 +18,5 @@
+ EXTRA_DIST = viruses.db
+ 
+ install:
+-	@mkdir -p $(prefix)/share/clam
+-	@chmod 711 $(prefix)/share/clam
+-	@cp -f viruses.db $(prefix)/share/clam
+-	@chmod 644 $(prefix)/share/clam/viruses.db
+-	@if test -r /etc/passwd; then \
+-	    clamavuser=`cat /etc/passwd|grep clamav`; \
+-	    if test -n "$$clamavuser"; then \
+-		chown clamav $(prefix)/share/clam; \
+-		chgrp clamav $(prefix)/share/clam; \
+-		chown clamav $(prefix)/share/clam/viruses.db; \
+-		chgrp clamav $(prefix)/share/clam/viruses.db; \
+-	    fi; \
+-	fi
++	$(mkinstalldirs) "$(DESTDIR)$(datadir)/clam"
++	@$(INSTALL_DATA) viruses.db $(DESTDIR)$(datadir)/clam
+diff -urN clamav-0.11.org/freshclam/Makefile.am clamav-0.11/freshclam/Makefile.am
+--- clamav-0.11.org/freshclam/Makefile.am	Sun May 19 22:51:40 2002
++++ clamav-0.11/freshclam/Makefile.am	Sun May 19 23:33:33 2002
+@@ -15,7 +15,9 @@
+ #  along with this program; if not, write to the Free Software
+ #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+-INCLUDES = -I../clamscan
++INCLUDES = -I$(top_srcdir)/clamscan
++
++DEFS = @DEFS@ -DVIRUSDBDIR=\"$(datadir)/clam\"
+ 
+ bin_PROGRAMS = freshclam
+ 
+@@ -31,5 +33,4 @@
+ 
+ LDADD = ../clamscan/md5.o ../clamscan/getopt.o
+ 
+-CFLAGS = -O3 -Wall
+ LIBS = @FRESH_LIBS@
+diff -urN clamav-0.11.org/freshclam/defaults.h clamav-0.11/freshclam/defaults.h
+--- clamav-0.11.org/freshclam/defaults.h	Sun May 19 22:51:40 2002
++++ clamav-0.11/freshclam/defaults.h	Sun May 19 23:33:33 2002
+@@ -16,7 +16,9 @@
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
++#ifndef VIRUSDBDIR
+ #define VIRUSDBDIR "/usr/local/share/clam"
++#endif
+ 
+ /* default names */
+ 
