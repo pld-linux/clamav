@@ -16,7 +16,7 @@ Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 %define		database_version	%(date -r %{SOURCE6} +%Y%m%d)
 Source6:	http://www.clamav.net/database/daily.cvd
-# Source6-md5:	91fae748a9702545492d1a045db4c630
+# Source6-md5:	11b6e9ce48def018e76f52c45ffac589
 Source7:	http://www.clamav.net/database/main.cvd
 # Source7-md5:	e85d9a1c57005458c3208bf94a888706
 Source8:	%{name}-post-updatedb
