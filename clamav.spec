@@ -19,7 +19,7 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}-database-%{database_version}.tar.gz
 # Source3-md5:	a8848904249edd97b873a43032c0208f
 Source4:	%{name}-cron-updatedb
-Patch0:         %{name}-pld_config.patch
+Patch0:		%{name}-pld_config.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -142,46 +142,46 @@ rm -rf $RPM_BUILD_ROOT
 %triggerin -- amavis-ng
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
-if  [ $RESULT -eq 0 ]; then
-        /usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
-        echo "adding clamav to amavis group GID=$AMAVIS"
+if [ $RESULT -eq 0 ]; then
+	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
+	echo "adding clamav to amavis group GID=$AMAVIS"
 fi
 
 %triggerin -- amavisd-new
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
-if  [ $RESULT -eq 0 ]; then
-        /usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
-        echo "adding clamav to amavis group GID=$AMAVIS"
+if [ $RESULT -eq 0 ]; then
+	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
+	echo "adding clamav to amavis group GID=$AMAVIS"
 fi
 
 %triggerin -- amavisd
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
-if  [ $RESULT -eq 0 ]; then
-        /usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
-        echo "adding clamav to amavis group GID=$AMAVIS"
+if [ $RESULT -eq 0 ]; then
+	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
+	echo "adding clamav to amavis group GID=$AMAVIS"
 fi
 
 
 %pre
 if [ -n "`getgid clamav`" ]; then
-        if [ "`getgid clamav`" != "43" ]; then
-                echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
-                exit 1
-        fi
+	if [ "`getgid clamav`" != "43" ]; then
+		echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
+		exit 1
+	fi
 else
-       echo "Adding group clamav GID=43"
-        /usr/sbin/groupadd -g 43 -r -f clamav
+	echo "Adding group clamav GID=43"
+	/usr/sbin/groupadd -g 43 -r -f clamav
 fi
 if [ -n "`id -u clamav 2>/dev/null`" ]; then
-       if [ "`id -u clamav`" != "43" ]; then
-               echo "Warning: user clamav doesn't have uid=43. Correct this before installing clamav" 1>&2
-               exit 1
-       fi
+	if [ "`id -u clamav`" != "43" ]; then
+		echo "Warning: user clamav doesn't have uid=43. Correct this before installing clamav" 1>&2
+		exit 1
+	fi
 else
-       echo "Adding user clamav UID=43"
-       /usr/sbin/useradd -u 43 -r -d /tmp  -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav 1>&2
+	echo "Adding user clamav UID=43"
+	/usr/sbin/useradd -u 43 -r -d /tmp -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav 1>&2
 fi
 
 %post
@@ -203,14 +203,14 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-       echo "Removing user clamav"
-       /usr/sbin/userdel clamav
-       echo "Removing group clamav"
-       /usr/sbin/groupdel clamav
+	echo "Removing user clamav"
+	/usr/sbin/userdel clamav
+	echo "Removing group clamav"
+	/usr/sbin/groupdel clamav
 fi
 
-%post   libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
