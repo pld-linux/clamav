@@ -2,3 +2,10 @@
 
 # Define nice level
 SERVICE_RUN_NICE_LEVEL="+0"
+
+# how often update databases - once per X hours
+UPDATE_HOUR=6
+
+# be quiet when updating?
+UPDATE_QUIET=no
+
