@@ -13,16 +13,19 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
-Version:	0.65
-Release:	6
+Version:	0.66
+Release:	0.1
 License:	GPL
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	f2b8473190b6dc1fd9c64b9ebc49a5ad
+# Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
+# Temporary url - sf is under maintanance
+Source0:	http://clamav.catt.com/stable/clamav-0.66.tar.gz
+# Source0-md5:	f0a5d7f35106fb7b176bca5cd28a1bed
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # bziped from http://clamav.elektrapro.com/database/:
 Source3:	%{name}-database-%{database_version}.tar.bz2
+
 # Source3-md5:	f1e7c6362a2c03439da41d237dc5d01c
 Source4:	%{name}-cron-updatedb
 Patch0:		%{name}-pld_config.patch
@@ -82,7 +85,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
 %description static
-clamav static libraris.
+clamav static libraries.
 
 %description static -l pl
 Biblioteki statyczne clamav.
@@ -102,9 +105,9 @@ Bazy wirusów dla clamav (aktualizowana %{database_version})
 
 %prep
 %setup -q -a 3
-%patch0 -p1
-%{!?_with_bigZIPOSDET:%patch1 -p1}
-%patch2 -p0
+#%%patch0 -p1
+#%%{!?_with_bigZIPOSDET:%patch1 -p1}
+#%%patch2 -p0
 
 %build
 rm -f missing
@@ -115,9 +118,9 @@ rm -f missing
 	--disable-clamav \
 	--with-dbdir=/var/lib/%{name}
 %{__make}
-mv database/mirrors.txt{,.old}
-echo clamav.sourceforge.net >database/mirrors.txt
-cat database/mirrors.txt.old >>database/mirrors.txt
+#mv database/mirrors.txt{,.old}
+#echo clamav.sourceforge.net >database/mirrors.txt
+#cat database/mirrors.txt.old >>database/mirrors.txt
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -227,10 +230,10 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,clamav,root) %dir /var/lib/%{name}
-%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/mirrors.txt
+#%%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/mirrors.txt
 %attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
-# %%attr(666,clamav,clamav) %%ghost %{_var}/run/%{name}/clamd.pid
+#%%attr(666,clamav,clamav) %%ghost %{_var}/run/%{name}/clamd.pid
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
 %attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
