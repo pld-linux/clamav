@@ -1,4 +1,4 @@
-/var/log/clamd.log /var/log/freshclam.log {
+/var/log/clamd.log {
     olddir /var/log/archiv
     create 640 clamav root
     sharedscripts
