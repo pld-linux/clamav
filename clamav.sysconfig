@@ -4,10 +4,10 @@
 SERVICE_RUN_NICE_LEVEL="+0"
 
 # how often update databases - once per X hours
-UPDATE_HOUR=2
+UPDATE_HOUR=4
 
-# be quiet when updating?
-UPDATE_QUIET=no
+# what kind of messages cron should send via email (all, errors, none)?
+UPDATE_MAIL_MESSAGES=errors
 
 # try to download new databases after upgrade of databases?
 # Remember - you need good internet connection for that
