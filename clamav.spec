@@ -16,6 +16,7 @@ Requires:	%{name}-database
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	zlib-devel
+Requires(pre):	user-clamav
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -118,26 +119,6 @@ install etc/clamav.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
-if [ -n "`getgid clamav`" ]; then
-        if [ "`getgid clamav`" != "43" ]; then
-                echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
-                exit 1
-        fi
-else
-	echo "Adding group clamav GID=43"
-        /usr/sbin/groupadd -g 43 -r -f clamav
-fi
-if [ -n "`id -u clamav 2>/dev/null`" ]; then
-	if [ "`id -u clamav`" != "43" ]; then
-		echo "Warning: user clamav doesn't have uid=43. Correct this before installing clamav" 1>&2
-		exit 1
-	fi
-else
-	echo "Adding user clamav UID=43"
-	/usr/sbin/useradd -u 43 -r -d /tmp  -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav 1>&2
-fi
-
 %post
 touch %{_var}/log/%{name}.log && chmod 640 %{_var}/log/%{name}.log && chown clamav %{_var}/log/%{name}.log
 /sbin/chkconfig --add clamd
@@ -145,14 +126,6 @@ if [ -f /var/lock/subsys/clamd ]; then
 	/etc/rc.d/init.d/clamd restart >&2
 else
 	echo "Run \"/etc/rc.d/init.d/clamd start\" to start Clam Antivirus daemon." >&2
-fi
-
-%postun
-if [ "$1" = "0" ]; then
-	echo "Removing user clamav"
-	/usr/sbin/userdel clamav
-	echo "Removing group clamav"
-	/usr/sbin/groupdel clamav
 fi
 
 %preun
