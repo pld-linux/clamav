@@ -8,7 +8,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.60
-Release:	4
+Release:	4.1
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -24,7 +24,6 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
-Requires:	%{name}-database
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -66,7 +65,7 @@ Pliki nag³ówkowe i biblioteki konieczne do kompilacji aplikacji
 klienckich clamav.
 
 %package static
-Summary:	clamav staic libraris
+Summary:	clamav static libraris
 Summary(pl):	Biblioteki statyczne clamav
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
