@@ -3,7 +3,7 @@
 #   log nicely via syslog to /var/log/freshclam.log
 
 Summary:	An anti-virus utility for Unix
-Summary(pl):	Antywirusowe narzêdzie dla Unixów
+Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
 %define		_ver	0.68-1
 Version:	0.68
