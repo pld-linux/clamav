@@ -6,14 +6,12 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
-Version:	0.66
+Version:	0.67
 Release:	2
 License:	GPL
 Group:		Applications
-# Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Temporary url - sf is under maintanance
-Source0:	http://clamav.catt.com/stable/clamav-0.66.tar.gz
-# Source0-md5:	f0a5d7f35106fb7b176bca5cd28a1bed
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
+# Source0-md5:	6d854be864037f82fef1457bb9cabdff
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 # bziped from http://www.clamav.net/database/
@@ -216,11 +214,13 @@ fi
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,clamav,root) %dir /var/lib/%{name}
 #%%attr(640,clamav,root) %ghost %{_var}/log/%{name}.log
-%attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
+%attr(640,clamav,root) %{_var}/log/freshclam.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
-%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/*.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/clamav.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/freshclam.conf
+
 %attr(754,root,root) /etc/rc.d/init.d/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/clamd
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/clamav
