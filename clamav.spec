@@ -4,20 +4,20 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
-Version:	0.71
+Version:	0.72
 Release:	1
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	096cffd2633cbac5a14b7080b6f67a67
+# Source0-md5:	f859f9ba5d156a8be92585f6e7f26cca
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
-%define		database_version	20040520
+%define		database_version	20040604
 Source6:	http://www.clamav.net/database/daily.cvd
-# Source6-md5:	d5c30cc2417644d3b92d1f7f71323b03
+# Source6-md5:	9cb276b72763b9598a7776931af88255
 Source7:	http://www.clamav.net/database/main.cvd
 # Source7-md5:	937f22844dd8dc7e75604a7c0939ad73
 Source8:	%{name}-post-updatedb
