@@ -123,7 +123,7 @@ diff -urN clamav-0.66.org/etc/freshclam.conf clamav-0.66/etc/freshclam.conf
  
  # Send the RELOAD command to clamd.
  #NotifyClamd [/optional/config/file/path]
-+NotifyClamd /etc/rc.d/init.d/clamd reload
++NotifyClamd /etc/clamav.conf
  
  # Run command after database update.
  #OnUpdateExecute command
