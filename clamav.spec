@@ -2,7 +2,7 @@ Summary:	Antivirus for Unix
 Summary(pl):	Antywirus dla Unixów
 Name:		clamav
 Version:	0.11
-Release:	1
+Release:	2
 License:	GPL
 Group:		System/Tools
 ######		/home/mick3y/rpm/SOURCES/rpm.groups: no such file
@@ -51,7 +51,6 @@ fi
 
 %post
  /usr/sbin/userdel clamav
-fi
 
 %files
 %defattr(644,root,root,755)
