@@ -8,7 +8,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Unixów
 Name:		clamav
 Version:	0.60
-Release:	4.2
+Release:	4.5
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -18,6 +18,7 @@ Source2:	%{name}.sysconfig
 # gziped from http://clamav.elektrapro.com/database/:
 Source3:	%{name}-database-%{database_version}.tar.gz
 # Source3-md5:	a8848904249edd97b873a43032c0208f
+Source4:	%{name}-cron-updatedb
 Patch0:         %{name}-pld_config.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
@@ -115,13 +116,14 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,sysconfig} \
 	DESTDIR=$RPM_BUILD_ROOT
 
 cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
-0 */6 * * *	root	umask 022; %{_bindir}/freshclam --quiet -l %{_var}/log/%{name}.log --daemon-notify
+5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
 EOF
 
 touch $RPM_BUILD_ROOT%{_var}/log/%{name}.log
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/clamav.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
