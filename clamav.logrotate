@@ -2,7 +2,7 @@
     olddir /var/log/archiv
     create 640 clamav clamav
     postrotate
-        /bin/killall -HUP clamav
+        /bin/killall -HUP clamd
     endscript
 }
 
@@ -10,6 +10,6 @@
     olddir /var/log/archiv
     create 640 clamav clamav
     postrotate
-        /bin/killall -HUP clamav
+        /bin/killall -HUP clamd
     endscript
 }
