@@ -7,7 +7,6 @@ License:	GPL
 Group:		Applications/Mail
 Source0:	http://www.konarski.edu.pl/~zolw/clam/%{name}-%{version}.tar.gz
 Patch0:		%{name}-am_ac.patch
-Patch1:		%{name}-http.patch
 URL:		http://www.konarski.edu.pl/~zolw/clam.html
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -29,7 +28,6 @@ POSIXem.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 rm -f missing
