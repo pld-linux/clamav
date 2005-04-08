@@ -27,21 +27,21 @@ case "$1" in
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/clamd ]; then
 		msg_starting clamd
-		daemon /usr/sbin/clamd 
+		daemon /usr/sbin/clamd
 		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd		
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd
 	else
 		msg_already_running clamd
 	fi
 	;;
   stop)
-        if [ -f /var/lock/subsys/clamd ]; then
+	if [ -f /var/lock/subsys/clamd ]; then
 		msg_stopping clamd
-		killproc clamd
+		killproc --pidfile clamav/clamd.pid clamd
 		rm -f /var/run/clamav/clamd.pid /var/lock/subsys/clamd >/dev/null 2>&1
 	else
 		msg_not_running clamd
-	fi	
+	fi
 	;;
   restart)
 	$0 stop
