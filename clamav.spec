@@ -42,6 +42,7 @@ BuildRequires:	libtool
 BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
+PreReq:		rc-scripts
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
