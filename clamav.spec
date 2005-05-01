@@ -13,8 +13,7 @@ Release:	2
 Epoch:		0
 License:	GPL
 Group:		Applications
-#Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-Source0:	http://puzzle.dl.sourceforge.net/sourceforge/clamav/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
 # Source0-md5:	c43213da01d510faf117daa9a4d5326c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
