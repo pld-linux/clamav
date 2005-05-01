@@ -1,0 +1,2 @@
+- added clamav-post-updatedb script - fix problem with overwriting with
+  (maybe) older databases
