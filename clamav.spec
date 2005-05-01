@@ -39,7 +39,7 @@ BuildRequires:	bzip2-devel
 BuildRequires:	gmp-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libtool
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
 PreReq:		rc-scripts
@@ -204,7 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
 if [ $RESULT -eq 0 ]; then
-	echo "adding clamav to amavis group GID=$AMAVIS"
+	echo "Adding clamav to amavis group GID=$AMAVIS"
 	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
 fi
 
@@ -212,7 +212,7 @@ fi
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
 if [ $RESULT -eq 0 ]; then
-	echo "adding clamav to amavis group GID=$AMAVIS"
+	echo "Adding clamav to amavis group GID=$AMAVIS"
 	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
 fi
 
@@ -220,33 +220,19 @@ fi
 AMAVIS=$(/usr/bin/getgid amavis)
 RESULT=$?
 if [ $RESULT -eq 0 ]; then
-	echo "adding clamav to amavis group GID=$AMAVIS"
+	echo "Adding clamav to amavis group GID=$AMAVIS"
 	/usr/sbin/usermod -G amavis clamav 1>&2
 fi
 
 %pre
-if [ -n "`/usr/bin/getgid clamav`" ]; then
-	if [ "`/usr/bin/getgid clamav`" != 43 ]; then
-		echo "Error: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
-		exit 1
-	fi
-else
-	echo "Adding group clamav GID=43"
-	/usr/sbin/groupadd -g 43 clamav
-fi
-if [ -n "`/bin/id -u clamav 2>/dev/null`" ]; then
-	if [ "`/bin/id -u clamav`" != 43 ]; then
-		echo "Error: user clamav doesn't have uid=43. Correct this before installing clamav" 1>&2
-		exit 1
-	fi
-else
-	echo "Adding user clamav UID=43"
-	/usr/sbin/useradd -u 43 -d /tmp -s /bin/false \
-		-c "Clam Anti Virus Checker" -g clamav clamav 1>&2
-	if [ -n "`/usr/bin/getgid amavis`" ]; then
-		echo "adding clamav to amavis group"
-		/usr/sbin/usermod -G amavis clamav 1>&2
-	fi
+%groupadd -g 43 clamav
+%useradd -u 43 -d /tmp -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav
+
+# FIXME: check this. is it proper after useradd macro?
+# TODO: use addusertogroup macro?
+if [ -n "`/usr/bin/getgid amavis`" ]; then
+	echo "Adding clamav to amavis group"
+	/usr/sbin/usermod -G amavis clamav 1>&2
 fi
 
 %post
