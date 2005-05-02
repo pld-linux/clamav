@@ -305,19 +305,19 @@ fi
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
-%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/clamd.conf
-%attr(644,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/freshclam.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamd.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/freshclam.conf
 
 %attr(754,root,root) /etc/rc.d/init.d/clamd
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/clamd
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/clamav
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamd
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/clamav
 %{_mandir}/man[15]/*
 %{_mandir}/man8/clamd*
 
 %if %{with milter}
 %files milter
 %defattr(644,root,root,755)
-%config(noreplace) %{_sysconfdir}/sysconfig/clamav-milter
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamav-milter
 %attr(754,root,root) /etc/rc.d/init.d/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
@@ -346,4 +346,4 @@ fi
 %files database
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
-%attr(644,clamav,root) %verify(not md5 size mtime) /var/lib/%{name}/*.cvd
+%attr(644,clamav,root) %verify(not md5 mtime size) /var/lib/%{name}/*.cvd
