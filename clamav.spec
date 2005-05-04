@@ -2,14 +2,15 @@
 #   Make freshclam (script and daemon)
 #
 # Conditional build:
-%bcond_without	milter	# build without milter subpackage
-%bcond_with	curl	# enable curl support
+%bcond_without	milter		# build without milter subpackage
+%bcond_without	database	# build without databases subpackage
+%bcond_with	curl		# enable curl support
 #
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.84
-Release:	2
+Release:	2.1
 Epoch:		0
 License:	GPL
 Group:		Applications
@@ -20,13 +21,15 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
+%if %{with database}
 # Remember to update date after databases upgrade
-%define		database_version	20050430
+%define		database_version	20050504
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	be42ab8ce086b80155be1088b413be26
+# Source6-md5:	1feb7d583f50ca87c816d76b8208a12f
 Source7:	http://db.local.clamav.net/main.cvd
-# Source7-md5:	59f425f2dffe9a98926bfae94f299880
+# Source7-md5:	8771a3301a0781d7897b98e435df26f3
 Source8:	%{name}-post-updatedb
+%endif # database
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
@@ -43,7 +46,7 @@ BuildRequires:	rpmbuild(macros) >= 1.202
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
 PreReq:		rc-scripts
-Requires(pre):	/bin/id
+Requires(pre):	%{__id}
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
@@ -63,14 +66,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
 AMaViS, compressed files, on-access scanning and includes a program
 for auto-updating with support for digital signatures. The virus
-database has over 25000 viruses, worms and trojans signatures. The
+database has over 34000 viruses, worms and trojans signatures. The
 scanner is multithreaded, written in C, and POSIX compliant.
 
 %description -l pl
 Clam Antivirus jest potê¿nym skanerem antywirusowym dla systemów
 uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
 "on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
-Baza wirusów zawiera ponad 25000 sygnatur. Skaner jest wielow±tkowy,
+Baza wirusów zawiera ponad 34000 sygnatur. Skaner jest wielow±tkowy,
 napisany w C i zgodny z POSIXem.
 
 %package libs
@@ -186,9 +189,11 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+%if %{with database}
 install %{SOURCE6} $RPM_BUILD_ROOT/var/lib/%{name}
 install %{SOURCE7} $RPM_BUILD_ROOT/var/lib/%{name}
 install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
+%endif # database
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
@@ -289,7 +294,7 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
-%post	database -p %{_sbindir}/%{name}-post-updatedb
+%{?with_database:%post	database -p %{_sbindir}/%{name}-post-updatedb}
 
 %files
 %defattr(644,root,root,755)
@@ -343,7 +348,9 @@ fi
 %defattr(644,root,root,755)
 %{_libdir}/*.a
 
+%if %{with database}
 %files database
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
 %attr(644,clamav,root) %verify(not md5 mtime size) /var/lib/%{name}/*.cvd
+%endif # database
