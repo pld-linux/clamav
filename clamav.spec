@@ -27,9 +27,9 @@ Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
 %define		database_version	20050512
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	6b53c0ec6cbe5862133e57fa380877e7
+# Source6-md5:	f6dd359299d1a491c0940e73ee77efad
 Source7:	http://db.local.clamav.net/main.cvd
-# Source7-md5:	6d04141a9d00f1997df2c6c206962392
+# Source7-md5:	8771a3301a0781d7897b98e435df26f3
 Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
