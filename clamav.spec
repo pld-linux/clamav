@@ -5,10 +5,6 @@
 %bcond_with	milter	# build milter subpackage
 %bcond_with	curl	# enable curl support
 #
-%ifarch alpha
-%define		no_install_post_strip 1
-%endif
-#
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Antywirusowe narzêdzie dla Uniksów
 Name:		clamav
