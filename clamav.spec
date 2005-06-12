@@ -189,11 +189,14 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+
 %if %{with database}
 install %{SOURCE6} $RPM_BUILD_ROOT/var/lib/%{name}
 install %{SOURCE7} $RPM_BUILD_ROOT/var/lib/%{name}
 install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
-%endif # database
+%else
+rm -f $RPM_BUILD_ROOT/var/lib/%{name}/{main,daily}.cvd
+%endif
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
