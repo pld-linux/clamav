@@ -13,7 +13,7 @@ Release:	1
 Epoch:		0
 License:	GPL
 Group:		Applications
-Source0:	http://osdn.dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
 # Source0-md5:	df7116898cdd80ce56721a91e9cff206
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
