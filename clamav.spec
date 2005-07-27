@@ -21,9 +21,9 @@ Source3:	%{name}-milter.init
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
-%define		database_version	20050725
+%define		database_version	20050727
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	130b8cadc89055cca09bf1938e130801
+# Source6-md5:	1998f92321dfa3de7dc5f8b07ab0c81f
 Source7:	http://db.local.clamav.net/main.cvd
 # Source7-md5:	b98a3007c9f7c4db172590bfb2f084a8
 Source8:	%{name}-post-updatedb
