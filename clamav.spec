@@ -51,7 +51,7 @@ Requires(postun):	sed >= 4.0
 Requires(postun,pre):	/usr/sbin/usermod
 Requires(post,preun):	/sbin/chkconfig
 Requires:	/usr/sbin/usermod
-Requires:	%{name}-libs = %{epoch}%{version}-%{release}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bc
 Provides:	group(clamav)
 Provides:	user(clamav)
@@ -225,7 +225,7 @@ fi
 %pre
 if [ -n "`/usr/bin/getgid clamav`" ]; then
 	if [ "`/usr/bin/getgid clamav`" != 43 ]; then
-		echo "Warning: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
+		echo "Error: group clamav doesn't have gid=43. Correct this before installing clamav" 1>&2
 		exit 1
 	fi
 else
@@ -234,7 +234,7 @@ else
 fi
 if [ -n "`/bin/id -u clamav 2>/dev/null`" ]; then
 	if [ "`/bin/id -u clamav`" != 43 ]; then
-		echo "Warning: user clamav doesn't have uid=43. Correct this before installing clamav" 1>&2
+		echo "Error: user clamav doesn't have uid=43. Correct this before installing clamav" 1>&2
 		exit 1
 	fi
 else
