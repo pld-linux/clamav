@@ -52,9 +52,9 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
-Requires(postun):	sed >= 4.0
 Requires(postun,pre):	/usr/sbin/usermod
 Requires(post,preun):	/sbin/chkconfig
+Requires(triggerpostun):	sed >= 4.0
 Requires:	/usr/sbin/usermod
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bc
