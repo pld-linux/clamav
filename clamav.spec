@@ -45,8 +45,7 @@ BuildRequires:	libtool
 BuildRequires:	rpmbuild(macros) >= 1.202
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
-PreReq:		rc-scripts
-Requires(pre):	%{__id}
+Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
@@ -58,6 +57,7 @@ Requires(triggerpostun):	sed >= 4.0
 Requires:	/usr/sbin/usermod
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bc
+Requires:	rc-scripts
 Provides:	group(clamav)
 Provides:	user(clamav)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -313,8 +313,8 @@ fi
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
 %attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamd.conf
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/freshclam.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamd.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/freshclam.conf
 
 %attr(754,root,root) /etc/rc.d/init.d/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamd
@@ -332,7 +332,7 @@ fi
 #%{_sysconfdir}/log.d/conf/services/clamav-milter.conf
 %attr(755,root,root) %{_sbindir}/clamav-milter
 %{_mandir}/man8/clamav-milter.8*
-%attr(700,clamav,clamav) /var/spool/clamav/
+%attr(700,clamav,clamav) /var/spool/clamav
 %endif
 
 %files libs
