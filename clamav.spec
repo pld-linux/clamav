@@ -277,7 +277,6 @@ if [ -f /etc/clamav.conf.rpmsave ]; then
 	sed -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
 fi
 
-%if %{with milter}
 %post milter
 /sbin/chkconfig --add clamav-milter
 if [ -f /var/lock/subsys/clamav-milter ]; then
@@ -293,7 +292,7 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del clamav-milter
 fi
-%endif
+
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
