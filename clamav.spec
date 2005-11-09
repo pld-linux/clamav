@@ -297,7 +297,7 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
-%{?with_database:%post	database -p %{_sbindir}/%{name}-post-updatedb}
+%post	database -p %{_sbindir}/%{name}-post-updatedb
 
 %files
 %defattr(644,root,root,755)
