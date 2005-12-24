@@ -9,6 +9,9 @@ DIV="$(echo "$(LC_ALL=C date "+%H % ${UPDATE_HOUR}")" | bc)"
 [ -z "$UPDATE_MAIL_MESSAGES" ] && UPDATE_MAIL_MESSAGES="errors"
 [ "$UPDATE_MAIL_MESSAGES" = "errors" ] && freshclamopt="--quiet"
 
+notify=
+[ -f /var/lock/subsys/clamd ] && notify="--daemon-notify"
+
 umask 022
-log=$(/usr/bin/freshclam $freshclamopt --daemon-notify 2>&1)
+log=$(/usr/bin/freshclam $freshclamopt $notify 2>&1)
 [ "$UPDATE_MAIL_MESSAGES" != "none" -a -n "$log" ] && echo "$log"
