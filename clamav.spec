@@ -40,22 +40,22 @@ BuildRequires:	automake
 BuildRequires:	bzip2-devel
 %{?with_curl:BuildRequires:	curl-devel}
 BuildRequires:	gmp-devel
-%{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libtool
-BuildRequires:	rpmbuild(macros) >= 1.202
+%{?with_milter:BuildRequires:	libwrap-devel}
+BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
 BuildRequires:	zlib-devel
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(postun,pre):	/usr/sbin/usermod
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(postun,pre):	/usr/sbin/usermod
-Requires(post,preun):	/sbin/chkconfig
 Requires(triggerpostun):	sed >= 4.0
-Requires:	/usr/sbin/usermod
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
+Requires:	/usr/sbin/usermod
 Requires:	bc
 Requires:	rc-scripts
 Provides:	group(clamav)
@@ -119,7 +119,7 @@ Pliki nag³ówkowe i biblioteki konieczne do kompilacji aplikacji
 klienckich clamav.
 
 %package static
-Summary:	clamav static libraris
+Summary:	clamav static libraries
 Summary(pl):	Biblioteki statyczne clamav
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
@@ -133,9 +133,9 @@ Biblioteki statyczne clamav.
 %package database
 Summary:	Virus database for clamav
 Summary(pl):	Bazy wirusów dla clamav
-Group:		Applications
 Version:	%{version}.%{database_version}
-PreReq:		%{name}
+Group:		Applications/Databases
+Requires:	%{name}
 
 %description database
 Virus database for clamav (updated %{database_version}).
@@ -245,20 +245,14 @@ fi
 
 %post
 /sbin/chkconfig --add clamd
-if [ -f /var/lock/subsys/clamd ]; then
-	/etc/rc.d/init.d/clamd restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/clamd start\" to start Clam Antivirus daemon." >&2
-fi
+%service clamd restart "Clam Antivirus daemon"
 touch %{_var}/log/freshclam.log
 chown clamav:root %{_var}/log/freshclam.log
 chmod 640 %{_var}/log/freshclam.log
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/clamd ]; then
-		/etc/rc.d/init.d/clamd stop
-	fi
+	%service clamd stop
 	/sbin/chkconfig --del clamd
 fi
 
@@ -279,17 +273,11 @@ fi
 
 %post milter
 /sbin/chkconfig --add clamav-milter
-if [ -f /var/lock/subsys/clamav-milter ]; then
-	/etc/rc.d/init.d/clamd restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/clamav-milter start\" to start Clam Antivirus daemon." >&2
-fi
+%service clamav-milter restart "Clam Antivirus daemon"
 
 %preun milter
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/clamav-milter ]; then
-		/etc/rc.d/init.d/clamav-milter stop
-	fi
+	%service clamav-milter stop
 	/sbin/chkconfig --del clamav-milter
 fi
 
@@ -311,7 +299,7 @@ fi
 %attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
-%attr(640,root,root) %{_sysconfdir}/cron.d/%{name}
+%attr(640,root,root) /etc/cron.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamd.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/freshclam.conf
 
