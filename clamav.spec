@@ -25,7 +25,7 @@ Source5:	%{name}.logrotate
 # Remember to update date after databases upgrade
 %define		database_version	20060430
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	e2e5504919bb5a7827b6e28579a2d108
+# Source6-md5:	c1bd689da3b846948237dc91f195b332
 Source7:	http://db.local.clamav.net/main.cvd
 # Source7-md5:	4bc38beb789f56fe8a9a4a18fa8ff8a6
 Source8:	%{name}-post-updatedb
