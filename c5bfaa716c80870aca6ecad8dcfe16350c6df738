@@ -1,0 +1,2 @@
+- up to 0.88.1 [fixes CVE-2006-1614 CVE-2006-1615 CVE-2006-1630]
+- RPM thinks version has gone down, thanks to added decimal
