@@ -1,0 +1,1 @@
+- updated to 0.88.2 [fix possible buffer overflow, CVE-2006-1989]
