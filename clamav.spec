@@ -9,13 +9,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.88.2
+Version:	0.88.3
 Release:	1
 Epoch:		0
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	f0a1c610a1fb70bd748a08bea69c736c
+# Source0-md5:	330206089713e73a44afc7a4d6450225
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -23,11 +23,11 @@ Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 %if %{with database}
 # Remember to update date after databases upgrade
-%define		database_version	20060430
+%define		database_version	20060701
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	c1bd689da3b846948237dc91f195b332
+# Source6-md5:	d33e4464a765f3585c4f0ab7c4a2f93e
 Source7:	http://db.local.clamav.net/main.cvd
-# Source7-md5:	4bc38beb789f56fe8a9a4a18fa8ff8a6
+# Source7-md5:	258f99d2893c66c1584dd9a52a237c75
 Source8:	%{name}-post-updatedb
 %endif # database
 Source9:	%{name}-milter.sysconfig
