@@ -10,15 +10,15 @@ diff -uNr clamav-0.80rc4.orig/configure clamav-0.80rc4/configure
  
  Some influential environment variables:
    CC          C compiler command
-@@ -12176,7 +12176,7 @@
+@@ -14321,7 +14321,7 @@
     { (exit 1); exit 1; }; } ;;
    esac
  else
 -   tcpw=auto
 +   tcpw=no
- fi;
+ fi
  
- if test "$tcpw" != "no" && test "$have_milter" = "yes" ; then
+ 
 diff -uNr clamav-0.80rc4.orig/configure.in clamav-0.80rc4/configure.in
 --- clamav-0.80rc4.orig/configure.in	2004-10-11 04:13:35.000000000 +0200
 +++ clamav-0.80rc4/configure.in	2004-10-16 23:33:12.456451560 +0200
