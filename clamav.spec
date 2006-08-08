@@ -14,7 +14,7 @@ Release:	1
 Epoch:		0
 License:	GPL
 Group:		Applications
-Source0:	http://heanet.dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
 # Source0-md5:	7759784aa4506b314e6543e0f2a8587b
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
