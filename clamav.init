@@ -55,7 +55,7 @@ case "$1" in
 		killproc clamd -HUP
 		RETVAL=$?
 	else
-		msg_not_running clamd >&2
+		msg_not_running clamd
 		RETVAL=7
 	fi
 	;;

@@ -68,7 +68,7 @@ case "$1" in
 		killproc clamav-milter -SIGHUP
 		RETVAL=$?
 	else
-		msg_not_running clamav-milter >&2
+		msg_not_running clamav-milter
 		exit 7
 	fi
 	;;
