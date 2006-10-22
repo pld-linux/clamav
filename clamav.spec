@@ -299,7 +299,7 @@ fi
 %attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
 %attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
-%attr(640,root,root) /etc/cron.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamd.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/freshclam.conf
 
