@@ -6,16 +6,19 @@
 %bcond_without	database	# build without databases subpackage
 %bcond_with	curl		# enable curl support
 #
+%define		_ver	0.90
+%define		_rc	rc2
+%define		_rel	0.1
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.88.5
-Release:	1
+Version:	%{_ver}
+Release:	0.%{_rc}.%{_rel}
 Epoch:		0
 License:	GPL
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	d62376205647b208eba4191dde821830
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{?_rc}.tar.gz
+# Source0-md5:	91da47456ed28a7cfbfe17b033e15121
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -133,7 +136,7 @@ Biblioteki statyczne clamav.
 %package database
 Summary:	Virus database for clamav
 Summary(pl):	Bazy wirusów dla clamav
-Version:	%{version}.%{database_version}
+Version:	%{_ver}.%{database_version}
 Group:		Applications/Databases
 Requires:	%{name}
 
@@ -144,7 +147,7 @@ Virus database for clamav (updated %{database_version}).
 Bazy wirusów dla clamav (aktualizowana %{database_version}).
 
 %prep
-%setup -q
+%setup -q %{?_rc:-n %{name}-%{_ver}%{_rc}}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
