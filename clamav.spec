@@ -1,5 +1,6 @@
 # TODO:
-#   Make freshclam (script and daemon)
+# - Make freshclam (script and daemon)
+# - trigger for 0.90 config
 #
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
@@ -17,7 +18,7 @@ Release:	0.%{_rc}.%{_rel}
 Epoch:		0
 License:	GPL
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{?_rc}.tar.gz
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{_rc}.tar.gz
 # Source0-md5:	91da47456ed28a7cfbfe17b033e15121
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -179,7 +180,7 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 	DESTDIR=$RPM_BUILD_ROOT
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
-cat <<EOF >$RPM_BUILD_ROOT/etc/cron.d/%{name}
+cat <<'EOF' >$RPM_BUILD_ROOT/etc/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
 EOF
 
@@ -204,9 +205,9 @@ rm -f $RPM_BUILD_ROOT/var/lib/%{name}/{main,daily}.cvd
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
 # If it is fixed use of dir will be unecesary
-install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
+install -d $RPM_BUILD_ROOT/var/run/%{name}
 
-:> $RPM_BUILD_ROOT%{_var}/log/freshclam.log
+:> $RPM_BUILD_ROOT/var/log/freshclam.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -249,9 +250,9 @@ fi
 %post
 /sbin/chkconfig --add clamd
 %service clamd restart "Clam Antivirus daemon"
-touch %{_var}/log/freshclam.log
-chown clamav:root %{_var}/log/freshclam.log
-chmod 640 %{_var}/log/freshclam.log
+touch /var/log/freshclam.log
+chown clamav:root /var/log/freshclam.log
+chmod 640 /var/log/freshclam.log
 
 %preun
 if [ "$1" = "0" ]; then
@@ -296,11 +297,12 @@ fi
 %attr(755,root,root) %{_bindir}/clamscan
 %attr(755,root,root) %{_bindir}/freshclam
 %attr(755,root,root) %{_bindir}/sigtool
+%attr(755,root,root) %{_bindir}/clamconf
 %attr(755,root,root) %{_sbindir}/clamd
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,clamav,root) %dir /var/lib/%{name}
-%attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
-%attr(750,clamav,clamav) %dir %{_var}/run/%{name}
+%attr(640,clamav,root) %ghost /var/log/freshclam.log
+%attr(750,clamav,clamav) %dir /var/run/%{name}
 
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamd.conf
