@@ -1,6 +1,7 @@
 # TODO:
 # - Make freshclam (script and daemon)
 # - trigger for 0.90 config
+# - check how the "scripted updates" work (instead of old full cvd download)
 #
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
@@ -27,11 +28,11 @@ Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 %if %{with database}
 # Remember to update date after databases upgrade
-%define		database_version	20060808
+%define		database_version	20061105
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	03dfca1179e8209fa9ece6e75025d72d
+# Source6-md5:	a39e9288913b4bae43823bf9d1bfad76
 Source7:	http://db.local.clamav.net/main.cvd
-# Source7-md5:	258f99d2893c66c1584dd9a52a237c75
+# Source7-md5:	347c99544205184fbc1bd23fd7cfd782
 Source8:	%{name}-post-updatedb
 %endif # database
 Source9:	%{name}-milter.sysconfig
