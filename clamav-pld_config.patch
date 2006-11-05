@@ -1,4 +1,4 @@
---- clamav-0.90rc2.pld/etc/clamd.conf	2006-11-05 17:18:53.305030378 +0200
+--- clamav-0.90rc2/etc/clamd.conf	2006-11-05 18:53:11.342468909 +0200
 +++ clamav-0.90rc2/etc/clamd.conf	2006-11-05 18:53:11.342468909 +0200
 @@ -5,13 +5,13 @@
  
@@ -16,7 +16,7 @@
  
  # By default the log file is locked for writing - the lock protects against
  # running clamd multiple times (if want to run another clamd, please
-@@ -40,7 +40,7 @@
+@@ -40,12 +40,12 @@
  
  # Use system logger (can work together with LogFile).
  # Default: no
@@ -25,6 +25,12 @@
  
  # Specify the type of syslog messages - please refer to 'man syslog'
  # for facility names.
+ # Default: LOG_LOCAL6
+-#LogFacility LOG_MAIL
++LogFacility LOG_MAIL
+ 
+ # Enable verbose logging.
+ # Default: no
 @@ -54,7 +54,7 @@
  # This option allows you to save a process identifier of the listening
  # daemon (main thread).
