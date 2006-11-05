@@ -1,5 +1,5 @@
---- clamav-0.90rc2/etc/clamd.conf	2006-10-29 00:25:26.000000000 +0300
-+++ clamav-0.90rc2.pld/etc/clamd.conf	2006-11-05 17:18:53.305030378 +0200
+--- clamav-0.90rc2.pld/etc/clamd.conf	2006-11-05 17:18:53.305030378 +0200
++++ clamav-0.90rc2/etc/clamd.conf	2006-11-05 18:53:11.342468909 +0200
 @@ -5,13 +5,13 @@
  
  
@@ -34,7 +34,7 @@
  
  # Optional path to the global temporary directory.
  # Default: system specific (usually /tmp or /var/tmp).
-@@ -69,7 +69,7 @@
+@@ -69,11 +69,11 @@
  
  # Path to a local socket file the daemon will listen on.
  # Default: disabled (must be specified by a user)
@@ -42,6 +42,11 @@
 +LocalSocket /var/lib/clamav/clamd.socket
  
  # Remove stale socket after unclean shutdown.
+ # Default: no
+-#FixStaleSocket yes
++FixStaleSocket yes
+ 
+ # TCP port address.
  # Default: no
 @@ -141,11 +141,11 @@
  

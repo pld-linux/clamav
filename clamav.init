@@ -21,7 +21,6 @@ start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/clamd ]; then
 		msg_starting clamd
-		rm -f /var/lib/clamav/clamd.socket
 		daemon /usr/sbin/clamd
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd
