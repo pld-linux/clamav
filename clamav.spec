@@ -1,6 +1,5 @@
 # TODO:
 # - Make freshclam (script and daemon)
-# - trigger for 0.90 config
 # - check how the "scripted updates" work (instead of old full cvd download)
 #
 # Conditional build:
@@ -10,7 +9,7 @@
 #
 %define		_ver	0.90
 %define		_rc	rc2
-%define		_rel	0.1
+%define		_rel	0.7
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
@@ -273,7 +272,20 @@ if [ -f /etc/clamav.conf.rpmsave ]; then
 	mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
 	mv -f /etc/clamav.conf.rpmsave /etc/clamd.conf
 	echo "Changing config location in freshclam config"
-	sed -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
+	%{__sed} -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
+fi
+
+%triggerpostun -- %{name} < 0.90-0.rc2.0.7
+if [ -f /etc/clamav.conf.rpmnew ]; then
+	%{__cp} -f /etc/clamd.conf{,.rpmsave}
+	%{__sed} -i -e '
+			s,^LogSyslog$,& yes,
+			s,^FixStaleSocket$,& yes,
+			s,^AllowSupplementaryGroups$,& yes,
+			s,^ClamukoScanOnOpen$,& yes,
+			s,^ClamukoScanOnClose$,& yes,
+			s,^ClamukoScanOnExec$,& yes,
+	' /etc/clamd.conf
 fi
 
 %post milter
