@@ -9,7 +9,7 @@
 #
 %define		_ver	0.90
 %define		_rc	rc2
-%define		_rel	0.7
+%define		_rel	0.10
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
@@ -275,18 +275,25 @@ if [ -f /etc/clamav.conf.rpmsave ]; then
 	%{__sed} -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
 fi
 
-%triggerpostun -- %{name} < 0.90-0.rc2.0.7
-if [ -f /etc/clamav.conf.rpmnew ]; then
-	%{__cp} -f /etc/clamd.conf{,.rpmsave}
-	%{__sed} -i -e '
-			s,^LogSyslog$,& yes,
-			s,^FixStaleSocket$,& yes,
-			s,^AllowSupplementaryGroups$,& yes,
-			s,^ClamukoScanOnOpen$,& yes,
-			s,^ClamukoScanOnClose$,& yes,
-			s,^ClamukoScanOnExec$,& yes,
-	' /etc/clamd.conf
-fi
+%triggerpostun -- %{name} < 0.90-0.rc2.0.10
+%{__cp} -f /etc/clamd.conf{,.rpmsave}
+%{__sed} -i -e '
+		s,^LogSyslog$,& yes,
+		s,^FixStaleSocket$,& yes,
+		s,^AllowSupplementaryGroups$,& yes,
+		s,^ClamukoScanOnOpen$,& yes,
+		s,^ClamukoScanOnClose$,& yes,
+		s,^ClamukoScanOnExec$,& yes,
+' /etc/clamd.conf
+%banner -e %{name}-0.90 <<EOF
+ClamAV config was automatically upgraded to 0.90 format. You should review it
+that it's still valid.
+EOF
+#'
+# unfortunately clamd has no configcheck option so we just have to start it
+# once again after config was broken after upgrade
+touch /var/lock/subsys/clamd
+%service -q clamd restart
 
 %post milter
 /sbin/chkconfig --add clamav-milter
