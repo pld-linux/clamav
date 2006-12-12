@@ -17,10 +17,7 @@
 # Get service config
 [ -f /etc/sysconfig/clamd ] && . /etc/sysconfig/clamd
 
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
+start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/clamd ]; then
 		msg_starting clamd
@@ -30,8 +27,9 @@ case "$1" in
 	else
 		msg_already_running clamd
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	if [ -f /var/lock/subsys/clamd ]; then
 		msg_stopping clamd
 		killproc --pidfile clamav/clamd.pid clamd
@@ -39,11 +37,20 @@ case "$1" in
 	else
 		msg_not_running clamd
 	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
 	;;
   restart)
-	$0 stop
-	$0 start
-	exit $?
+	stop
+	start
 	;;
   status)
 	status clamd
