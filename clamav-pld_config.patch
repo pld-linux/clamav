@@ -135,7 +135,7 @@ diff -uN clamav-0.80-orig/etc/freshclam.conf clamav-0.80/etc/freshclam.conf
  # By default it uses the hardcoded configuration file but you can force an
  # another one.
 -#NotifyClamd /config/file/path
-+NotifyClamd /etc/clamd.conf
++#NotifyClamd /etc/clamd.conf
  
  # Run command after successful database update.
  # Default: disabled
