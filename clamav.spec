@@ -1,26 +1,18 @@
-# TODO:
-# - Make freshclam (script and daemon)
-# - trigger for 0.90 config
-# - check how the "scripted updates" work (instead of old full cvd download)
-#
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
 %bcond_without	database	# build without databases subpackage
 %bcond_with	curl		# enable curl support
 #
-%define		_ver	0.90
-%define		_rc	rc2
-%define		_rel	0.1
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	%{_ver}
-Release:	0.%{_rc}.%{_rel}
+Version:	0.88.7
+Release:	2
 Epoch:		0
 License:	GPL
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{_rc}.tar.gz
-# Source0-md5:	91da47456ed28a7cfbfe17b033e15121
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
+# Source0-md5:	34a9d58cf5bcb04dbe3eb32b5367a3f8
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -28,9 +20,9 @@ Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 %if %{with database}
 # Remember to update date after databases upgrade
-%define		database_version	20061105
+%define		database_version	20060808
 Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	a39e9288913b4bae43823bf9d1bfad76
+# Source6-md5:	78f17167c67776470db9886fc2a07e28
 Source7:	http://db.local.clamav.net/main.cvd
 # Source7-md5:	347c99544205184fbc1bd23fd7cfd782
 Source8:	%{name}-post-updatedb
@@ -138,7 +130,7 @@ Biblioteki statyczne clamav.
 %package database
 Summary:	Virus database for clamav
 Summary(pl):	Bazy wirusów dla clamav
-Version:	%{_ver}.%{database_version}
+Version:	%{version}.%{database_version}
 Group:		Applications/Databases
 Requires:	%{name}
 
@@ -149,7 +141,7 @@ Virus database for clamav (updated %{database_version}).
 Bazy wirusów dla clamav (aktualizowana %{database_version}).
 
 %prep
-%setup -q %{?_rc:-n %{name}-%{_ver}%{_rc}}
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -181,7 +173,7 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 	DESTDIR=$RPM_BUILD_ROOT
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
-cat <<'EOF' >$RPM_BUILD_ROOT/etc/cron.d/%{name}
+cat <<EOF >$RPM_BUILD_ROOT/etc/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
 EOF
 
@@ -206,9 +198,9 @@ rm -f $RPM_BUILD_ROOT/var/lib/%{name}/{main,daily}.cvd
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
 # If it is fixed use of dir will be unecesary
-install -d $RPM_BUILD_ROOT/var/run/%{name}
+install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
 
-:> $RPM_BUILD_ROOT/var/log/freshclam.log
+:> $RPM_BUILD_ROOT%{_var}/log/freshclam.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -251,9 +243,9 @@ fi
 %post
 /sbin/chkconfig --add clamd
 %service clamd restart "Clam Antivirus daemon"
-touch /var/log/freshclam.log
-chown clamav:root /var/log/freshclam.log
-chmod 640 /var/log/freshclam.log
+touch %{_var}/log/freshclam.log
+chown clamav:root %{_var}/log/freshclam.log
+chmod 640 %{_var}/log/freshclam.log
 
 %preun
 if [ "$1" = "0" ]; then
@@ -298,14 +290,13 @@ fi
 %attr(755,root,root) %{_bindir}/clamscan
 %attr(755,root,root) %{_bindir}/freshclam
 %attr(755,root,root) %{_bindir}/sigtool
-%attr(755,root,root) %{_bindir}/clamconf
 %attr(755,root,root) %{_sbindir}/clamd
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,clamav,root) %dir /var/lib/%{name}
-%attr(640,clamav,root) %ghost /var/log/freshclam.log
-%attr(750,clamav,clamav) %dir /var/run/%{name}
+%attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
+%attr(750,clamav,clamav) %dir %{_var}/run/%{name}
 
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/%{name}
+%attr(640,root,root) /etc/cron.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamd.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/freshclam.conf
 
