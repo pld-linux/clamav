@@ -1,6 +1,3 @@
-# TODO:
-#   Make freshclam (script and daemon)
-#
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
 %bcond_without	database	# build without databases subpackage
@@ -10,7 +7,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.88.7
-Release:	1
+Release:	2
 Epoch:		0
 License:	GPL
 Group:		Applications
