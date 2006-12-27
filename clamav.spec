@@ -1,13 +1,12 @@
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
-%bcond_without	database	# build without databases subpackage
 %bcond_with	curl		# enable curl support
 #
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.88.7
-Release:	2
+Release:	3
 Epoch:		0
 License:	GPL
 Group:		Applications
@@ -18,15 +17,7 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
 Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
-%if %{with database}
-# Remember to update date after databases upgrade
-%define		database_version	20060808
-Source6:	http://db.local.clamav.net/daily.cvd
-# Source6-md5:	78f17167c67776470db9886fc2a07e28
-Source7:	http://db.local.clamav.net/main.cvd
-# Source7-md5:	347c99544205184fbc1bd23fd7cfd782
 Source8:	%{name}-post-updatedb
-%endif # database
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
@@ -63,14 +54,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
 AMaViS, compressed files, on-access scanning and includes a program
 for auto-updating with support for digital signatures. The virus
-database has over 34000 viruses, worms and trojans signatures. The
+database has over 85387 viruses, worms and trojans signatures. The
 scanner is multithreaded, written in C, and POSIX compliant.
 
 %description -l pl
 Clam Antivirus jest potê¿nym skanerem antywirusowym dla systemów
 uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
 "on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
-Baza wirusów zawiera ponad 34000 sygnatur. Skaner jest wielow±tkowy,
+Baza wirusów zawiera ponad 85387 sygnatur. Skaner jest wielow±tkowy,
 napisany w C i zgodny z POSIXem.
 
 %package libs
@@ -127,19 +118,6 @@ clamav static libraries.
 %description static -l pl
 Biblioteki statyczne clamav.
 
-%package database
-Summary:	Virus database for clamav
-Summary(pl):	Bazy wirusów dla clamav
-Version:	%{version}.%{database_version}
-Group:		Applications/Databases
-Requires:	%{name}
-
-%description database
-Virus database for clamav (updated %{database_version}).
-
-%description database -l pl
-Bazy wirusów dla clamav (aktualizowana %{database_version}).
-
 %prep
 %setup -q
 %patch0 -p1
@@ -173,7 +151,7 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 	DESTDIR=$RPM_BUILD_ROOT
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
-cat <<EOF >$RPM_BUILD_ROOT/etc/cron.d/%{name}
+cat <<'EOF' >$RPM_BUILD_ROOT/etc/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
 EOF
 
@@ -187,20 +165,14 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
 install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
-%if %{with database}
-install %{SOURCE6} $RPM_BUILD_ROOT/var/lib/%{name}
-install %{SOURCE7} $RPM_BUILD_ROOT/var/lib/%{name}
 install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
-%else
-rm -f $RPM_BUILD_ROOT/var/lib/%{name}/{main,daily}.cvd
-%endif
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
 # If it is fixed use of dir will be unecesary
-install -d $RPM_BUILD_ROOT%{_var}/run/%{name}
+install -d $RPM_BUILD_ROOT/var/run/%{name}
 
-:> $RPM_BUILD_ROOT%{_var}/log/freshclam.log
+:> $RPM_BUILD_ROOT/var/log/freshclam.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -243,9 +215,9 @@ fi
 %post
 /sbin/chkconfig --add clamd
 %service clamd restart "Clam Antivirus daemon"
-touch %{_var}/log/freshclam.log
-chown clamav:root %{_var}/log/freshclam.log
-chmod 640 %{_var}/log/freshclam.log
+touch /var/log/freshclam.log
+chown clamav:root /var/log/freshclam.log
+chmod 640 /var/log/freshclam.log
 
 %preun
 if [ "$1" = "0" ]; then
@@ -265,7 +237,7 @@ if [ -f /etc/clamav.conf.rpmsave ]; then
 	mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
 	mv -f /etc/clamav.conf.rpmsave /etc/clamd.conf
 	echo "Changing config location in freshclam config"
-	sed -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
+	%{__sed} -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
 fi
 
 %post milter
@@ -281,8 +253,6 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
-%post	database -p %{_sbindir}/%{name}-post-updatedb
-
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog FAQ NEWS README TODO docs/*.pdf
@@ -292,11 +262,13 @@ fi
 %attr(755,root,root) %{_bindir}/sigtool
 %attr(755,root,root) %{_sbindir}/clamd
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
+%attr(755,root,root) %{_sbindir}/clamav-post-updatedb
 %attr(755,clamav,root) %dir /var/lib/%{name}
-%attr(640,clamav,root) %ghost %{_var}/log/freshclam.log
-%attr(750,clamav,clamav) %dir %{_var}/run/%{name}
+%ghost %attr(644,clamav,root) %verify(not md5 mtime size) /var/lib/clamav/*.cvd
+%attr(640,clamav,root) %ghost /var/log/freshclam.log
+%attr(750,clamav,clamav) %dir /var/run/%{name}
 
-%attr(640,root,root) /etc/cron.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamd.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/freshclam.conf
 
@@ -334,10 +306,3 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/*.a
-
-%if %{with database}
-%files database
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_sbindir}/clamav-post-updatedb
-%attr(644,clamav,root) %verify(not md5 mtime size) /var/lib/%{name}/*.cvd
-%endif # database
