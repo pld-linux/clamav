@@ -6,7 +6,7 @@
 %bcond_with	curl		# enable curl support
 #
 %define		_rc		rc2
-%define		_rel	2
+%define		_rel	3
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
@@ -27,6 +27,7 @@ Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 Patch2:		%{name}-nolibs.patch
+Patch3:		%{name}-find_milter.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -128,6 +129,7 @@ Biblioteki statyczne clamav.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p0
 
 # kill old libtool.m4 copy
 head -n 489 acinclude.m4 > acinclude.m4.tmp
