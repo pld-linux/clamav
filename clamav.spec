@@ -6,7 +6,7 @@
 %bcond_with	curl		# enable curl support
 #
 %define		_rc		rc2
-%define		_rel	1
+%define		_rel	2
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
