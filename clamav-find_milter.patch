@@ -1,0 +1,11 @@
+--- configure.in	2007-01-03 18:50:38.000000000 +0100
++++ configure.in-new	2007-01-03 18:51:09.000000000 +0100
+@@ -615,7 +615,7 @@
+     if test -d /usr/lib/libmilter ; then
+ 	CLAMAV_MILTER_LIBS="$CLAMAV_MILTER_LIBS -L/usr/lib/libmilter"
+     fi
+-    LDFLAGS="$LDFLAGS -lmilter $CLAMAV_MILTER_LIBS"
++    LDFLAGS="-lmilter $CLAMAV_MILTER_LIBS"
+     AC_CHECK_LIB(milter, mi_stop,[CLAMAV_MILTER_LIBS="-lmilter $CLAMAV_MILTER_LIBS"],[
+ 	dnl Older sendmails require libsm or libsmutil for support functions
+ 	AC_SEARCH_LIBS(strlcpy, [sm smutil], [test "$ac_cv_search_strlcpy" = "none required" || CLAMAV_MILTER_XLIB="$ac_cv_search_strlcpy"])
