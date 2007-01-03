@@ -1,8 +1,11 @@
---- configure.in	2007-01-03 18:50:38.000000000 +0100
-+++ configure.in-new	2007-01-03 18:51:09.000000000 +0100
-@@ -615,7 +615,7 @@
+--- configure.in	2007-01-03 19:19:37.000000000 +0100
++++ configure.in-new	2007-01-03 19:20:48.000000000 +0100
+@@ -613,9 +613,9 @@
+     dnl Check for libmilter and it's header files in the usual locations
+     save_LDFLAGS="$LDFLAGS"
      if test -d /usr/lib/libmilter ; then
- 	CLAMAV_MILTER_LIBS="$CLAMAV_MILTER_LIBS -L/usr/lib/libmilter"
+-	CLAMAV_MILTER_LIBS="$CLAMAV_MILTER_LIBS -L/usr/lib/libmilter"
++	CLAMAV_MILTER_LIBS="$CLAMAV_MILTER_LIBS"
      fi
 -    LDFLAGS="$LDFLAGS -lmilter $CLAMAV_MILTER_LIBS"
 +    LDFLAGS="-lmilter $CLAMAV_MILTER_LIBS"
