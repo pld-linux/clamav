@@ -37,7 +37,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
-%{?with_milter:BuildRequires:	sendmail-devel >= 8.11}
+%{?with_milter:BuildRequires:	/usr/lib/libmilter.a}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
