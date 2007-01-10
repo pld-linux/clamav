@@ -6,7 +6,7 @@
 %bcond_with	curl		# enable curl support
 #
 %define		_rc		rc2
-%define		_rel	3
+%define		_rel	4
 Summary:	An anti-virus utility for Unix
 Summary(pl):	Narzêdzie antywirusowe dla Uniksów
 Name:		clamav
@@ -37,7 +37,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
-%{?with_milter:BuildRequires:	/usr/lib/libmilter.a}
+%{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
