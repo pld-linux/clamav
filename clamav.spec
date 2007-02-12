@@ -8,7 +8,7 @@
 %define		_rc		rc2
 %define		_rel	4
 Summary:	An anti-virus utility for Unix
-Summary(pl):	Narz阣zie antywirusowe dla Uniks體
+Summary(pl.UTF-8):   Narz臋dzie antywirusowe dla Uniks贸w
 Name:		clamav
 Version:	0.90
 Release:	0.%{_rc}.%{_rel}
@@ -63,27 +63,27 @@ for auto-updating with support for digital signatures. The virus
 database has over 85387 viruses, worms and trojans signatures. The
 scanner is multithreaded, written in C, and POSIX compliant.
 
-%description -l pl
-Clam Antivirus jest pot昕nym skanerem antywirusowym dla system體
+%description -l pl.UTF-8
+Clam Antivirus jest pot臋偶nym skanerem antywirusowym dla system贸w
 uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
 "on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
-Baza wirus體 zawiera ponad 85387 sygnatur. Skaner jest wielow眛kowy,
+Baza wirus贸w zawiera ponad 85387 sygnatur. Skaner jest wielow膮tkowy,
 napisany w C i zgodny z POSIXem.
 
 %package libs
 Summary:	Shared libraries for clamav
-Summary(pl):	Biblioteki dzielone clamav
+Summary(pl.UTF-8):   Biblioteki dzielone clamav
 Group:		Libraries
 
 %description libs
 Shared libraries for clamav.
 
-%description libs -l pl
+%description libs -l pl.UTF-8
 Biblioteki dzielone clamav.
 
 %package milter
 Summary:	ClamAV filter using milter interface
-Summary(pl):	Filtr ClamAV korzystaj眂y z interfejsu milter
+Summary(pl.UTF-8):   Filtr ClamAV korzystaj膮cy z interfejsu milter
 Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	sendmail >= 8.11
@@ -92,12 +92,12 @@ Requires:	tcp_wrappers
 %description milter
 ClamAV sendmail filter using MILTER interface.
 
-%description milter -l pl
-Filtr ClamAV dla sendmaila korzystaj眂y z interfejsu MILTER.
+%description milter -l pl.UTF-8
+Filtr ClamAV dla sendmaila korzystaj膮cy z interfejsu MILTER.
 
 %package devel
 Summary:	clamav - Development header files and libraries
-Summary(pl):	clamav - Pliki nag丑wkowe i biblioteki dla programist體
+Summary(pl.UTF-8):   clamav - Pliki nag艂贸wkowe i biblioteki dla programist贸w
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
@@ -108,20 +108,20 @@ Requires:	zlib-devel
 This package contains the development header files and libraries
 necessary to develop clamav client applications.
 
-%description devel -l pl
-Pliki nag丑wkowe i biblioteki konieczne do kompilacji aplikacji
+%description devel -l pl.UTF-8
+Pliki nag艂贸wkowe i biblioteki konieczne do kompilacji aplikacji
 klienckich clamav.
 
 %package static
 Summary:	clamav static libraries
-Summary(pl):	Biblioteki statyczne clamav
+Summary(pl.UTF-8):   Biblioteki statyczne clamav
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 clamav static libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Biblioteki statyczne clamav.
 
 %prep
