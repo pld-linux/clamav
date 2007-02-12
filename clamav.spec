@@ -8,7 +8,7 @@
 %define		_rc		rc3
 %define		_rel	1
 Summary:	An anti-virus utility for Unix
-Summary(pl.UTF-8):   Narzędzie antywirusowe dla Uniksów
+Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.90
 Release:	0.%{_rc}.%{_rel}
@@ -72,7 +72,7 @@ napisany w C i zgodny z POSIXem.
 
 %package libs
 Summary:	Shared libraries for clamav
-Summary(pl.UTF-8):   Biblioteki dzielone clamav
+Summary(pl.UTF-8):	Biblioteki dzielone clamav
 Group:		Libraries
 
 %description libs
@@ -83,7 +83,7 @@ Biblioteki dzielone clamav.
 
 %package milter
 Summary:	ClamAV filter using milter interface
-Summary(pl.UTF-8):   Filtr ClamAV korzystający z interfejsu milter
+Summary(pl.UTF-8):	Filtr ClamAV korzystający z interfejsu milter
 Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	sendmail >= 8.11
@@ -97,7 +97,7 @@ Filtr ClamAV dla sendmaila korzystający z interfejsu MILTER.
 
 %package devel
 Summary:	clamav - Development header files and libraries
-Summary(pl.UTF-8):   clamav - Pliki nagłówkowe i biblioteki dla programistów
+Summary(pl.UTF-8):	clamav - Pliki nagłówkowe i biblioteki dla programistów
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
@@ -114,7 +114,7 @@ klienckich clamav.
 
 %package static
 Summary:	clamav static libraries
-Summary(pl.UTF-8):   Biblioteki statyczne clamav
+Summary(pl.UTF-8):	Biblioteki statyczne clamav
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
