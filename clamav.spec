@@ -5,8 +5,8 @@
 %bcond_without	milter		# build without milter subpackage
 %bcond_with	curl		# enable curl support
 #
-%define		_rc		rc2
-%define		_rel	4
+%define		_rc		rc3
+%define		_rel	1
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):   Narzędzie antywirusowe dla Uniksów
 Name:		clamav
@@ -16,7 +16,7 @@ Epoch:		0
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{_rc}.tar.gz
-# Source0-md5:	91da47456ed28a7cfbfe17b033e15121
+# Source0-md5:	5af2bdbbb255829dd590609d900c1854
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -130,11 +130,6 @@ Biblioteki statyczne clamav.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p0
-
-# kill old libtool.m4 copy
-head -n 489 acinclude.m4 > acinclude.m4.tmp
-tail -n +4089 acinclude.m4 >> acinclude.m4.tmp
-mv -f acinclude.m4.tmp acinclude.m4
 
 %build
 %{__libtoolize}
@@ -256,6 +251,8 @@ fi
 		s,^ClamukoScanOnOpen$,& yes,
 		s,^ClamukoScanOnClose$,& yes,
 		s,^ClamukoScanOnExec$,& yes,
+		s,^LogTime$,& yes,
+		s,^ScanPE$,& yes,
 ' /etc/clamd.conf
 %banner -e %{name}-0.90 <<EOF
 ClamAV config was automatically upgraded to 0.90 format. You should review it
