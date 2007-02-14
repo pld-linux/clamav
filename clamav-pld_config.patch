@@ -1,5 +1,5 @@
 --- clamav-0.90rc2/etc/clamd.conf	2006-11-05 18:53:11.342468909 +0200
-+++ clamav-0.90rc2/etc/clamd.conf	2006-11-05 18:53:11.342468909 +0200
++++ clamav-0.90/etc/clamd.conf	2007-02-14 10:46:12.916118373 +0200
 @@ -5,13 +5,13 @@
  
  
@@ -68,7 +68,7 @@
  
  # Stop daemon when libclamav reports out of memory condition.
  #ExitOnOOM yes
-@@ -303,15 +303,15 @@
+@@ -326,15 +326,15 @@
  
  # Set access mask for Clamuko.
  # Default: no
@@ -79,7 +79,7 @@
 +ClamukoScanOnClose yes
 +ClamukoScanOnExec yes
  
- # Set the include paths (all files in them will be scanned). You can have
+ # Set the include paths (all files inside them will be scanned). You can have
  # multiple ClamukoIncludePath directives but each directory must be added
  # in a seperate line.
  # Default: disabled
