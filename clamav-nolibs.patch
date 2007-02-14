@@ -4,7 +4,7 @@
  AC_COMPILE_CHECK_SIZEOF(long)
  AC_COMPILE_CHECK_SIZEOF(long long)
  
-+AC_CHECK_FUNC(socket,,
++AC_CHECK_FUNC(socket,, [
  AC_CHECK_LIB(socket, bind, [LIBS="$LIBS -lsocket"; CLAMAV_MILTER_LIBS="$CLAMAV_MILTER_LIBS -lsocket"; FRESHCLAM_LIBS="$FRESHCLAM_LIBS -lsocket"; CLAMD_LIBS="$CLAMD_LIBS -lsocket"])
 +])
 +AC_CHECK_FUNC(gethostent,, [
