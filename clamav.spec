@@ -5,18 +5,16 @@
 %bcond_without	milter		# build without milter subpackage
 %bcond_with	curl		# enable curl support
 #
-%define		_rc		rc3
-%define		_rel	1
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.90
-Release:	0.%{_rc}.%{_rel}
+Release:	1
 Epoch:		0
 License:	GPL
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{_rc}.tar.gz
-# Source0-md5:	5af2bdbbb255829dd590609d900c1854
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
+# Source0-md5:	f04372e49c3c5ff3bd94bbe1fef2eaca
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -34,10 +32,10 @@ BuildRequires:	automake
 BuildRequires:	bzip2-devel
 %{?with_curl:BuildRequires:	curl-devel}
 BuildRequires:	gmp-devel
+%{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
-%{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -129,7 +127,7 @@ Biblioteki statyczne clamav.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p0
+%patch3 -p1
 
 %build
 %{__libtoolize}
