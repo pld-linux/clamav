@@ -26,6 +26,7 @@ Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 Patch2:		%{name}-nolibs.patch
 Patch3:		%{name}-find_milter.patch
+Patch4:		%{name}-valid_pp_exp.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -128,6 +129,7 @@ Biblioteki statyczne clamav.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p0
 
 %build
 %{__libtoolize}
