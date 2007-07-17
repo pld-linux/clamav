@@ -5,18 +5,16 @@
 %bcond_without	milter		# build without milter subpackage
 %bcond_with	curl		# enable curl support
 #
-%define		_rc		rc3
-%define		_rel	1
 Summary:	An anti-virus utility for Unix
-Summary(pl.UTF-8):	Narz臋dzie antywirusowe dla Uniks贸w
+Summary(pl):	Narz阣zie antywirusowe dla Uniks體
 Name:		clamav
-Version:	0.90
-Release:	0.%{_rc}.%{_rel}
+Version:	0.91.1
+Release:	1
 Epoch:		0
 License:	GPL
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{_rc}.tar.gz
-# Source0-md5:	5af2bdbbb255829dd590609d900c1854
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
+# Source0-md5:	60152bf1e24b3fbdf0473794199e5215
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -34,10 +32,10 @@ BuildRequires:	automake
 BuildRequires:	bzip2-devel
 %{?with_curl:BuildRequires:	curl-devel}
 BuildRequires:	gmp-devel
+%{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
-%{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -60,30 +58,30 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
 AMaViS, compressed files, on-access scanning and includes a program
 for auto-updating with support for digital signatures. The virus
-database has over 85387 viruses, worms and trojans signatures. The
+database has over 90000 viruses, worms and trojans signatures. The
 scanner is multithreaded, written in C, and POSIX compliant.
 
-%description -l pl.UTF-8
-Clam Antivirus jest pot臋偶nym skanerem antywirusowym dla system贸w
+%description -l pl
+Clam Antivirus jest pot昕nym skanerem antywirusowym dla system體
 uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
 "on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
-Baza wirus贸w zawiera ponad 85387 sygnatur. Skaner jest wielow膮tkowy,
+Baza wirus體 zawiera ponad 90000 sygnatur. Skaner jest wielow眛kowy,
 napisany w C i zgodny z POSIXem.
 
 %package libs
 Summary:	Shared libraries for clamav
-Summary(pl.UTF-8):	Biblioteki dzielone clamav
+Summary(pl):	Biblioteki dzielone clamav
 Group:		Libraries
 
 %description libs
 Shared libraries for clamav.
 
-%description libs -l pl.UTF-8
+%description libs -l pl
 Biblioteki dzielone clamav.
 
 %package milter
 Summary:	ClamAV filter using milter interface
-Summary(pl.UTF-8):	Filtr ClamAV korzystaj膮cy z interfejsu milter
+Summary(pl):	Filtr ClamAV korzystaj眂y z interfejsu milter
 Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	sendmail >= 8.11
@@ -92,12 +90,12 @@ Requires:	tcp_wrappers
 %description milter
 ClamAV sendmail filter using MILTER interface.
 
-%description milter -l pl.UTF-8
-Filtr ClamAV dla sendmaila korzystaj膮cy z interfejsu MILTER.
+%description milter -l pl
+Filtr ClamAV dla sendmaila korzystaj眂y z interfejsu MILTER.
 
 %package devel
 Summary:	clamav - Development header files and libraries
-Summary(pl.UTF-8):	clamav - Pliki nag艂贸wkowe i biblioteki dla programist贸w
+Summary(pl):	clamav - Pliki nag丑wkowe i biblioteki dla programist體
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
@@ -108,20 +106,20 @@ Requires:	zlib-devel
 This package contains the development header files and libraries
 necessary to develop clamav client applications.
 
-%description devel -l pl.UTF-8
-Pliki nag艂贸wkowe i biblioteki konieczne do kompilacji aplikacji
+%description devel -l pl
+Pliki nag丑wkowe i biblioteki konieczne do kompilacji aplikacji
 klienckich clamav.
 
 %package static
 Summary:	clamav static libraries
-Summary(pl.UTF-8):	Biblioteki statyczne clamav
+Summary(pl):	Biblioteki statyczne clamav
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 clamav static libraries.
 
-%description static -l pl.UTF-8
+%description static -l pl
 Biblioteki statyczne clamav.
 
 %prep
@@ -129,7 +127,7 @@ Biblioteki statyczne clamav.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p0
+%patch3 -p1
 
 %build
 %{__libtoolize}
@@ -279,7 +277,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog FAQ NEWS README TODO docs/*.pdf
+%doc AUTHORS ChangeLog FAQ NEWS README docs/*.pdf
 %attr(755,root,root) %{_bindir}/clamdscan
 %attr(755,root,root) %{_bindir}/clamscan
 %attr(755,root,root) %{_bindir}/freshclam
