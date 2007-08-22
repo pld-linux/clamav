@@ -1,8 +1,0 @@
-/var/log/clamd.log /var/log/freshclam.log  {
-    olddir /var/log/archive
-    create 640 clamav root
-    sharedscripts
-    postrotate
-        /bin/killall -HUP clamd
-    endscript
-}
