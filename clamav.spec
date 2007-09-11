@@ -53,6 +53,7 @@ Requires:	bc
 Requires:	rc-scripts
 Provides:	group(clamav)
 Provides:	user(clamav)
+Conflicts:	logrotate < 3.7.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
