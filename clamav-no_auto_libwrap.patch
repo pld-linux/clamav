@@ -1,33 +1,11 @@
-diff -Nura clamav-0.67-1.before/configure clamav-0.67-1/configure
---- clamav-0.67-1.before/configure	2004-03-20 21:20:30.000000000 +0100
-+++ clamav-0.67-1/configure	2004-03-21 23:43:56.000000000 +0100
-@@ -1019,7 +1019,7 @@
-   --with-dbdir=path	  Path to virus database directory.
-   --with-db1=name	  Name of the main database (main.cvd).
-   --with-db2=name	  Name of the daily database (daily.cvd).
--  --with-tcpwrappers      Support hosts.allow / hosts.deny (default=auto)
-+  --with-tcpwrappers      Support hosts.allow / hosts.deny (default=no)
- 
- Some influential environment variables:
-   CC          C compiler command
-@@ -9365,7 +9365,7 @@
-    { (exit 1); exit 1; }; } ;;
-   esac
- else
--   tcpw=auto
-+   tcpw=no
- fi;
- 
- if test x"$tcpw" != xno; then
-diff -Nura clamav-0.67-1.before/configure.in clamav-0.67-1/configure.in
---- clamav-0.67-1.before/configure.in	2004-03-20 21:20:30.000000000 +0100
-+++ clamav-0.67-1/configure.in	2004-03-21 23:44:03.000000000 +0100
-@@ -211,12 +211,12 @@
- # tcpwrappers support
- # rules from http://ma.ph-freiburg.de/tng/tng-technical/2002-01/msg00094.html
+--- clamav-0.80rc4.orig/configure.in	2004-10-11 04:13:35.000000000 +0200
++++ clamav-0.80rc4/configure.in	2004-10-16 23:33:12.456451560 +0200
+@@ -480,12 +480,12 @@
+ dnl tcpwrappers support
+ dnl rules from http://ma.ph-freiburg.de/tng/tng-technical/2002-01/msg00094.html
  AC_ARG_WITH(tcpwrappers,
--[  --with-tcpwrappers      Support hosts.allow / hosts.deny (default=auto)],
-+[  --with-tcpwrappers      Support hosts.allow / hosts.deny (default=no)],
+-[  --with-tcpwrappers      support hosts.allow / hosts.deny (default=auto)],
++[  --with-tcpwrappers      support hosts.allow / hosts.deny (default=no)],
  [ case "$withval" in
    yes|no) tcpw="$withval" ;;
    *)      AC_MSG_ERROR([--with-tcpwrappers does not take an argument]) ;;
@@ -35,5 +13,5 @@ diff -Nura clamav-0.67-1.before/configure.in clamav-0.67-1/configure.in
 -[ tcpw=auto ])
 +[ tcpw=no ])
  
- if test x"$tcpw" != xno; then
-   err=no
+ if test "$tcpw" != "no" && test "$have_milter" = "yes" ; then
+         AC_CHECK_HEADERS(tcpd.h,[
