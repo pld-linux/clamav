@@ -5,16 +5,17 @@
 %bcond_without	milter		# build without milter subpackage
 %bcond_with	curl		# enable curl support
 #
+%define	_rc	rc2
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.91.2
-Release:	1
+Version:	0.92
+Release:	0.%{_rc}.1
 Epoch:		0
-License:	GPL
+License:	GPL v2+
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	2a7265d17cfa80c32858978f16a3f47b
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{_rc}.tar.gz
+# Source0-md5:	718868fc536b56ab284b1a26f5381fe4
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
