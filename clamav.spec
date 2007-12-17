@@ -8,13 +8,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.91.2
+Version:	0.92
 Release:	1
 Epoch:		0
 License:	GPL
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	2a7265d17cfa80c32858978f16a3f47b
+# Source0-md5:	e500651858a9187a87025c8a5c23969c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -53,35 +53,14 @@ Requires:	bc
 Requires:	rc-scripts
 Provides:	group(clamav)
 Provides:	user(clamav)
-Conflicts:	logrotate < 3.7-4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Clam AntiVirus is an open source anti-virus toolkit for UNIX, designed
-especially for e-mail scanning on mail gateways. It provides a number
-of utilities including a flexible and scalable multi-threaded daemon,
-a command line scanner and advanced tool for automatic database
-updates. The core of the package is an anti-virus engine available in
-a form of shared library.
-
-Here is a list of the main features:
-- command-line scanner
-- fast, multi-threaded daemon with support for on-access scanning
-- milter interface for sendmail
-- advanced database updater with support for scripted updates and
-  digital signatures
-- virus scanner C library
-- on-access scanning (Linux® and FreeBSD®)
-- virus database updated multiple times per day (see home page for
-  total number of signatures)
-- built-in support for various archive formats, including Zip, RAR,
-  Tar, Gzip, Bzip2, OLE2, Cabinet, CHM, BinHex, SIS and others
-- built-in support for almost all mail file formats
-- built-in support for ELF executables and Portable Executable files
-  compressed with UPX, FSG, Petite, NsPack, wwpack32, MEW, Upack and
-  obfuscated with SUE, Y0da Cryptor and others
-- built-in support for popular document formats including MS Office
-  and MacOffice files, HTML, RTF and PDF
+Clam Antivirus is a powerful anti-virus scanner for Unix. It supports
+AMaViS, compressed files, on-access scanning and includes a program
+for auto-updating with support for digital signatures. The virus
+database has over 90000 viruses, worms and trojans signatures. The
+scanner is multithreaded, written in C, and POSIX compliant.
 
 %description -l pl.UTF-8
 Clam Antivirus jest potężnym skanerem antywirusowym dla systemów
