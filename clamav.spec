@@ -9,7 +9,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.92
-Release:	4
+Release:	5
 Epoch:		0
 License:	GPL
 Group:		Applications
@@ -254,7 +254,7 @@ if [ "$1" = "0" ]; then
 	%groupremove clamav
 fi
 
-%triggerpostun -- %{name} <= 0.75.1
+%triggerpostun -- %{name} < 0.80
 if [ -f /etc/clamav.conf.rpmsave ]; then
 	echo "Renaming config to new name /etc/clamd.conf"
 	mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
