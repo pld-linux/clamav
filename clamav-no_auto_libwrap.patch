@@ -1,9 +1,9 @@
---- clamav-0.80rc4.orig/configure.in	2004-10-11 04:13:35.000000000 +0200
-+++ clamav-0.80rc4/configure.in	2004-10-16 23:33:12.456451560 +0200
-@@ -480,12 +480,12 @@
+--- clamav-0.93rc1/configure.in~	2008-03-30 15:10:25.470753399 +0200
++++ clamav-0.93rc1/configure.in	2008-03-30 15:12:07.615636507 +0200
+@@ -989,12 +989,12 @@
  dnl tcpwrappers support
  dnl rules from http://ma.ph-freiburg.de/tng/tng-technical/2002-01/msg00094.html
- AC_ARG_WITH(tcpwrappers,
+ AC_ARG_WITH([tcpwrappers],
 -[  --with-tcpwrappers      support hosts.allow / hosts.deny (default=auto)],
 +[  --with-tcpwrappers      support hosts.allow / hosts.deny (default=no)],
  [ case "$withval" in
@@ -14,4 +14,4 @@
 +[ tcpw=no ])
  
  if test "$tcpw" != "no" && test "$have_milter" = "yes" ; then
-         AC_CHECK_HEADERS(tcpd.h,[
+         AC_CHECK_HEADERS([tcpd.h],[
