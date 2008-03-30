@@ -5,16 +5,17 @@
 %bcond_without	milter		# build without milter subpackage
 %bcond_with	curl		# enable curl support
 #
+%define	_rc	rc1
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.92.1
-Release:	2
+Version:	0.93
+Release:	0.%{_rc}.1
 Epoch:		0
-License:	GPL
+License:	GPL v2+
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	c16e60f569b6ec575d8de494e788f9d2
+Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}%{_rc}.tar.gz
+# Source0-md5:	36b67bf1fc390bf3b5077df303d9c897
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -150,11 +151,11 @@ Biblioteki statyczne clamav.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p0
+%patch4 -p1
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -340,9 +341,9 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamav.so.3
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.3
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.3
+%attr(755,root,root) %ghost %{_libdir}/libclamav.so.4
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.4
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.4
 
 %files devel
 %defattr(644,root,root,755)
