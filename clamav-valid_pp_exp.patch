@@ -1,12 +1,12 @@
---- configure.in	2007-06-29 14:31:13.029322058 +0200
-+++ configure.in-new	2007-06-29 14:31:51.871236822 +0200
-@@ -209,9 +209,9 @@
+--- clamav-0.93rc1/configure.in~	2008-03-30 15:25:01.112614075 +0200
++++ clamav-0.93rc1/configure.in	2008-03-30 15:26:27.256732255 +0200
+@@ -472,9 +472,9 @@
      sendmailver_b=`echo $sendmailver | awk -F. '{printf $2}'`
      sendmailver_c=`echo $sendmailver | awk -F. '{printf $3}'`
  
--    AC_DEFINE_UNQUOTED(SENDMAIL_VERSION_A, $sendmailver_a, [major version of Sendmail])
--    AC_DEFINE_UNQUOTED(SENDMAIL_VERSION_B, $sendmailver_b, [minor version of Sendmail])
--    AC_DEFINE_UNQUOTED(SENDMAIL_VERSION_C, $sendmailver_c, [subversion of Sendmail])
+-    AC_DEFINE_UNQUOTED([SENDMAIL_VERSION_A], $sendmailver_a, [major version of Sendmail])
+-    AC_DEFINE_UNQUOTED([SENDMAIL_VERSION_B], $sendmailver_b, [minor version of Sendmail])
+-    AC_DEFINE_UNQUOTED([SENDMAIL_VERSION_C], $sendmailver_c, [subversion of Sendmail])
 +    AC_DEFINE(SENDMAIL_VERSION_A, $sendmailver_a, [major version of Sendmail])
 +    AC_DEFINE(SENDMAIL_VERSION_B, $sendmailver_b, [minor version of Sendmail])
 +    AC_DEFINE(SENDMAIL_VERSION_C, $sendmailver_c, [subversion of Sendmail])
