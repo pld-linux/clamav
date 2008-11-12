@@ -4,12 +4,12 @@
 #
 # chkconfig:	345 60 40
 #
-# description:	clamd is a antivirus daemon.
+# description:	Clam Antivirus daemon
 #
 # processname:	clamd
 # pidfile:      /var/run/clamav/clamd.pid
 #
-
+# $Id$
 
 # Source function library
 . /etc/rc.d/init.d/functions
@@ -20,32 +20,32 @@
 start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/clamd ]; then
-		msg_starting clamd
+		msg_starting "Clam Antivirus daemon"
 		daemon /usr/sbin/clamd
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd
 	else
-		msg_already_running clamd
+		msg_already_running "Clam Antivirus daemon"
 	fi
 }
 
 stop() {
 	if [ -f /var/lock/subsys/clamd ]; then
-		msg_stopping clamd
+		msg_stopping "Clam Antivirus daemon"
 		killproc --pidfile clamav/clamd.pid clamd
 		rm -f /var/run/clamav/clamd.pid /var/lock/subsys/clamd >/dev/null 2>&1
 	else
-		msg_not_running clamd
+		msg_not_running "Clam Antivirus daemon"
 	fi
 }
 
 reload() {
 	if [ -f /var/lock/subsys/clamd ]; then
-		msg_reloading clamd
+		msg_reloading "Clam Antivirus daemon"
 		killproc clamd -HUP
 		RETVAL=$?
 	else
-		msg_not_running clamd
+		msg_not_running "Clam Antivirus daemon"
 		RETVAL=7
 	fi
 }
@@ -55,7 +55,7 @@ condrestart() {
 		stop
 		start
 	else
-		msg_not_running clamd
+		msg_not_running "Clam Antivirus daemon"
 		RETVAL=$1
 	fi
 }
