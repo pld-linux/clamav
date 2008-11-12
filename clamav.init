@@ -39,6 +39,27 @@ stop() {
 	fi
 }
 
+reload() {
+	if [ -f /var/lock/subsys/clamd ]; then
+		msg_reloading clamd
+		killproc clamd -HUP
+		RETVAL=$?
+	else
+		msg_not_running clamd
+		RETVAL=7
+	fi
+}
+
+condrestart() {
+	if [ -f /var/lock/subsys/clamd ]; then
+		stop
+		start
+	else
+		msg_not_running clamd
+		RETVAL=$1
+	fi
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
@@ -52,22 +73,18 @@ case "$1" in
 	stop
 	start
 	;;
+  try-restart)
+	condrestart 0
+	;;
+  reload|force-reload)
+  	reload
+	;;
   status)
 	status clamd
 	exit $?
 	;;
-  reload|force-reload)
-	if [ -f /var/lock/subsys/clamd ]; then
-		msg_reloading clamd
-		killproc clamd -HUP
-		RETVAL=$?
-	else
-		msg_not_running clamd
-		RETVAL=7
-	fi
-	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
 	exit 3
 esac
 
