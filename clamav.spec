@@ -3,7 +3,6 @@
 #
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
-%bcond_with	curl		# enable curl support
 #
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
@@ -25,13 +24,11 @@ Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-no_auto_libwrap.patch
 Patch2:		%{name}-nolibs.patch
-Patch3:		%{name}-find_milter.patch
-Patch4:		%{name}-valid_pp_exp.patch
+Patch3:		%{name}-valid_pp_exp.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bzip2-devel
-%{?with_curl:BuildRequires:	curl-devel}
 BuildRequires:	gmp-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libtool
@@ -150,7 +147,6 @@ Biblioteki statyczne clamav.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -160,7 +156,6 @@ Biblioteki statyczne clamav.
 %{__automake}
 %configure \
 	--disable-clamav \
-	%{!?with_curl:--without-libcurl} \
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name}
 %{__make}
