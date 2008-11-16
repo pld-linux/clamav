@@ -149,6 +149,7 @@ Biblioteki statyczne clamav.
 %patch3 -p1
 
 %build
+
 %{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
@@ -157,8 +158,9 @@ Biblioteki statyczne clamav.
 %configure \
 	--disable-clamav \
 	%{?with_milter:--enable-milter} \
-	--with-dbdir=/var/lib/%{name}
-%{__make}
+	--with-dbdir=/var/lib/%{name} \
+	--with-no-cache
+%{__make} LIBTOOL=/usr/bin/libtool
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -166,6 +168,7 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{_var}/{log,spool/clamav}
 
 %{__make} install \
+	LIBTOOL=/usr/bin/libtool \
 	DESTDIR=$RPM_BUILD_ROOT
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
