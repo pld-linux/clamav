@@ -7,7 +7,7 @@
 # description:	Clam Antivirus daemon
 #
 # processname:	clamd
-# pidfile:      /var/run/clamav/clamd.pid
+# pidfile:	/var/run/clamav/clamd.pid
 #
 # $Id$
 
@@ -21,7 +21,7 @@ start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/clamd ]; then
 		msg_starting "Clam Antivirus daemon"
-		daemon /usr/sbin/clamd
+		daemon --pidfile /var/run/clamav/clamd.pid /usr/sbin/clamd
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd
 	else
@@ -32,8 +32,8 @@ start() {
 stop() {
 	if [ -f /var/lock/subsys/clamd ]; then
 		msg_stopping "Clam Antivirus daemon"
-		killproc --pidfile clamav/clamd.pid clamd
-		rm -f /var/run/clamav/clamd.pid /var/lock/subsys/clamd >/dev/null 2>&1
+		killproc --pidfile /var/run/clamav/clamd.pid clamd
+		rm -f /var/lock/subsys/clamd /var/run/clamav/clamd.pid >/dev/null 2>&1
 	else
 		msg_not_running "Clam Antivirus daemon"
 	fi
@@ -64,10 +64,10 @@ RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   restart)
 	stop
@@ -77,7 +77,7 @@ case "$1" in
 	condrestart 0
 	;;
   reload|force-reload)
-  	reload
+	reload
 	;;
   status)
 	status clamd
