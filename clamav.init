@@ -19,24 +19,26 @@
 
 start() {
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/clamd ]; then
-		msg_starting "Clam Antivirus daemon"
-		daemon --pidfile /var/run/clamav/clamd.pid /usr/sbin/clamd
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd
-	else
+	if [ -f /var/lock/subsys/clamd ]; then
 		msg_already_running "Clam Antivirus daemon"
+		return
 	fi
+
+	msg_starting "Clam Antivirus daemon"
+	daemon --pidfile /var/run/clamav/clamd.pid /usr/sbin/clamd
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/clamd
 }
 
 stop() {
-	if [ -f /var/lock/subsys/clamd ]; then
-		msg_stopping "Clam Antivirus daemon"
-		killproc --pidfile /var/run/clamav/clamd.pid clamd
-		rm -f /var/lock/subsys/clamd /var/run/clamav/clamd.pid >/dev/null 2>&1
-	else
+	if [ ! -f /var/lock/subsys/clamd ]; then
 		msg_not_running "Clam Antivirus daemon"
+		return
 	fi
+
+	msg_stopping "Clam Antivirus daemon"
+	killproc --pidfile /var/run/clamav/clamd.pid clamd
+	rm -f /var/lock/subsys/clamd /var/run/clamav/clamd.pid >/dev/null 2>&1
 }
 
 reload() {
