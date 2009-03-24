@@ -7,13 +7,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.94.2
-Release:	1
+Version:	0.95
+Release:	0.1
 Epoch:		0
 License:	GPL v2+
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	1181e6d62341b84708f126cc353f7ebf
+# Source0-md5:	98590386ba9a69039580b1bf48ca038b
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -22,9 +22,7 @@ Source5:	%{name}.logrotate
 Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
-Patch1:		%{name}-no_auto_libwrap.patch
-Patch2:		%{name}-nolibs.patch
-Patch3:		%{name}-valid_pp_exp.patch
+Patch1:		%{name}-nolibs.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -145,11 +143,8 @@ Biblioteki statyczne clamav.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 %build
-
 %{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
@@ -279,6 +274,7 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog FAQ NEWS README docs/*.pdf
 %attr(755,root,root) %{_bindir}/clamdscan
+%attr(755,root,root) %{_bindir}/clamdtop
 %attr(755,root,root) %{_bindir}/clamscan
 %attr(755,root,root) %{_bindir}/freshclam
 %attr(755,root,root) %{_bindir}/sigtool
@@ -305,6 +301,7 @@ fi
 %files milter
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamav-milter
+%config(noreplace) %verify(not md5 mtime size) /etc/clamav-milter.conf
 %attr(754,root,root) /etc/rc.d/init.d/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
@@ -317,9 +314,9 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamav.so.5
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.5
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.5
+%attr(755,root,root) %ghost %{_libdir}/libclamav.so.6
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.6
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.6
 
 %files devel
 %defattr(644,root,root,755)
