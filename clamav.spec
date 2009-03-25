@@ -194,18 +194,39 @@ install -d $RPM_BUILD_ROOT/var/run/%{name}
 rm -rf $RPM_BUILD_ROOT
 
 %triggerin -- amavis-ng
-%addusertogroup clamav amavis
+AMAVIS=$(/usr/bin/getgid amavis)
+RESULT=$?
+if [ $RESULT -eq 0 ]; then
+	echo "Adding clamav to amavis group GID=$AMAVIS"
+	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
+fi
 
 %triggerin -- amavisd-new
-%addusertogroup clamav amavis
+AMAVIS=$(/usr/bin/getgid amavis)
+RESULT=$?
+if [ $RESULT -eq 0 ]; then
+	echo "Adding clamav to amavis group GID=$AMAVIS"
+	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
+fi
 
 %triggerin -- amavisd
-%addusertogroup clamav amavis
+AMAVIS=$(/usr/bin/getgid amavis)
+RESULT=$?
+if [ $RESULT -eq 0 ]; then
+	echo "Adding clamav to amavis group GID=$AMAVIS"
+	/usr/sbin/usermod -G amavis clamav 1>&2
+fi
 
 %pre
 %groupadd -g 43 clamav
 %useradd -u 43 -d /tmp -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav
-%addusertogroup clamav amavis
+
+# FIXME: check this. is it proper after useradd macro?
+# TODO: use addusertogroup macro?
+if [ -n "`/usr/bin/getgid amavis`" ]; then
+	echo "Adding clamav to amavis group"
+	/usr/sbin/usermod -G amavis clamav 1>&2
+fi
 
 %post
 /sbin/chkconfig --add clamd
