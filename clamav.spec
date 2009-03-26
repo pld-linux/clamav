@@ -205,7 +205,6 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 %groupadd -g 43 clamav
 %useradd -u 43 -d /tmp -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav
-%addusertogroup -q clamav amavis
 
 %post
 /sbin/chkconfig --add clamd
