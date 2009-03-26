@@ -8,7 +8,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.95
-Release:	0.1
+Release:	0.2
 Epoch:		0
 License:	GPL v2+
 Group:		Applications
@@ -31,7 +31,7 @@ BuildRequires:	gmp-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.514
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -194,39 +194,18 @@ install -d $RPM_BUILD_ROOT/var/run/%{name}
 rm -rf $RPM_BUILD_ROOT
 
 %triggerin -- amavis-ng
-AMAVIS=$(/usr/bin/getgid amavis)
-RESULT=$?
-if [ $RESULT -eq 0 ]; then
-	echo "Adding clamav to amavis group GID=$AMAVIS"
-	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
-fi
+%addusertogroup -q clamav amavis
 
 %triggerin -- amavisd-new
-AMAVIS=$(/usr/bin/getgid amavis)
-RESULT=$?
-if [ $RESULT -eq 0 ]; then
-	echo "Adding clamav to amavis group GID=$AMAVIS"
-	/usr/sbin/usermod -G amavis clamav 1>&2 > /dev/null
-fi
+%addusertogroup -q clamav amavis
 
 %triggerin -- amavisd
-AMAVIS=$(/usr/bin/getgid amavis)
-RESULT=$?
-if [ $RESULT -eq 0 ]; then
-	echo "Adding clamav to amavis group GID=$AMAVIS"
-	/usr/sbin/usermod -G amavis clamav 1>&2
-fi
+%addusertogroup -q clamav amavis
 
 %pre
 %groupadd -g 43 clamav
 %useradd -u 43 -d /tmp -s /bin/false -c "Clam Anti Virus Checker" -g clamav clamav
-
-# FIXME: check this. is it proper after useradd macro?
-# TODO: use addusertogroup macro?
-if [ -n "`/usr/bin/getgid amavis`" ]; then
-	echo "Adding clamav to amavis group"
-	/usr/sbin/usermod -G amavis clamav 1>&2
-fi
+%addusertogroup -q clamav amavis
 
 %post
 /sbin/chkconfig --add clamd
