@@ -1,5 +1,7 @@
 # TODO:
 # - Make freshclam package (script and daemon)
+# - user system libltdl
+# - restart amavis in triggers if group membership was modified?
 #
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
