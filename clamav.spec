@@ -156,7 +156,9 @@ Biblioteki statyczne clamav.
 	--disable-clamav \
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name} \
-	--with-no-cache
+	--with-no-cache \
+	--with-ltdl-include=/usr/include/ \
+	--with-ltdl-lib=/usr/lib/
 %{__make} LIBTOOL=/usr/bin/libtool
 
 %install
