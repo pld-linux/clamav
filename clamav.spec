@@ -1,6 +1,5 @@
 # TODO:
 # - Make freshclam package (script and daemon)
-# - user system libltdl
 # - restart amavis in triggers if group membership was modified?
 #
 # Conditional build:
@@ -10,7 +9,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.95
-Release:	1
+Release:	2
 Epoch:		0
 License:	GPL v2+
 Group:		Applications
@@ -157,9 +156,11 @@ Biblioteki statyczne clamav.
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name} \
 	--with-no-cache \
-	--with-ltdl-include=/usr/include/ \
-	--with-ltdl-lib=/usr/lib/
-%{__make} LIBTOOL=/usr/bin/libtool
+	--with-ltdl-include=/usr/include \
+	--with-ltdl-lib=%{_libdir}
+
+%{__make} \
+	LIBTOOL=/usr/bin/libtool
 
 %install
 rm -rf $RPM_BUILD_ROOT
