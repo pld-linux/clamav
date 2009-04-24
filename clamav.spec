@@ -9,7 +9,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.95.1
-Release:	1
+Release:	2
 Epoch:		0
 License:	GPL v2+
 Group:		Applications
@@ -46,7 +46,7 @@ Requires(triggerpostun):	sed >= 4.0
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/sbin/usermod
 Requires:	bc
-Requires:	rc-scripts
+Requires:	rc-scripts >= 0.4.0.20
 Provides:	group(clamav)
 Provides:	user(clamav)
 Conflicts:	logrotate < 3.7-4
