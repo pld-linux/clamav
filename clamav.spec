@@ -6,7 +6,7 @@
 %bcond_without	milter		# build without milter subpackage
 #
 Summary:	An anti-virus utility for Unix
-Summary(pl.UTF-8):	Narz??dzie antywirusowe dla Uniks??w
+Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.95.2
 Release:	1
@@ -68,7 +68,7 @@ Here is a list of the main features:
 - advanced database updater with support for scripted updates and
   digital signatures
 - virus scanner C library
-- on-access scanning (Linux?? and FreeBSD??)
+- on-access scanning (Linux® and FreeBSD®)
 - virus database updated multiple times per day (see home page for
   total number of signatures)
 - built-in support for various archive formats, including Zip, RAR,
@@ -81,10 +81,10 @@ Here is a list of the main features:
   and MacOffice files, HTML, RTF and PDF
 
 %description -l pl.UTF-8
-Clam Antivirus jest pot????nym skanerem antywirusowym dla system??w
+Clam Antivirus jest potężnym skanerem antywirusowym dla systemów
 uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
 "on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
-Baza wirus??w zawiera ponad 90000 sygnatur. Skaner jest wielow??tkowy,
+Baza wirusów zawiera ponad 90000 sygnatur. Skaner jest wielowątkowy,
 napisany w C i zgodny z POSIXem.
 
 %package libs
@@ -100,7 +100,7 @@ Biblioteki dzielone clamav.
 
 %package milter
 Summary:	ClamAV filter using milter interface
-Summary(pl.UTF-8):	Filtr ClamAV korzystaj??cy z interfejsu milter
+Summary(pl.UTF-8):	Filtr ClamAV korzystający z interfejsu milter
 Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	sendmail >= 8.11
@@ -110,11 +110,11 @@ Requires:	tcp_wrappers
 ClamAV sendmail filter using MILTER interface.
 
 %description milter -l pl.UTF-8
-Filtr ClamAV dla sendmaila korzystaj??cy z interfejsu MILTER.
+Filtr ClamAV dla sendmaila korzystający z interfejsu MILTER.
 
 %package devel
 Summary:	clamav - Development header files and libraries
-Summary(pl.UTF-8):	clamav - Pliki nag????wkowe i biblioteki dla programist??w
+Summary(pl.UTF-8):	clamav - Pliki nagłówkowe i biblioteki dla programistów
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
@@ -126,7 +126,7 @@ This package contains the development header files and libraries
 necessary to develop clamav client applications.
 
 %description devel -l pl.UTF-8
-Pliki nag????wkowe i biblioteki konieczne do kompilacji aplikacji
+Pliki nagłówkowe i biblioteki konieczne do kompilacji aplikacji
 klienckich clamav.
 
 %package static
