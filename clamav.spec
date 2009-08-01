@@ -9,7 +9,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.95.2
-Release:	1
+Release:	2
 Epoch:		0
 License:	GPL v2+
 Group:		Applications
@@ -103,7 +103,11 @@ Summary:	ClamAV filter using milter interface
 Summary(pl.UTF-8):	Filtr ClamAV korzystający z interfejsu milter
 Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
+%if "%{pld_release}" == "ti"
+Requires:	postfix
+%else
 Requires:	sendmail >= 8.11
+%endif
 Requires:	tcp_wrappers
 
 %description milter
