@@ -1,18 +1,24 @@
 #!/bin/sh
 
-[ -f /etc/sysconfig/clamd ] && . /etc/sysconfig/clamd
+# default as often as two hours
+UPDATE_HOUR=2
 
-[ -z "$UPDATE_HOUR" ] && UPDATE_HOUR=2
-DIV="$(echo "$(LC_ALL=C date "+%H % ${UPDATE_HOUR}")" | bc)"
-[ "$DIV" = "0" ] || exit 0
+if [ -f /etc/sysconfig/clamd ]; then
+	. /etc/sysconfig/clamd
+fi
+
+hour=$(LC_ALL=C date '+%H')
+
+div=$((hour % $UPDATE_HOUR))
+[ "$div" = "0" ] || exit 0
 
 # sleep random amount to avoid all servers hitting clamav servers at same time
 # but at most 1800 seconds (half hour)
 rand=${RANDOM:-$$}
-rand="$(echo "$rand % 1800" | bc)"
+rand=$((rand % 1800))
 sleep $rand
 
-[ -z "$UPDATE_MAIL_MESSAGES" ] && UPDATE_MAIL_MESSAGES="errors"
+[ "$UPDATE_MAIL_MESSAGES" ] || UPDATE_MAIL_MESSAGES="errors"
 [ "$UPDATE_MAIL_MESSAGES" = "errors" ] && freshclamopt="--quiet"
 
 notify=

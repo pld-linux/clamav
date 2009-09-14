@@ -46,7 +46,6 @@ Requires(pre):	/usr/sbin/useradd
 Requires(triggerpostun):	sed >= 4.0
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/sbin/usermod
-Requires:	bc
 Requires:	rc-scripts >= 0.4.1.23
 Provides:	group(clamav)
 Provides:	user(clamav)
