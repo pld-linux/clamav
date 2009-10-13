@@ -9,7 +9,8 @@ fi
 
 hour=$(LC_ALL=C date '+%H')
 
-div=$((hour % $UPDATE_HOUR))
+div=$((hour % ${UPDATE_HOUR#0}))
+
 [ "$div" = "0" ] || exit 0
 
 # sleep random amount to avoid all servers hitting clamav servers at same time
