@@ -9,7 +9,10 @@ fi
 
 hour=$(LC_ALL=C date '+%k')
 
-div=$((hour % ${UPDATE_HOUR#0}))
+# skip divide errors
+[ "$hour" = "0" ] && exit 0
+
+div=$((hour % $UPDATE_HOUR))
 
 [ "$div" = "0" ] || exit 0
 
