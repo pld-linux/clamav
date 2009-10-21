@@ -7,7 +7,7 @@ if [ -f /etc/sysconfig/clamd ]; then
 	. /etc/sysconfig/clamd
 fi
 
-hour=$(LC_ALL=C date '+%H')
+hour=$(LC_ALL=C date '+%k')
 
 div=$((hour % ${UPDATE_HOUR#0}))
 
