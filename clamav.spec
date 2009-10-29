@@ -8,13 +8,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.95.2
-Release:	5
+Version:	0.95.3
+Release:	1
 Epoch:		0
 License:	GPL v2+
 Group:		Applications
 Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	930362397d30e01ba81b5f24c1046d48
+# Source0-md5:	eaf9fccc3cc3567605a9732313652967
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
