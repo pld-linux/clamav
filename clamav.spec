@@ -291,7 +291,7 @@ fi
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
 %attr(755,clamav,root) %dir /var/lib/%{name}
-%ghost %attr(644,clamav,root) %verify(not md5 mtime size) /var/lib/clamav/*.cvd
+%attr(644,clamav,root) %ghost %verify(not md5 mtime size) /var/lib/clamav/*.cvd
 %attr(640,clamav,root) %ghost /var/log/freshclam.log
 %attr(750,clamav,clamav) %dir /var/run/%{name}
 
