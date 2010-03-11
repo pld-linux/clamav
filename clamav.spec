@@ -5,16 +5,17 @@
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
 #
+%define		_rc	rc1
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.95.3
-Release:	2
+Version:	0.96
+Release:	0.%{_rc}.1
 Epoch:		0
 License:	GPL v2+
 Group:		Applications
-Source0:	http://dl.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	eaf9fccc3cc3567605a9732313652967
+Source0:	http://downloads.sourceforge.net/clamav/0.96rc1/%{name}-%{version}%{_rc}.tar.gz
+# Source0-md5:	6cb3a716f06f00c73def71aa72ff5f41
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -145,7 +146,7 @@ clamav static libraries.
 Biblioteki statyczne clamav.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}%{_rc}
 %patch0 -p1
 %patch1 -p1
 
