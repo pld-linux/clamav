@@ -10,3 +10,20 @@
  
  dnl we told automake to not define these, since we want to include
  dnl the date in the version
+--- clamav-0.96/m4/acinclude.m4~	2010-04-15 14:58:22.000000000 +0300
++++ clamav-0.96/m4/acinclude.m4	2010-04-15 14:59:20.072733581 +0300
+@@ -789,9 +789,9 @@
+ AC_DEFUN([CL_MSG_STATUS],
+ [
+    m4_if($#,3,,[m4_fatal([$0: invalid number of arguments: $#])])
+-   AS_ECHO_N(["              $1: "])
+-   AS_IF([test "x$3" = "xno"], [AS_ECHO(["$2 (disabled)"])],
+-	 [test "x$3" = "xyes"], [AS_ECHO(["$2"])],
+-	 [test "x$3" = "x"], [AS_ECHO(["$2"])],
+-	 [AS_ECHO(["$2 ($3)"])])
++   echo ["              $1: "]
++   AS_IF([test "x$3" = "xno"], [echo ["$2 (disabled)"]],
++	 [test "x$3" = "xyes"], [echo ["$2"]],
++	 [test "x$3" = "x"], [echo ["$2"]],
++	 [echo ["$2 ($3)"]])
+ ])
