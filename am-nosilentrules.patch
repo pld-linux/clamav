@@ -1,0 +1,12 @@
+--- clamav-0.96/configure.in~	2010-04-15 13:38:54.000000000 +0300
++++ clamav-0.96/configure.in	2010-04-15 13:38:55.799688151 +0300
+@@ -34,8 +34,7 @@
+ 
+ dnl -Wall and -Werror here are NOT CFLAGS, they refer to automake warnings
+ dnl enable stealth builds and psychedelic tests
+-AM_INIT_AUTOMAKE([1.11 -Wall -Wportability -Wno-override -Werror std-options foreign dist-bzip2 no-define color-tests parallel-tests tar-ustar])
+-AM_SILENT_RULES([yes])
++AM_INIT_AUTOMAKE([1.10 -Wall -Wportability -Wno-override -Werror std-options foreign dist-bzip2 no-define tar-ustar])
+ 
+ dnl we told automake to not define these, since we want to include
+ dnl the date in the version
