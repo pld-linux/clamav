@@ -32,8 +32,10 @@ BuildRequires:	bzip2-devel
 BuildRequires:	gmp-devel
 BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
+BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
+BuildRequires:	ncurses-devel
 BuildRequires:	rpmbuild(macros) >= 1.514
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
