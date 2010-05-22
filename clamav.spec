@@ -12,7 +12,7 @@ Version:	0.96.1
 Release:	1
 Epoch:		0
 License:	GPL v2+
-Group:		Applications
+Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/0.96rc1/%{name}-%{version}.tar.gz
 # Source0-md5:	38e7870db6e9ad0e569518499a6f3651
 Source1:	%{name}.init
