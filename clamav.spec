@@ -8,13 +8,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.96.1
+Version:	0.96.2
 Release:	1
 Epoch:		0
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/0.96rc1/%{name}-%{version}.tar.gz
-# Source0-md5:	38e7870db6e9ad0e569518499a6f3651
+# Source0-md5:	a2c2555d86868f91a01d0e2c2403bbec
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -25,6 +25,7 @@ Source9:	%{name}-milter.sysconfig
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		am-nosilentrules.patch
+Patch3:		%{name}-link.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -50,6 +51,7 @@ Requires(triggerpostun):	sed >= 4.0
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/sbin/usermod
 Requires:	rc-scripts >= 0.4.1.23
+Suggests:	clamav-database
 Provides:	group(clamav)
 Provides:	user(clamav)
 Conflicts:	logrotate < 3.7-4
@@ -152,6 +154,7 @@ Biblioteki statyczne clamav.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__libtoolize}
