@@ -1,18 +1,32 @@
 #!/bin/sh
 
-[ -f /etc/sysconfig/clamd ] && . /etc/sysconfig/clamd
-[ -n "$UPDATE_HOUR" -a "$UPDATE_HOUR" -gt 0 ] || UPDATE_HOUR=2
+# default as often as two hours
+UPDATE_HOUR=2
 
-[ $((`date '+%k'` % $UPDATE_HOUR)) -eq 0 ] || exit 0
+if [ -f /etc/sysconfig/clamd ]; then
+	. /etc/sysconfig/clamd
+fi
 
-# sleep random period to avoid all servers hitting clamav servers at the same time,
-# but 1800 seconds (half an hour) at most
-sleep $((RANDOM % 1800))
+hour=$(LC_ALL=C date '+%k')
+
+# skip divide errors
+[ "$hour" = "0" ] && exit 0
+
+div=$((hour % $UPDATE_HOUR))
+
+[ "$div" = "0" ] || exit 0
+
+# sleep random amount to avoid all servers hitting clamav servers at same time
+# but at most 1800 seconds (half hour)
+rand=${RANDOM:-$$}
+rand=$((rand % 1800))
+sleep $rand
 
 [ "$UPDATE_MAIL_MESSAGES" ] || UPDATE_MAIL_MESSAGES="errors"
 [ "$UPDATE_MAIL_MESSAGES" = "errors" ] && freshclamopt="--quiet"
 
-[ -f /var/lock/subsys/clamd ] && notify="--daemon-notify" || notify=
+notify=
+[ -f /var/lock/subsys/clamd ] && notify="--daemon-notify"
 
 umask 022
 log=$(/usr/bin/freshclam $freshclamopt $notify 2>&1)
