@@ -1,0 +1,13 @@
+--- clamav-0.96.4/libclamav/pdf.c~	2010-10-19 16:14:41.000000000 +0200
++++ clamav-0.96.4/libclamav/pdf.c	2010-11-15 08:23:09.826782407 +0100
+@@ -468,6 +468,10 @@
+ 		return 0;
+ 	    }
+ 	    q = pdf_nextobject(pdf->map+obj->start, pdf->size - obj->start);
++	    if (!q) {
++		cli_dbgmsg("cli_pdf: next object not found\n");
++		return 0;
++	    }
+ 	    length = atoi(q);
+ 	}
+     }
