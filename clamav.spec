@@ -8,12 +8,12 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.97
-Release:	2
+Version:	0.97.1
+Release:	1
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/0.96rc1/%{name}-%{version}.tar.gz
-# Source0-md5:	605ed132b2f8e89df11064adea2b183b
+# Source0-md5:	4f3fb74ff1098c25eef8e10721478c29
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -34,6 +34,7 @@ BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
+BuildRequires:	llvm-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	rpmbuild(macros) >= 1.514
