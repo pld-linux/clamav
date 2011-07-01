@@ -4,7 +4,7 @@
 #
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
-%bcond_with	llvm		# build without llvm support (Ac)
+%bcond_without	llvm		# build without llvm support (Ac)
 
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
