@@ -4,6 +4,7 @@
 #
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
+%bcond_without	llvm		# build without llvm support (Ac)
 
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
@@ -34,7 +35,7 @@ BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
-BuildRequires:	llvm-devel
+%{?with_llvm:BuildRequires:	llvm-devel}
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	rpmbuild(macros) >= 1.514
