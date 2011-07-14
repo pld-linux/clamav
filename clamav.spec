@@ -108,11 +108,8 @@ Summary:	ClamAV filter using milter interface
 Summary(pl.UTF-8):	Filtr ClamAV korzystający z interfejsu milter
 Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-%if "%{pld_release}" == "ti"
 Requires:	postfix
-%else
-Requires:	sendmail >= 8.11
-%endif
+#Requires:	sendmail >= 8.11
 Requires:	tcp_wrappers
 
 %description milter
