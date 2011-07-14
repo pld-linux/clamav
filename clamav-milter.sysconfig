@@ -1,8 +1,1 @@
-CLAMAV_FLAGS="	--max-children=10 \
-		--quiet \
-		--force-scan \
-		--dont-log-clean \
-		--server=localhost \
-		--pidfile=/var/run/clamav/clamav-milter.pid \
-		local:/var/run/clamav/clamav-milter.sock \
-		"
+CLAMAV_FLAGS=""
