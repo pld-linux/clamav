@@ -4,7 +4,11 @@
 #
 # Conditional build:
 %bcond_without	milter		# build without milter subpackage
-%bcond_without	llvm		# build without llvm support (Ac)
+%if "%{pld_release}" == "ac"
+%bcond_with		llvm		# build without llvm support
+%else
+%bcond_without	llvm		# build without llvm support
+%endif
 
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
@@ -35,9 +39,10 @@ BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
-%{?with_llvm:BuildRequires:	llvm-devel}
 %{?with_milter:BuildRequires:	libwrap-devel}
+%{?with_llvm:BuildRequires:	llvm-devel}
 BuildRequires:	ncurses-devel
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.514
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
@@ -185,17 +190,17 @@ cat <<'EOF' >$RPM_BUILD_ROOT/etc/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
 EOF
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamd
 %if %{with milter}
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamav-milter
-install %{SOURCE9} $RPM_BUILD_ROOT/etc/sysconfig/clamav-milter
+install -p %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/clamav-milter
+cp -p %{SOURCE9} $RPM_BUILD_ROOT/etc/sysconfig/clamav-milter
 %endif
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
-install etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
+install -p %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
+cp -p etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
+cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
-install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
+install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
@@ -315,7 +320,7 @@ fi
 %files milter
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamav-milter
-%config(noreplace) %verify(not md5 mtime size) /etc/clamav-milter.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamav-milter.conf
 %attr(754,root,root) /etc/rc.d/init.d/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
