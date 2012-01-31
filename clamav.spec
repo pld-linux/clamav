@@ -26,6 +26,7 @@ Source4:	%{name}-cron-updatedb
 Source5:	%{name}.logrotate
 Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
+Source10:	%{name}.tmpfiles
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		am-nosilentrules.patch
@@ -177,7 +178,8 @@ Biblioteki statyczne clamav.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
-	$RPM_BUILD_ROOT%{_var}/{log,spool/clamav}
+	$RPM_BUILD_ROOT%{_var}/{log,spool/clamav} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
 	LIBTOOL=/usr/bin/libtool \
@@ -199,6 +201,8 @@ cp -p etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
 cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
+
+install %{SOURCE10} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
@@ -299,6 +303,7 @@ fi
 %attr(755,root,root) %{_sbindir}/clamd
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
+/usr/lib/tmpfiles.d/%{name}.conf
 %attr(755,clamav,root) %dir /var/lib/%{name}
 %attr(644,clamav,root) %ghost %verify(not md5 mtime size) /var/lib/clamav/*.cvd
 %attr(640,clamav,root) %ghost /var/log/freshclam.log
