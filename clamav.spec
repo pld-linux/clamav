@@ -178,7 +178,7 @@ Biblioteki statyczne clamav.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
-	$RPM_BUILD_ROOT%{_var}/{log,spool/clamav} \
+	$RPM_BUILD_ROOT%{_var}/{log,spool/clamav,lib/clamav} \
 	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
