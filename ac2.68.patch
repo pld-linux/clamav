@@ -1,0 +1,104 @@
+diff -ur clamav-0.97.5/clamav-milter/Makefile.am clamav-0.97.5-am/clamav-milter/Makefile.am
+--- clamav-0.97.5/clamav-milter/Makefile.am	2012-06-12 15:36:05.000000000 +0200
++++ clamav-0.97.5-am/clamav-milter/Makefile.am	2012-06-28 11:10:21.205378306 +0200
+@@ -45,7 +45,7 @@
+ endif
+ 
+ DEFS = @DEFS@ -DCL_NOLIBCLAMAV
+-CFLAGS=`echo "@CFLAGS@" | sed -e 's/-Wwrite-strings//' -e 's/-Werror /-Werror -Wno-error=format-nonliteral /'`
++AM_CFLAGS=`echo "@CFLAGS@" | sed -e 's/-Wwrite-strings//' -e 's/-Werror /-Werror -Wno-error=format-nonliteral /'`
+ LIBS = $(top_builddir)/libclamav/libclamav_internal_utils.la @CLAMAV_MILTER_LIBS@ @THREAD_LIBS@
+ AM_CPPFLAGS = -I$(top_srcdir)/clamd -I$(top_srcdir)/libclamav -I$(top_srcdir)/shared -I$(top_srcdir)
+ CLEANFILES=*.gcda *.gcno
+diff -ur clamav-0.97.5/configure.in clamav-0.97.5-am/configure.in
+--- clamav-0.97.5/configure.in	2012-06-28 11:10:46.795377403 +0200
++++ clamav-0.97.5-am/configure.in	2012-06-28 11:01:44.658245193 +0200
+@@ -54,6 +54,8 @@
+ AC_PROG_INSTALL
+ AC_PROG_LN_S
+ AC_PROG_MAKE_SET
++AM_PROG_AR
++AM_PROG_CC_C_O
+ 
+ LT_CONFIG_LTDL_DIR([libltdl])
+ LT_INIT([dlopen disable-static])
+@@ -469,7 +471,7 @@
+ 
+ if test "$enable_check_ut" != "no" ; then
+ 	AC_LIB_FIND([check],[check.h],
+-			AC_LANG_PROGRAM([#include <check.h>],[srunner_create(0)]),
++			[AC_LANG_PROGRAM([#include <check.h>],[srunner_create(0)])],
+ 			[CHECK_CPPFLAGS="$INCCHECK"; CHECK_LIBS="$LTLIBCHECK"],
+ 			[])
+ fi
+@@ -1549,8 +1551,8 @@
+ if test "$enable_clamdtop" != "no"; then
+ 
+ AC_LIB_FIND([ncurses], [ncurses/ncurses.h],
+-	    AC_LANG_PROGRAM([#include <ncurses/ncurses.h>],
+-			    [initscr(); KEY_RESIZE;]),
++	    [AC_LANG_PROGRAM([#include <ncurses/ncurses.h>],
++			    [initscr(); KEY_RESIZE;])],
+ 	    [CURSES_CPPFLAGS="$INCNCURSES"; CURSES_LIBS="$LTLIBNCURSES";
+ 	     CURSES_INCLUDE="<ncurses/ncurses.h>"],
+ 	    [])
+@@ -1558,8 +1560,8 @@
+ if test "X$HAVE_LIBNCURSES" != "Xyes"; then
+     HAVE_LIBNCURSES=
+     AC_LIB_FIND([ncurses], [ncurses.h],
+-	    AC_LANG_PROGRAM([#include <ncurses.h>],
+-			    [initscr(); KEY_RESIZE;]),
++	    [AC_LANG_PROGRAM([#include <ncurses.h>],
++			    [initscr(); KEY_RESIZE;])],
+ 	    [CURSES_CPPFLAGS="$INCNCURSES"; CURSES_LIBS="$LTLIBNCURSES";
+ 	     CURSES_INCLUDE="<ncurses.h>"],
+ 	    [])
+@@ -1567,8 +1569,8 @@
+ 
+ if test "X$HAVE_LIBNCURSES" != "Xyes"; then
+     AC_LIB_FIND([pdcurses],[curses.h],
+-			    AC_LANG_PROGRAM([#include <curses.h>],
+-					    [initscr(); KEY_RESIZE;]),
++			    [AC_LANG_PROGRAM([#include <curses.h>],
++					    [initscr(); KEY_RESIZE;])],
+ 			    [CURSES_CPPFLAGS="$INCPDCURSES";
+ 			     CURSES_LIBS="$LTLIBPDCURSES";
+ 			     CURSES_INCLUDE="<curses.h>"],
+diff -ur clamav-0.97.5/m4/resolv.m4 clamav-0.97.5-am/m4/resolv.m4
+--- clamav-0.97.5/m4/resolv.m4	2012-06-12 15:36:05.000000000 +0200
++++ clamav-0.97.5-am/m4/resolv.m4	2012-06-28 11:09:01.312047789 +0200
+@@ -18,7 +18,7 @@
+ 	[
+ 	    AC_CACHE_CHECK([for dn_expand in std libs], [ac_cv_have_lresolv_std], [
+ 	    	ac_cv_have_lresolv_std='no'
+-	        AC_LINK_IFELSE([
++	        AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <sys/types.h>
+ #include <netinet/in.h>
+ #include <arpa/nameser.h>
+@@ -28,14 +28,14 @@
+ 		[
+ 		    ac_cv_have_lresolv_std='yes'
+ 		    ac_cv_have_lresolv=''
+-		])
++		])])
+ 	    ])
+ 	    if test "x$ac_cv_have_lresolv" = "xno"; then
+ 	    bklibs=$LIBS
+ 	    LIBS=-lresolv
+ 	    AC_CACHE_CHECK([for dn_expand in -lresolv], [ac_cv_have_lresolv_lresolv], [
+ 		ac_cv_have_lresolv_lresolv='yes'
+-		AC_LINK_IFELSE([
++		AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <sys/types.h>
+ #include <netinet/in.h>
+ #include <arpa/nameser.h>
+@@ -45,7 +45,7 @@
+ 		[
+ 		    ac_cv_have_lresolv_lresolv='yes'
+ 		    ac_cv_have_lresolv=' -lresolv'
+-		])
++		])])
+ 	    ])
+ 	    LIBS=$bklibs;
+ 	    fi
