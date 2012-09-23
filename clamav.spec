@@ -13,12 +13,12 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.97.5
-Release:	3
+Version:	0.97.6
+Release:	1
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	4d4b93243a5add0216acc4f24f43a895
+# Source0-md5:	1dbdd803b37c0d9d222e4316049f46a2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -161,6 +161,8 @@ Biblioteki statyczne clamav.
 %patch3 -p1
 
 %build
+# automake 1.12+ needs configure.ac not .in
+mv configure.{in,ac}
 %{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
@@ -171,20 +173,20 @@ Biblioteki statyczne clamav.
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name} \
 	--with-no-cache \
-	--with-ltdl-include=/usr/include \
+	--with-ltdl-include=%{_includedir} \
 	--with-ltdl-lib=%{_libdir}
 
 %{__make} \
-	LIBTOOL=/usr/bin/libtool
+	LIBTOOL=%{_bindir}/libtool
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{_var}/{log,spool/clamav,lib/clamav} \
-	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 %{__make} install \
-	LIBTOOL=/usr/bin/libtool \
+	LIBTOOL=%{_bindir}/libtool \
 	DESTDIR=$RPM_BUILD_ROOT
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
@@ -204,7 +206,7 @@ cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 
-install %{SOURCE10} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+install %{SOURCE10} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 # Not packaged/installed anymore, but we want it ghosted
 touch $RPM_BUILD_ROOT/var/lib/clamav/{daily,main}.cvd
@@ -308,7 +310,7 @@ fi
 %attr(755,root,root) %{_sbindir}/clamd
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
-/usr/lib/tmpfiles.d/%{name}.conf
+%{systemdtmpfilesdir}/%{name}.conf
 %attr(755,clamav,root) %dir /var/lib/%{name}
 %attr(644,clamav,root) %ghost %verify(not md5 mtime size) /var/lib/clamav/*.cvd
 %attr(640,clamav,root) %ghost /var/log/freshclam.log
