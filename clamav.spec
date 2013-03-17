@@ -14,7 +14,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.97.7
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -207,9 +207,6 @@ cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 
 install %{SOURCE10} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
-
-# Not packaged/installed anymore, but we want it ghosted
-touch $RPM_BUILD_ROOT/var/lib/clamav/{daily,main}.cvd
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
