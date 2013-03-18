@@ -27,6 +27,7 @@ Source5:	%{name}.logrotate
 Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Source10:	%{name}.tmpfiles
+Source11:	clamd.service
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		am-nosilentrules.patch
@@ -44,7 +45,7 @@ BuildRequires:	libtool
 %{?with_llvm:BuildRequires:	llvm-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	rpm >= 4.4.9-56
-BuildRequires:	rpmbuild(macros) >= 1.514
+BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -289,6 +290,9 @@ EOF
 touch /var/lock/subsys/clamd
 %service -q clamd restart
 
+%triggerpostun -- %{name} < 0.97.7-4
+%systemd_trigger clamd.service
+
 %post milter
 /sbin/chkconfig --add clamav-milter
 %service clamav-milter restart "Clam Antivirus daemon"
@@ -316,6 +320,7 @@ fi
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
 %{systemdtmpfilesdir}/%{name}.conf
+%{systemdunitdir}/clamd.service
 %attr(755,clamav,root) %dir /var/lib/%{name}
 %attr(640,clamav,root) %ghost /var/log/freshclam.log
 %attr(750,clamav,clamav) %dir /var/run/%{name}
