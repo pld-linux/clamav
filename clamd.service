@@ -1,0 +1,14 @@
+[Unit]
+Description=ClamAV daemon
+After=syslog.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/clamd
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/run/clamav/clamd.pid
+Restart=on-failure
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
