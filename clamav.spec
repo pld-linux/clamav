@@ -14,7 +14,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.97.7
-Release:	3
+Release:	4
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -54,6 +54,8 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires(post,preun,postun):	systemd-units >= 38
+Requires:	systemd-units >= 38
 Requires(triggerpostun):	sed >= 4.0
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/sbin/usermod
@@ -183,7 +185,8 @@ mv configure.{in,ac}
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{_var}/{log,spool/clamav,lib/clamav} \
-	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir} \
+	$RPM_BUILD_ROOT%{systemdunitdir}
 
 %{__make} install \
 	LIBTOOL=%{_bindir}/libtool \
@@ -207,6 +210,8 @@ cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 
 install %{SOURCE10} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+
+install %{SOURCE11} $RPM_BUILD_ROOT%{systemdunitdir}
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
@@ -237,18 +242,21 @@ rm -rf $RPM_BUILD_ROOT
 touch /var/log/freshclam.log
 chown clamav:root /var/log/freshclam.log
 chmod 640 /var/log/freshclam.log
+%systemd_post clamd.service
 
 %preun
 if [ "$1" = "0" ]; then
 	%service clamd stop
 	/sbin/chkconfig --del clamd
 fi
+%systemd_preun clamd.service
 
 %postun
 if [ "$1" = "0" ]; then
 	%userremove clamav
 	%groupremove clamav
 fi
+%systemd_reload
 
 %triggerpostun -- %{name} < 0.80
 if [ -f /etc/clamav.conf.rpmsave ]; then
