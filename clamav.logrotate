@@ -7,6 +7,6 @@
 /var/log/freshclam.log {
 	create 640 clamav root
 	postrotate
-		/bin/killall -HUP freshclam || /sbin/service syslog-ng flush-logs >/dev/null
+		/bin/killall -HUP freshclam 2>/dev/null || /sbin/service syslog-ng flush-logs >/dev/null
 	endscript
 }
