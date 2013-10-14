@@ -10,9 +10,9 @@ diff -ur clamav-0.97.5/clamav-milter/Makefile.am clamav-0.97.5-am/clamav-milter/
  LIBS = $(top_builddir)/libclamav/libclamav_internal_utils.la @CLAMAV_MILTER_LIBS@ @THREAD_LIBS@
  AM_CPPFLAGS = -I$(top_srcdir)/clamd -I$(top_srcdir)/libclamav -I$(top_srcdir)/shared -I$(top_srcdir)
  CLEANFILES=*.gcda *.gcno
-diff -ur clamav-0.97.5/configure.in clamav-0.97.5-am/configure.in
---- clamav-0.97.5/configure.in	2012-06-28 11:10:46.795377403 +0200
-+++ clamav-0.97.5-am/configure.in	2012-06-28 11:01:44.658245193 +0200
+diff -ur clamav-0.97.5/configure.ac clamav-0.97.5-am/configure.ac
+--- clamav-0.97.5/configure.ac	2012-06-28 11:10:46.795377403 +0200
++++ clamav-0.97.5-am/configure.ac	2012-06-28 11:01:44.658245193 +0200
 @@ -54,6 +54,8 @@
  AC_PROG_INSTALL
  AC_PROG_LN_S

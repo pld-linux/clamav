@@ -1,5 +1,5 @@
---- clamav-0.96.1/configure.in~	2010-05-19 14:23:09.000000000 +0200
-+++ clamav-0.96.1/configure.in	2010-05-20 09:28:22.297294559 +0200
+--- clamav-0.96.1/configure.ac~	2010-05-19 14:23:09.000000000 +0200
++++ clamav-0.96.1/configure.ac	2010-05-20 09:28:22.297294559 +0200
 @@ -430,8 +430,12 @@
  AC_SUBST([BUILD_CONFIGURE_FLAGS], [$build_configure_args])
  

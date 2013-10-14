@@ -1,6 +1,6 @@
-diff -ur clamav-0.97.1/etc//clamav-milter.conf clamav-0.97.1.new/etc//clamav-milter.conf
---- clamav-0.97.1/etc//clamav-milter.conf	2011-01-10 18:48:28.000000000 +0100
-+++ clamav-0.97.1.new/etc//clamav-milter.conf	2011-07-14 18:24:02.801795736 +0200
+diff -ur clamav-0.97.1/etc//clamav-milter.conf.sample clamav-0.97.1.new/etc//clamav-milter.conf.sample
+--- clamav-0.97.1/etc//clamav-milter.conf.sample	2011-01-10 18:48:28.000000000 +0100
++++ clamav-0.97.1.new/etc//clamav-milter.conf.sample	2011-07-14 18:24:02.801795736 +0200
 @@ -3,7 +3,7 @@
  ##
  
@@ -68,9 +68,9 @@ diff -ur clamav-0.97.1/etc//clamav-milter.conf clamav-0.97.1.new/etc//clamav-mil
  
  # Enable verbose logging.
  #
-diff -ur clamav-0.97.1/etc//clamd.conf clamav-0.97.1.new/etc//clamd.conf
---- clamav-0.97.1/etc//clamd.conf	2011-05-13 13:25:31.000000000 +0200
-+++ clamav-0.97.1.new/etc//clamd.conf	2011-07-14 18:19:05.824861957 +0200
+diff -ur clamav-0.97.1/etc//clamd.conf.sample clamav-0.97.1.new/etc//clamd.conf.sample
+--- clamav-0.97.1/etc//clamd.conf.sample	2011-05-13 13:25:31.000000000 +0200
++++ clamav-0.97.1.new/etc//clamd.conf.sample	2011-07-14 18:19:05.824861957 +0200
 @@ -5,13 +5,13 @@
  
  
@@ -159,9 +159,9 @@ diff -ur clamav-0.97.1/etc//clamd.conf clamav-0.97.1.new/etc//clamd.conf
  #ClamukoIncludePath /students
  
  # Set the exclude paths. All subdirectories are also excluded. (Dazuko only)
-diff -ur clamav-0.97.1/etc//freshclam.conf clamav-0.97.1.new/etc//freshclam.conf
---- clamav-0.97.1/etc//freshclam.conf	2011-01-10 18:48:28.000000000 +0100
-+++ clamav-0.97.1.new/etc//freshclam.conf	2011-07-14 18:14:32.705707450 +0200
+diff -ur clamav-0.97.1/etc//freshclam.conf.sample clamav-0.97.1.new/etc//freshclam.conf.sample
+--- clamav-0.97.1/etc//freshclam.conf.sample	2011-01-10 18:48:28.000000000 +0100
++++ clamav-0.97.1.new/etc//freshclam.conf.sample	2011-07-14 18:14:32.705707450 +0200
 @@ -3,9 +3,14 @@
  ## Please read the freshclam.conf(5) manual before editing this file.
  ##
