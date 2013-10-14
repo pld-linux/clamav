@@ -1,15 +1,3 @@
-diff -ur clamav-0.97.5/clamav-milter/Makefile.am clamav-0.97.5-am/clamav-milter/Makefile.am
---- clamav-0.97.5/clamav-milter/Makefile.am	2012-06-12 15:36:05.000000000 +0200
-+++ clamav-0.97.5-am/clamav-milter/Makefile.am	2012-06-28 11:10:21.205378306 +0200
-@@ -45,7 +45,7 @@
- endif
- 
- DEFS = @DEFS@ -DCL_NOLIBCLAMAV
--CFLAGS=`echo "@CFLAGS@" | sed -e 's/-Wwrite-strings//' -e 's/-Werror /-Werror -Wno-error=format-nonliteral /'`
-+AM_CFLAGS=`echo "@CFLAGS@" | sed -e 's/-Wwrite-strings//' -e 's/-Werror /-Werror -Wno-error=format-nonliteral /'`
- LIBS = $(top_builddir)/libclamav/libclamav_internal_utils.la @CLAMAV_MILTER_LIBS@ @THREAD_LIBS@
- AM_CPPFLAGS = -I$(top_srcdir)/clamd -I$(top_srcdir)/libclamav -I$(top_srcdir)/shared -I$(top_srcdir)
- CLEANFILES=*.gcda *.gcno
 diff -ur clamav-0.97.5/configure.ac clamav-0.97.5-am/configure.ac
 --- clamav-0.97.5/configure.ac	2012-06-28 11:10:46.795377403 +0200
 +++ clamav-0.97.5-am/configure.ac	2012-06-28 11:01:44.658245193 +0200
@@ -64,41 +52,15 @@ diff -ur clamav-0.97.5/configure.ac clamav-0.97.5-am/configure.ac
  			    [CURSES_CPPFLAGS="$INCPDCURSES";
  			     CURSES_LIBS="$LTLIBPDCURSES";
  			     CURSES_INCLUDE="<curses.h>"],
-diff -ur clamav-0.97.5/m4/resolv.m4 clamav-0.97.5-am/m4/resolv.m4
---- clamav-0.97.5/m4/resolv.m4	2012-06-12 15:36:05.000000000 +0200
-+++ clamav-0.97.5-am/m4/resolv.m4	2012-06-28 11:09:01.312047789 +0200
-@@ -18,7 +18,7 @@
- 	[
- 	    AC_CACHE_CHECK([for dn_expand in std libs], [ac_cv_have_lresolv_std], [
- 	    	ac_cv_have_lresolv_std='no'
--	        AC_LINK_IFELSE([
-+	        AC_LINK_IFELSE([AC_LANG_SOURCE([
- #include <sys/types.h>
- #include <netinet/in.h>
- #include <arpa/nameser.h>
-@@ -28,14 +28,14 @@
- 		[
- 		    ac_cv_have_lresolv_std='yes'
- 		    ac_cv_have_lresolv=''
--		])
-+		])])
- 	    ])
- 	    if test "x$ac_cv_have_lresolv" = "xno"; then
- 	    bklibs=$LIBS
- 	    LIBS=-lresolv
- 	    AC_CACHE_CHECK([for dn_expand in -lresolv], [ac_cv_have_lresolv_lresolv], [
- 		ac_cv_have_lresolv_lresolv='yes'
--		AC_LINK_IFELSE([
-+		AC_LINK_IFELSE([AC_LANG_SOURCE([
- #include <sys/types.h>
- #include <netinet/in.h>
- #include <arpa/nameser.h>
-@@ -45,7 +45,7 @@
- 		[
- 		    ac_cv_have_lresolv_lresolv='yes'
- 		    ac_cv_have_lresolv=' -lresolv'
--		])
-+		])])
- 	    ])
- 	    LIBS=$bklibs;
- 	    fi
+
+--- clamav-0.98/configure.ac~	2013-10-14 20:17:59.000000000 +0200
++++ clamav-0.98/configure.ac	2013-10-14 20:19:05.824615211 +0200
+@@ -34,7 +34,7 @@
+ 
+ dnl -Wall and -Werror here are NOT CFLAGS, they refer to automake warnings
+ dnl enable stealth builds and psychedelic tests
+-AM_INIT_AUTOMAKE([1.10 -Wall -Wportability -Wno-override -Werror std-options foreign dist-bzip2 no-define tar-ustar])
++AM_INIT_AUTOMAKE([1.10 -Wall -Wportability -Wno-override std-options foreign dist-bzip2 no-define tar-ustar])
+ 
+ dnl we told automake to not define these, since we want to include
+ dnl the date in the version

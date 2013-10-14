@@ -41,6 +41,7 @@ BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
+BuildRequires:	llvm-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
 %{?with_llvm:BuildRequires:	llvm-devel}
 BuildRequires:	ncurses-devel
@@ -170,7 +171,9 @@ Biblioteki statyczne clamav.
 %{__autoheader}
 %{__automake}
 %configure \
+	--disable-silent-rules \
 	--disable-clamav \
+	--enable-clamdtop \
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name} \
 	--with-no-cache \
@@ -203,7 +206,9 @@ cp -p %{SOURCE9} $RPM_BUILD_ROOT/etc/sysconfig/clamav-milter
 %endif
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/clamd
 install -p %{SOURCE4} $RPM_BUILD_ROOT%{_sbindir}/clamav-cron-updatedb
-cp -p etc/*.conf $RPM_BUILD_ROOT%{_sysconfdir}
+for i in $RPM_BUILD_ROOT%{_sysconfdir}/*.conf.sample; do
+	mv $i ${i%%.sample}
+done
 cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
