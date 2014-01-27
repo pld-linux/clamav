@@ -139,26 +139,6 @@ diff -ur clamav-0.97.1/etc//clamd.conf.sample clamav-0.97.1.new/etc//clamd.conf.
  
  # Stop daemon when libclamav reports out of memory condition.
  #ExitOnOOM yes
-@@ -443,15 +443,15 @@
- 
- # Set access mask for Clamuko (Dazuko only).
- # Default: no
--#ClamukoScanOnOpen yes
--#ClamukoScanOnClose yes
--#ClamukoScanOnExec yes
-+ClamukoScanOnOpen yes
-+ClamukoScanOnClose yes
-+ClamukoScanOnExec yes
- 
- # Set the include paths (all files inside them will be scanned). You can have
- # multiple ClamukoIncludePath directives but each directory must be added
- # in a seperate line. (Dazuko only)
- # Default: disabled
--#ClamukoIncludePath /home
-+ClamukoIncludePath /home
- #ClamukoIncludePath /students
- 
- # Set the exclude paths. All subdirectories are also excluded. (Dazuko only)
 diff -ur clamav-0.97.1/etc//freshclam.conf.sample clamav-0.97.1.new/etc//freshclam.conf.sample
 --- clamav-0.97.1/etc//freshclam.conf.sample	2011-01-10 18:48:28.000000000 +0100
 +++ clamav-0.97.1.new/etc//freshclam.conf.sample	2011-07-14 18:14:32.705707450 +0200
