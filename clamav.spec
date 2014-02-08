@@ -3,11 +3,11 @@
 # - restart amavis in triggers if group membership was modified?
 #
 # Conditional build:
-%bcond_without	milter		# build without milter subpackage
+%bcond_without	milter		# milter interface subpackage
 %if "%{pld_release}" == "ac"
-%bcond_with		llvm		# build without llvm support
+%bcond_with	llvm		# LLVM support
 %else
-%bcond_without	llvm		# build without llvm support
+%bcond_without	llvm		# LLVM support
 %endif
 
 Summary:	An anti-virus utility for Unix
@@ -354,19 +354,27 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %{_libdir}/libclamav.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamav.so.6
+%attr(755,root,root) %{_libdir}/libclamunrar.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.6
+%attr(755,root,root) %{_libdir}/libclamunrar_iface.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.6
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/clamav-config
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
-%{_includedir}/*.h
-%{_pkgconfigdir}/*.pc
+%attr(755,root,root) %{_libdir}/libclamav.so
+%attr(755,root,root) %{_libdir}/libclamunrar.so
+%attr(755,root,root) %{_libdir}/libclamunrar_iface.so
+%{_libdir}/libclamav.la
+%{_libdir}/libclamunrar.la
+%{_libdir}/libclamunrar_iface.la
+%{_includedir}/clamav.h
+%{_pkgconfigdir}/libclamav.pc
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/*.a
+%{_libdir}/libclamav.a
+%{_libdir}/libclamunrar.a
+%{_libdir}/libclamunrar_iface.a
