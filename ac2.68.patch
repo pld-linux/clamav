@@ -1,25 +1,33 @@
-diff -ur clamav-0.97.5/configure.ac clamav-0.97.5-am/configure.ac
---- clamav-0.97.5/configure.ac	2012-06-28 11:10:46.795377403 +0200
-+++ clamav-0.97.5-am/configure.ac	2012-06-28 11:01:44.658245193 +0200
-@@ -54,6 +54,8 @@
- AC_PROG_INSTALL
- AC_PROG_LN_S
- AC_PROG_MAKE_SET
-+AM_PROG_AR
-+AM_PROG_CC_C_O
+diff -uNr clamav-0.98.3/configure.ac clamav-0.98.3-ac2.68/configure.ac
+--- clamav-0.98.3/configure.ac	2014-05-06 20:42:41.000000000 +0200
++++ clamav-0.98.3-ac2.68/configure.ac	2014-05-09 10:51:30.508280355 +0200
+@@ -42,12 +42,12 @@
+ AC_DEFINE([PACKAGE], PACKAGE_NAME, [Name of package])
+ 
+ m4_include([m4/reorganization/version.m4])
++m4_include([m4/reorganization/build_tools.m4])
  
  LT_CONFIG_LTDL_DIR([libltdl])
  LT_INIT([dlopen disable-static])
-@@ -469,7 +471,7 @@
+ LTDL_INIT([recursive])
  
- if test "$enable_check_ut" != "no" ; then
- 	AC_LIB_FIND([check],[check.h],
--			AC_LANG_PROGRAM([#include <check.h>],[srunner_create(0)]),
-+			[AC_LANG_PROGRAM([#include <check.h>],[srunner_create(0)])],
- 			[CHECK_CPPFLAGS="$INCCHECK"; CHECK_LIBS="$LTLIBCHECK"],
- 			[])
- fi
-@@ -1549,8 +1551,8 @@
+-m4_include([m4/reorganization/build_tools.m4])
+ m4_include([m4/reorganization/headers.m4])
+ 
+ AC_CONFIG_FILES([libltdl/Makefile])
+diff -uNr clamav-0.98.3/m4/reorganization/build_tools.m4 clamav-0.98.3-ac2.68/m4/reorganization/build_tools.m4
+--- clamav-0.98.3/m4/reorganization/build_tools.m4	2014-05-06 20:39:56.000000000 +0200
++++ clamav-0.98.3-ac2.68/m4/reorganization/build_tools.m4	2014-05-09 10:53:30.800262620 +0200
+@@ -1,3 +1,5 @@
++AM_PROG_AR
++AM_PROG_CC_C_O
+ AC_PROG_CC
+ AC_PROG_INSTALL
+ AC_PROG_LN_S
+diff -uNr clamav-0.98.3/m4/reorganization/clamdtop.m4 clamav-0.98.3-ac2.68/m4/reorganization/clamdtop.m4
+--- clamav-0.98.3/m4/reorganization/clamdtop.m4	2014-05-06 20:39:56.000000000 +0200
++++ clamav-0.98.3-ac2.68/m4/reorganization/clamdtop.m4	2014-05-09 10:51:06.963907781 +0200
+@@ -6,8 +6,8 @@
  if test "$enable_clamdtop" != "no"; then
  
  AC_LIB_FIND([ncurses], [ncurses/ncurses.h],
@@ -30,7 +38,7 @@ diff -ur clamav-0.97.5/configure.ac clamav-0.97.5-am/configure.ac
  	    [CURSES_CPPFLAGS="$INCNCURSES"; CURSES_LIBS="$LTLIBNCURSES";
  	     CURSES_INCLUDE="<ncurses/ncurses.h>"],
  	    [])
-@@ -1558,8 +1560,8 @@
+@@ -15,8 +15,8 @@
  if test "X$HAVE_LIBNCURSES" != "Xyes"; then
      HAVE_LIBNCURSES=
      AC_LIB_FIND([ncurses], [ncurses.h],
@@ -41,7 +49,7 @@ diff -ur clamav-0.97.5/configure.ac clamav-0.97.5-am/configure.ac
  	    [CURSES_CPPFLAGS="$INCNCURSES"; CURSES_LIBS="$LTLIBNCURSES";
  	     CURSES_INCLUDE="<ncurses.h>"],
  	    [])
-@@ -1567,8 +1569,8 @@
+@@ -24,8 +24,8 @@
  
  if test "X$HAVE_LIBNCURSES" != "Xyes"; then
      AC_LIB_FIND([pdcurses],[curses.h],
@@ -52,15 +60,15 @@ diff -ur clamav-0.97.5/configure.ac clamav-0.97.5-am/configure.ac
  			    [CURSES_CPPFLAGS="$INCPDCURSES";
  			     CURSES_LIBS="$LTLIBPDCURSES";
  			     CURSES_INCLUDE="<curses.h>"],
-
---- clamav-0.98/configure.ac~	2013-10-14 20:17:59.000000000 +0200
-+++ clamav-0.98/configure.ac	2013-10-14 20:19:05.824615211 +0200
-@@ -34,7 +34,7 @@
+diff -uNr clamav-0.98.3/m4/reorganization/code_checks/unit_tests.m4 clamav-0.98.3-ac2.68/m4/reorganization/code_checks/unit_tests.m4
+--- clamav-0.98.3/m4/reorganization/code_checks/unit_tests.m4	2014-05-06 20:39:56.000000000 +0200
++++ clamav-0.98.3-ac2.68/m4/reorganization/code_checks/unit_tests.m4	2014-05-09 10:51:06.963907781 +0200
+@@ -12,7 +12,7 @@
+ esac
  
- dnl -Wall and -Werror here are NOT CFLAGS, they refer to automake warnings
- dnl enable stealth builds and psychedelic tests
--AM_INIT_AUTOMAKE([1.10 -Wall -Wportability -Wno-override -Werror std-options foreign dist-bzip2 no-define tar-ustar])
-+AM_INIT_AUTOMAKE([1.10 -Wall -Wportability -Wno-override std-options foreign dist-bzip2 no-define tar-ustar])
+ 	AC_LIB_FIND([check],[check.h],
+-			AC_LANG_PROGRAM([#include <check.h>],[srunner_create(0)]),
++			[AC_LANG_PROGRAM([#include <check.h>],[srunner_create(0)])],
+ 			[CHECK_CPPFLAGS="$INCCHECK"; CHECK_LIBS="$LTLIBCHECK $LDFLAGS"],
+ 			[])
  
- dnl we told automake to not define these, since we want to include
- dnl the date in the version

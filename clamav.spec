@@ -13,12 +13,12 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.98.1
-Release:	2
+Version:	0.98.3
+Release:	0.1
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	b1ec7b19dea8385954515ef1d63576d8
+# Source0-md5:	b649d35ee85d4d6075a98173dd255c17
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -30,22 +30,25 @@ Source10:	%{name}.tmpfiles
 Source11:	clamd.service
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-nolibs.patch
+%if "%{pld_release}" == "ac"
 Patch2:		am-nosilentrules.patch
+%endif
 Patch3:		ac2.68.patch
-Patch4:		%{name}-notify-error.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bzip2-devel
+BuildRequires:	curl-devel
 BuildRequires:	gmp-devel
 BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
-BuildRequires:	llvm-devel
 %{?with_milter:BuildRequires:	libwrap-devel}
+BuildRequires:	llvm-devel
 %{?with_llvm:BuildRequires:	llvm-devel}
 BuildRequires:	ncurses-devel
+BuildRequires:	openssl-devel
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	zlib-devel
@@ -162,9 +165,10 @@ Biblioteki statyczne clamav.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%if "%{pld_release}" == "ac"
 %patch2 -p1
+%endif
 %patch3 -p1
-%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -215,9 +219,9 @@ cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 
-install %{SOURCE10} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+cp -p %{SOURCE10} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
-install %{SOURCE11} $RPM_BUILD_ROOT%{systemdunitdir}
+cp -p %{SOURCE11} $RPM_BUILD_ROOT%{systemdunitdir}
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir

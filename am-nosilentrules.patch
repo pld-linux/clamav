@@ -4,9 +4,9 @@
  
  dnl -Wall and -Werror here are NOT CFLAGS, they refer to automake warnings
  dnl enable stealth builds and psychedelic tests
--AM_INIT_AUTOMAKE([1.11 -Wall -Wportability -Wno-override -Werror std-options foreign dist-bzip2 no-define color-tests parallel-tests tar-ustar])
+-AM_INIT_AUTOMAKE([1.11 -Wall -Wportability -Wno-override std-options foreign dist-bzip2 no-define color-tests parallel-tests tar-ustar])
 -AM_SILENT_RULES([yes])
-+AM_INIT_AUTOMAKE([1.10 -Wall -Wportability -Wno-override -Werror std-options foreign dist-bzip2 no-define tar-ustar])
++AM_INIT_AUTOMAKE([1.10 -Wall -Wportability -Wno-override std-options foreign dist-bzip2 no-define tar-ustar])
  
  dnl we told automake to not define these, since we want to include
  dnl the date in the version
