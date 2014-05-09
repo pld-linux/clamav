@@ -14,7 +14,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.98.3
-Release:	0.1
+Release:	1
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -34,6 +34,7 @@ Patch1:		%{name}-nolibs.patch
 Patch2:		am-nosilentrules.patch
 %endif
 Patch3:		ac2.68.patch
+Patch4:		%{name}-openssl.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -138,7 +139,9 @@ Summary(pl.UTF-8):	clamav - Pliki nagłówkowe i biblioteki dla programistów
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
+Requires:	curl-devel
 Requires:	gmp-devel
+Requires:	openssl-devel
 Requires:	zlib-devel
 
 %description devel
@@ -169,6 +172,7 @@ Biblioteki statyczne clamav.
 %patch2 -p1
 %endif
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -322,6 +326,7 @@ fi
 %attr(755,root,root) %{_bindir}/clamdscan
 %attr(755,root,root) %{_bindir}/clamdtop
 %attr(755,root,root) %{_bindir}/clamscan
+%attr(755,root,root) %{_bindir}/clamsubmit
 %attr(755,root,root) %{_bindir}/freshclam
 %attr(755,root,root) %{_bindir}/sigtool
 %attr(755,root,root) %{_bindir}/clamconf
