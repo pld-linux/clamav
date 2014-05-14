@@ -14,7 +14,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.98.3
-Release:	2
+Release:	3
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/%{name}-%{version}.tar.gz
@@ -35,6 +35,7 @@ Patch2:		am-nosilentrules.patch
 %endif
 Patch3:		ac2.68.patch
 Patch4:		%{name}-openssl.patch
+Patch5:		%{name}-major.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -174,6 +175,7 @@ Biblioteki statyczne clamav.
 %endif
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 %{__libtoolize}

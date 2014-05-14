@@ -1,0 +1,16 @@
+--- clamav-0.98.3/m4/reorganization/version.m4~	2014-05-06 20:59:19.000000000 +0200
++++ clamav-0.98.3/m4/reorganization/version.m4	2014-05-14 20:33:00.181291208 +0200
+@@ -8,10 +8,11 @@
+ LIBCLAMAV_VERSION="$LC_CURRENT":"$LC_REVISION":"$LC_AGE"
+ AC_SUBST([LIBCLAMAV_VERSION])
+ 
+-AC_DEFINE_UNQUOTED([LIBCLAMAV_FULLVER], "$major.$LC_AGE.$LC_REVISION",
++MAJOR_VER=$(( $LC_CURRENT - $LC_AGE ))
++AC_DEFINE_UNQUOTED([LIBCLAMAV_FULLVER], "$MAJOR_VER.$LC_AGE.$LC_REVISION",
+         ["Full library version number"])
+ 
+-AC_DEFINE_UNQUOTED([LIBCLAMAV_MAJORVER], $major, ["Major library version number"])
++AC_DEFINE_UNQUOTED([LIBCLAMAV_MAJORVER], $MAJOR_VER, ["Major library version number"])
+ 
+ AC_DEFINE_UNQUOTED([VERSION],"$VERSION",[Version number of package])
+ AC_DEFINE_UNQUOTED([VERSION_SUFFIX],"$VERSION_SUFFIX",[Version suffix for package])
