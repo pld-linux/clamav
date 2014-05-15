@@ -172,7 +172,9 @@ Biblioteki statyczne clamav.
 %if "%{pld_release}" == "ac"
 %patch2 -p1
 %endif
+%if "%{pld_release}" != "ac"
 %patch3 -p1
+%endif
 %patch4 -p1
 %patch5 -p1
 
