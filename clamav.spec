@@ -47,7 +47,6 @@ BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
-BuildRequires:	llvm-devel
 %{?with_llvm:BuildRequires:	llvm-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
