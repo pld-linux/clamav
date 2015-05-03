@@ -4,17 +4,21 @@
 #
 # Conditional build:
 %bcond_without	milter		# milter interface subpackage
-%if "%{pld_release}" == "ac"
-%bcond_with	llvm		# LLVM support
-%else
 %bcond_without	llvm		# LLVM support
+
+%if "%{pld_release}" == "ac"
+%undefine with_llvm
+%endif
+
+%ifarch x32
+%undefine with_llvm
 %endif
 
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.98.7
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/%{name}-%{version}.tar.gz
