@@ -40,6 +40,7 @@ Patch2:		am-nosilentrules.patch
 Patch3:		ac2.68.patch
 Patch4:		%{name}-openssl.patch
 Patch5:		%{name}-major.patch
+Patch6:		x32.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -181,6 +182,7 @@ Biblioteki statyczne clamav.
 %endif
 #%patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__libtoolize}

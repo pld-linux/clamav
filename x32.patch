@@ -1,0 +1,14 @@
+--- clamav-0.98.7/libclamav/bytecode_vm.c~	2015-04-22 21:50:01.000000000 +0200
++++ clamav-0.98.7/libclamav/bytecode_vm.c	2015-05-03 21:40:54.448612567 +0200
+@@ -1248,7 +1248,11 @@
+         gettimeofday(&tv1, NULL);
+         tv1.tv_sec -= tv0.tv_sec;
+         tv1.tv_usec -= tv0.tv_usec;
++#ifdef __ILP32__
++        cli_dbgmsg("intepreter bytecode run finished in %lluus, after executing %u opcodes\n",
++#else
+         cli_dbgmsg("intepreter bytecode run finished in %luus, after executing %u opcodes\n",
++#endif
+                    tv1.tv_sec*1000000 + tv1.tv_usec, pc);
+     }
+     if (stop == CL_EBYTECODE) {
