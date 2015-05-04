@@ -4,10 +4,10 @@
 #
 # Conditional build:
 %bcond_without	milter		# milter interface subpackage
-%bcond_without	llvm		# LLVM support
-
 %if "%{pld_release}" == "ac"
-%undefine with_llvm
+%bcond_with	llvm		# LLVM support
+%else
+%bcond_without	llvm		# LLVM support
 %endif
 
 %ifarch x32
