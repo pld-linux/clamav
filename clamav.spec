@@ -14,15 +14,17 @@
 %undefine with_llvm
 %endif
 
+%bcond_with	system_llvm
+
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.98.7
-Release:	3
+Version:	0.99.1
+Release:	1
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://downloads.sourceforge.net/clamav/%{name}-%{version}.tar.gz
-# Source0-md5:	157c601161da1c2d5a0e48ea1b49e067
+# Source0-md5:	cf1f3cbe62a08c9165801f79239166ff
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -52,7 +54,7 @@ BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
-%{?with_llvm:BuildRequires:	llvm-devel}
+%{?with_llvm:%{?with_system_llvm:BuildRequires:	llvm-devel < 3.7}}
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
 BuildRequires:	rpm >= 4.4.9-56
@@ -194,7 +196,7 @@ Biblioteki statyczne clamav.
 	--disable-silent-rules \
 	--disable-clamav \
 	--enable-clamdtop \
-	%{?with_llvm:--enable-llvm --with-system-llvm} \
+	%{?with_llvm:--enable-llvm %{?with_system_llvm:--with-system-llvm}} \
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name} \
 	--with-no-cache \
@@ -377,11 +379,11 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libclamav.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamav.so.6
+%attr(755,root,root) %ghost %{_libdir}/libclamav.so.7
 %attr(755,root,root) %{_libdir}/libclamunrar.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.6
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.7
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.6
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.7
 
 %files devel
 %defattr(644,root,root,755)
