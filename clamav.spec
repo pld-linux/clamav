@@ -51,7 +51,7 @@ BuildRequires:	curl-devel
 BuildRequires:	gmp-devel
 BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
-BuildRequires:	libstdc++-devel >= 6:3.4
+BuildRequires:	libstdc++-devel >= 5:3.4
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
 %{?with_llvm:%{?with_system_llvm:BuildRequires:	llvm-devel < 3.7}}
