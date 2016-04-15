@@ -47,6 +47,7 @@ URL:		http://www.clamav.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bzip2-devel
+BuildRequires:	check-devel
 BuildRequires:	curl-devel
 BuildRequires:	gmp-devel
 BuildRequires:	libltdl-devel
@@ -57,6 +58,7 @@ BuildRequires:	libtool
 %{?with_llvm:%{?with_system_llvm:BuildRequires:	llvm-devel < 3.7}}
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
+BuildRequires:	pkgconfig
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	zlib-devel
