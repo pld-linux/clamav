@@ -361,7 +361,9 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/clamav
-%{_mandir}/man[15]/*
+%{_mandir}/man1/*
+%{_mandir}/man5/clamd*
+%{_mandir}/man5/freshclam*
 %{_mandir}/man8/clamd*
 
 %if %{with milter}
@@ -374,6 +376,7 @@ fi
 #%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
 #%{_sysconfdir}/log.d/conf/services/clamav-milter.conf
 %attr(755,root,root) %{_sbindir}/clamav-milter
+%{_mandir}/man5/clamav-milter*
 %{_mandir}/man8/clamav-milter.8*
 %attr(700,clamav,clamav) /var/spool/clamav
 %endif

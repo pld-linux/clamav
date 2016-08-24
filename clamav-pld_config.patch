@@ -48,7 +48,7 @@ diff -ur clamav-0.97.1/etc//clamav-milter.conf.sample clamav-0.97.1.new/etc//cla
  #
  # Default: no default
 -#ClamdSocket tcp:scanner.mydomain:7357
-+ClamdSocket /var/lib/clamav/clamd.socket
++ClamdSocket unix:/var/lib/clamav/clamd.socket
  
  
  ##
