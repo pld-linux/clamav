@@ -5,4 +5,4 @@ Description=clamav cronjob timer
 OnCalendar=*:05
 
 [Install]
-WantedBy=cronjobs.timer
+WantedBy=cronjobs.target
