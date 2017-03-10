@@ -79,7 +79,7 @@ Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/sbin/usermod
 Requires:	rc-scripts >= 0.4.1.23
 Suggests:	clamav-database
-Suggests:	crondaemon
+Suggests:	cronjobs
 Provides:	group(clamav)
 Provides:	user(clamav)
 Conflicts:	logrotate < 3.7-4
