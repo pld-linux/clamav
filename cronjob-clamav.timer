@@ -1,0 +1,8 @@
+[Unit]
+Description=clamav cronjob timer
+
+[Timer]
+OnCalendar=*:05
+
+[Install]
+WantedBy=cronjobs.timer

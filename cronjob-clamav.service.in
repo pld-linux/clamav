@@ -1,0 +1,5 @@
+[Unit]
+Description=clamav cronjob
+
+[Service]
+ExecStart=@sbindir@/clamav-cron-updatedb

@@ -20,7 +20,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.99.2
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
@@ -34,6 +34,8 @@ Source8:	%{name}-post-updatedb
 Source9:	%{name}-milter.sysconfig
 Source10:	%{name}.tmpfiles
 Source11:	clamd.service
+Source12:	cronjob-clamav.timer
+Source13:	cronjob-clamav.service.in
 Patch0:		%{name}-pld_config.patch
 Patch1:		%{name}-nolibs.patch
 %if "%{pld_release}" == "ac"
@@ -241,6 +243,8 @@ install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE10} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 cp -p %{SOURCE11} $RPM_BUILD_ROOT%{systemdunitdir}
+cp -p %{SOURCE12} $RPM_BUILD_ROOT%{systemdunitdir}/cronjob-%{name}.timer
+sed -e's#@sbindir@#%{_sbindir}#' <  %{SOURCE13} > $RPM_BUILD_ROOT%{systemdunitdir}/cronjob-%{name}.service
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
@@ -271,14 +275,14 @@ rm -rf $RPM_BUILD_ROOT
 touch /var/log/freshclam.log
 chown clamav:root /var/log/freshclam.log
 chmod 640 /var/log/freshclam.log
-%systemd_post clamd.service
+%systemd_post clamd.service cronjob-clamav.timer
 
 %preun
 if [ "$1" = "0" ]; then
 	%service clamd stop
 	/sbin/chkconfig --del clamd
 fi
-%systemd_preun clamd.service
+%systemd_preun clamd.service cronjob-clamav.timer
 
 %postun
 if [ "$1" = "0" ]; then
@@ -321,6 +325,9 @@ touch /var/lock/subsys/clamd
 %triggerpostun -- %{name} < 0.97.7-4
 %systemd_trigger clamd.service
 
+%triggerpostun -- %{name} < 0.99.2-2
+%systemd_service_enable cronjob-clamav.timer
+
 %post milter
 /sbin/chkconfig --add clamav-milter
 %service clamav-milter restart "Clam Antivirus daemon"
@@ -350,6 +357,8 @@ fi
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
 %{systemdtmpfilesdir}/%{name}.conf
 %{systemdunitdir}/clamd.service
+%{systemdunitdir}/cronjob-clamav.service
+%{systemdunitdir}/cronjob-clamav.timer
 %attr(755,clamav,root) %dir /var/lib/%{name}
 %attr(640,clamav,root) %ghost /var/log/freshclam.log
 %attr(750,clamav,clamav) %dir /var/run/%{name}
