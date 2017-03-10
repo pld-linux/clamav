@@ -197,6 +197,7 @@ Biblioteki statyczne clamav.
 %{__autoheader}
 %{__automake}
 %configure \
+	--disable-zlib-vcheck \
 	--disable-silent-rules \
 	--disable-clamav \
 	--enable-clamdtop \
