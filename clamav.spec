@@ -19,12 +19,12 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.99.4
+Version:	0.100.1
 Release:	1
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	b9359b90086948b3c4eb97c84cf4b400
+# Source0-md5:	0f653df0480eebcd828939e8db9f0443
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -203,7 +203,7 @@ export CXXFLAGS="%{rpmcxxflags} -std=gnu++98"
 	--disable-silent-rules \
 	--disable-clamav \
 	--enable-clamdtop \
-	%{?with_llvm:--enable-llvm %{?with_system_llvm:--with-system-llvm}} \
+	%{?with_llvm:--enable-llvm %{!?with_system_llvm:--with-system-llvm=no}} \
 	%{?with_milter:--enable-milter} \
 	--with-dbdir=/var/lib/%{name} \
 	--with-no-cache \
@@ -346,7 +346,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog FAQ NEWS README docs/*.pdf
+%doc ChangeLog.md NEWS.md README.md
 %attr(755,root,root) %{_bindir}/clambc
 %attr(755,root,root) %{_bindir}/clamdscan
 %attr(755,root,root) %{_bindir}/clamdtop
@@ -397,6 +397,8 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libclamav.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamav.so.7
+%attr(755,root,root) %{_libdir}/libclammspack.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libclammspack.so.0
 %attr(755,root,root) %{_libdir}/libclamunrar.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.7
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so.*.*.*
@@ -406,16 +408,20 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/clamav-config
 %attr(755,root,root) %{_libdir}/libclamav.so
+%attr(755,root,root) %{_libdir}/libclammspack.so
 %attr(755,root,root) %{_libdir}/libclamunrar.so
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so
 %{_libdir}/libclamav.la
+%{_libdir}/libclammspack.la
 %{_libdir}/libclamunrar.la
 %{_libdir}/libclamunrar_iface.la
 %{_includedir}/clamav.h
 %{_pkgconfigdir}/libclamav.pc
+%{_pkgconfigdir}/libclammspack.pc
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libclamav.a
+%{_libdir}/libclammspack.a
 %{_libdir}/libclamunrar.a
 %{_libdir}/libclamunrar_iface.a
