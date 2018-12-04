@@ -19,12 +19,12 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.100.2
+Version:	0.101.0
 Release:	1
 License:	GPL v2+
 Group:		Daemons
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	253dd79dd57da759567e42543a569c5c
+# Source0-md5:	47c36d13ac814b9e29ed6f5fc1691373
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -359,6 +359,9 @@ fi
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
 %{systemdtmpfilesdir}/%{name}.conf
+%{systemdunitdir}/clamav-daemon.service
+%{systemdunitdir}/clamav-daemon.socket
+%{systemdunitdir}/clamav-freshclam.service
 %{systemdunitdir}/clamd.service
 %{systemdunitdir}/cronjob-clamav.service
 %{systemdunitdir}/cronjob-clamav.timer
@@ -396,13 +399,13 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libclamav.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamav.so.7
+%attr(755,root,root) %ghost %{_libdir}/libclamav.so.9
 %attr(755,root,root) %{_libdir}/libclammspack.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclammspack.so.0
 %attr(755,root,root) %{_libdir}/libclamunrar.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.7
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.9
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.7
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.9
 
 %files devel
 %defattr(644,root,root,755)
@@ -417,7 +420,6 @@ fi
 %{_libdir}/libclamunrar_iface.la
 %{_includedir}/clamav.h
 %{_pkgconfigdir}/libclamav.pc
-%{_pkgconfigdir}/libclammspack.pc
 
 %files static
 %defattr(644,root,root,755)
