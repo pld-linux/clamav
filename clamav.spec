@@ -96,7 +96,7 @@ especially for e-mail scanning on mail gateways. It provides a number
 of utilities including a flexible and scalable multi-threaded daemon,
 a command line scanner and advanced tool for automatic database
 updates. The core of the package is an anti-virus engine available in
-a form of shared library.
+a form of shared library (available in clamav-libs).
 
 Here is a list of the main features:
 - command-line scanner
@@ -105,7 +105,7 @@ Here is a list of the main features:
 - advanced database updater with support for scripted updates and
   digital signatures
 - virus scanner C library
-- on-access scanning (Linux® and FreeBSD®)
+- on-access scanning (Linux and FreeBSD)
 - virus database updated multiple times per day (see home page for
   total number of signatures)
 - built-in support for various archive formats, including Zip, RAR,
@@ -118,11 +118,33 @@ Here is a list of the main features:
   and MacOffice files, HTML, RTF and PDF
 
 %description -l pl.UTF-8
-Clam Antivirus jest potężnym skanerem antywirusowym dla systemów
-uniksowych. Wspiera on AMaViSa, skompresowane pliki, skanowanie
-"on-access" i posiada system bezpiecznej, automatycznej aktualizacji.
-Baza wirusów zawiera ponad 90000 sygnatur. Skaner jest wielowątkowy,
-napisany w C i zgodny z POSIXem.
+Clam AntiVirus to mające otwarte źródła narzędzie antywirusowe dla
+systemów uniksowych, zaprojektowane szczególnie pod kątem skanowania
+poczty elektronicznej na bramkach pocztowych. Udostępnia wiele
+narzędzi, w tym elastycznego i skalowalnego, multiwątkowego demona,
+skaner działający z linii poleceń oraz zaawansowane narzędzie do
+automatycznej aktualizacji bazy danych. Główna część pakietu to
+silnik antywirusowy dostępny w postaci biblioteki współdzielonej
+(dostępnej w pakiecie clamav-libs).
+
+Lista podstawowych możliwości:
+- skaner działający z linii poleceń
+- szybki, wielowątkowy demon z obsługą skanowania przy odczycie
+- interfejs milter dla sendmaila
+- zaawansowane narzędzie do aktualizacji bazy danych z obsługą
+  aktualizacji oskryptowanych oraz podpisów cyfrowych
+- biblioteka C skanera antywirusowego
+- skanowanie przy odczycie (dla Linuksa i FreeBSD)
+- baza danych wirusów aktualizowana wiele razy dziennie (liczba
+  sygnatur dostępna na stronie projektu)
+- wbudowana obsługa różnych formatów archiwów, w tym Zip, RAR, Tar,
+  Gzip, Bzip2, OLE2, Cabinet, CHM, BinHex, SIS i inne
+- wbudowana obsługa prawie wszystkich formatów plików pocztowych
+- wbudowana obsługa plików wykonywalnych ELF i PE skompresowanych
+  programami UPX, FSG, Petite, NsPack, wwpack32, MEW, Upack oraz
+  zaciemnionych przy użyciu programów SUE, Y0da Cryptor i innych
+- wbudowana obsługa popularnych formatów dokumentów, w tym plików MS
+  Office, MacOffice, HTML, RTF i PDF
 
 %package libs
 Summary:	Shared libraries for clamav
