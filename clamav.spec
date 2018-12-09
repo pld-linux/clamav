@@ -3,26 +3,26 @@
 # - restart amavis in triggers if group membership was modified?
 #
 # Conditional build:
-%bcond_without	milter		# milter interface subpackage
+%bcond_without	milter			# milter interface subpackage
 %if "%{pld_release}" == "ac"
-%bcond_with	llvm		# LLVM support
+%bcond_with	llvm			# LLVM support
 %else
-%bcond_without	llvm		# LLVM support
+%bcond_without	llvm			# LLVM support
 %endif
+%bcond_without	system_libmspack	# system libmspack library
+%bcond_with	system_llvm		# system LLVM (< 3.7)
 
 %ifarch x32
 %undefine with_llvm
 %endif
-
-%bcond_with	system_llvm
-
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.101.0
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
+#Source0Download: http://www.clamav.net/download
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
 # Source0-md5:	47c36d13ac814b9e29ed6f5fc1691373
 Source1:	%{name}.init
@@ -46,24 +46,29 @@ Patch4:		%{name}-openssl.patch
 Patch5:		%{name}-major.patch
 Patch6:		x32.patch
 URL:		http://www.clamav.net/
-BuildRequires:	autoconf
-BuildRequires:	automake
+BuildRequires:	autoconf >= 2.59
+BuildRequires:	automake >= 1:1.11
 BuildRequires:	bzip2-devel
 BuildRequires:	check-devel
 BuildRequires:	curl-devel
 BuildRequires:	gmp-devel
+BuildRequires:	json-c-devel
 BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
+%{?with_system_libmspack:BuildRequires:	libmspack-devel}
 BuildRequires:	libstdc++-devel >= 5:3.4
 BuildRequires:	libtool
 %{?with_milter:BuildRequires:	libwrap-devel}
+BuildRequires:	libxml2-devel >= 2
 %{?with_llvm:%{?with_system_llvm:BuildRequires:	llvm-devel < 3.7}}
 BuildRequires:	ncurses-devel
-BuildRequires:	openssl-devel
-BuildRequires:	pkgconfig
+BuildRequires:	openssl-devel >= 0.9.8
+BuildRequires:	pcre2-8-devel
+BuildRequires:	pkgconfig >= 1:0.16
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.647
-BuildRequires:	zlib-devel
+BuildRequires:	systemd-devel
+BuildRequires:	zlib-devel >= 1.2.2
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -123,6 +128,7 @@ napisany w C i zgodny z POSIXem.
 Summary:	Shared libraries for clamav
 Summary(pl.UTF-8):	Biblioteki dzielone clamav
 Group:		Libraries
+Requires:	zlib >= 1.2.2
 
 %description libs
 Shared libraries for clamav.
@@ -153,8 +159,8 @@ Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
 Requires:	curl-devel
 Requires:	gmp-devel
-Requires:	openssl-devel
-Requires:	zlib-devel
+Requires:	openssl-devel >= 0.9.8
+Requires:	zlib-devel >= 1.2.2
 
 %description devel
 This package contains the development header files and libraries
@@ -199,16 +205,17 @@ export CXXFLAGS="%{rpmcxxflags} -std=gnu++98"
 %{__autoheader}
 %{__automake}
 %configure \
-	--disable-zlib-vcheck \
-	--disable-silent-rules \
 	--disable-clamav \
 	--enable-clamdtop \
 	%{?with_llvm:--enable-llvm %{!?with_system_llvm:--with-system-llvm=no}} \
 	%{?with_milter:--enable-milter} \
+	--disable-silent-rules \
+	--disable-zlib-vcheck \
 	--with-dbdir=/var/lib/%{name} \
-	--with-no-cache \
 	--with-ltdl-include=%{_includedir} \
-	--with-ltdl-lib=%{_libdir}
+	--with-ltdl-lib=%{_libdir} \
+	--with-no-cache \
+	%{?with_system_libmspack:--with-system-libmspack}
 
 %{__make} \
 	LIBTOOL=%{_bindir}/libtool
@@ -400,8 +407,10 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libclamav.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamav.so.9
+%if %{without system_libmspack}
 %attr(755,root,root) %{_libdir}/libclammspack.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclammspack.so.0
+%endif
 %attr(755,root,root) %{_libdir}/libclamunrar.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.9
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so.*.*.*
@@ -411,11 +420,15 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/clamav-config
 %attr(755,root,root) %{_libdir}/libclamav.so
+%if %{without system_libmspack}
 %attr(755,root,root) %{_libdir}/libclammspack.so
+%endif
 %attr(755,root,root) %{_libdir}/libclamunrar.so
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so
 %{_libdir}/libclamav.la
+%if %{without system_libmspack}
 %{_libdir}/libclammspack.la
+%endif
 %{_libdir}/libclamunrar.la
 %{_libdir}/libclamunrar_iface.la
 %{_includedir}/clamav.h
@@ -424,6 +437,8 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libclamav.a
+%if %{without system_libmspack}
 %{_libdir}/libclammspack.a
+%endif
 %{_libdir}/libclamunrar.a
 %{_libdir}/libclamunrar_iface.a
