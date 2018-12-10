@@ -19,7 +19,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.101.0
-Release:	2
+Release:	3
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
@@ -45,6 +45,7 @@ Patch3:		ac2.68.patch
 Patch4:		%{name}-openssl.patch
 Patch5:		%{name}-major.patch
 Patch6:		x32.patch
+Patch7:		%{name}-add-support-for-system-tomsfastmath.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.11
@@ -68,6 +69,7 @@ BuildRequires:	pkgconfig >= 1:0.16
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	systemd-devel
+BuildRequires:	tomsfastmath-devel >= 0.13.1-2
 BuildRequires:	zlib-devel >= 1.2.2
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -217,6 +219,7 @@ Biblioteki statyczne clamav.
 #%patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 export CFLAGS="%{rpmcflags} -Wall -W -Wmissing-prototypes -Wmissing-declarations -std=gnu99"
