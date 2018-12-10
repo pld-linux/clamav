@@ -1,0 +1,33 @@
+--- clamav-0.101.0/Makefile.am~	2018-11-29 14:52:31.000000000 +0100
++++ clamav-0.101.0/Makefile.am	2018-12-07 09:00:16.238721757 +0100
+@@ -23,6 +23,8 @@
+ 
+ bin_SCRIPTS=clamav-config
+ 
++pkginclude_HEADERS = clamav-config.h platform.h
++
+ if ENABLE_CLAMSUBMIT
+ SUBDIRS += clamsubmit
+ endif
+--- clamav-0.101.0/libclamav/Makefile.am~	2018-11-29 14:52:31.000000000 +0100
++++ clamav-0.101.0/libclamav/Makefile.am	2018-12-07 09:00:16.312058931 +0100
+@@ -269,7 +269,7 @@
+ libclamav_la_LDFLAGS += -Wl,@VERSIONSCRIPTFLAG@,@top_srcdir@/libclamav/libclamav.map
+ endif
+ 
+-include_HEADERS = clamav.h
++pkginclude_HEADERS = clamav.h cltypes.h
+ 
+ libclamav_la_SOURCES = \
+         matcher-ac.c \
+--- clamav-0.101.0/libclamav.pc.in~	2018-11-29 14:52:31.000000000 +0100
++++ clamav-0.101.0/libclamav.pc.in	2018-12-10 11:11:47.748327272 +0100
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ libdir=@libdir@
+-includedir=@includedir@
++includedir=@includedir@/clamav
+ 
+ Name: libclamav
+ Description: A GPL virus scanner
