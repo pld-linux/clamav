@@ -31,3 +31,23 @@
  
  Name: libclamav
  Description: A GPL virus scanner
+--- clamav-0.101.0/clamav-config.in.orig	2018-11-29 14:52:31.000000000 +0100
++++ clamav-0.101.0/clamav-config.in	2018-12-10 19:32:41.185456107 +0100
+@@ -3,7 +3,7 @@
+ 
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-includedir=@includedir@
++includedir=@includedir@/clamav
+ libdir=@libdir@
+ 
+ usage()
+@@ -55,7 +55,7 @@
+ 	;;
+ 
+     --cflags)
+-       	echo -I@includedir@ @CFLAGS@
++       	echo -I${includedir} @CFLAGS@
+        	;;
+ 
+     --libs)
