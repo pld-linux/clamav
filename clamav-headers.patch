@@ -1,14 +1,14 @@
 --- clamav-0.101.0/Makefile.am~	2018-11-29 14:52:31.000000000 +0100
 +++ clamav-0.101.0/Makefile.am	2018-12-07 09:00:16.238721757 +0100
-@@ -23,6 +23,8 @@
+@@ -34,7 +34,7 @@
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libclamav.pc
  
- bin_SCRIPTS=clamav-config
+-nodist_include_HEADERS = clamav-types.h
++pkginclude_HEADERS = clamav-types.h
  
-+pkginclude_HEADERS = clamav-config.h platform.h
-+
- if ENABLE_CLAMSUBMIT
- SUBDIRS += clamsubmit
- endif
+ # don't complain that configuration files and databases are not removed, this is intended
+ distuninstallcheck_listfiles = find . -type f ! -name clamd.conf ! -name freshclam.conf ! -name daily.cvd ! -name main.cvd -print
 --- clamav-0.101.0/libclamav/Makefile.am~	2018-11-29 14:52:31.000000000 +0100
 +++ clamav-0.101.0/libclamav/Makefile.am	2018-12-07 09:00:16.312058931 +0100
 @@ -269,7 +269,7 @@
@@ -16,7 +16,7 @@
  endif
  
 -include_HEADERS = clamav.h
-+pkginclude_HEADERS = clamav.h cltypes.h
++pkginclude_HEADERS = clamav.h
  
  libclamav_la_SOURCES = \
          matcher-ac.c \
