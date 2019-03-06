@@ -15,5 +15,5 @@ sleep $((RANDOM % 1800))
 [ -f /var/lock/subsys/clamd ] && notify="--daemon-notify" || notify=
 
 umask 022
-log=$(/usr/bin/freshclam $freshclamopt $notify 2>&1)
+log=$(/bin/nice -n 19 /usr/bin/ionice -c idle /usr/bin/freshclam $freshclamopt $notify 2>&1)
 [ "$UPDATE_MAIL_MESSAGES" != "none" -a -n "$log" ] && echo "$log"
