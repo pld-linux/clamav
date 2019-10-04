@@ -1,7 +1,7 @@
 diff -uNr clamav-0.98.3/configure.ac clamav-0.98.3-ac2.68/configure.ac
 --- clamav-0.98.3/configure.ac	2014-05-06 20:42:41.000000000 +0200
 +++ clamav-0.98.3-ac2.68/configure.ac	2014-05-09 10:51:30.508280355 +0200
-@@ -42,12 +42,12 @@
+@@ -53,6 +53,7 @@
  AC_USE_SYSTEM_EXTENSIONS
  
  m4_include([m4/reorganization/version.m4])
@@ -9,8 +9,9 @@ diff -uNr clamav-0.98.3/configure.ac clamav-0.98.3-ac2.68/configure.ac
  
  LT_CONFIG_LTDL_DIR([libltdl])
  LT_INIT([dlopen disable-static])
- LTDL_INIT([recursive])
- PKG_PROG_PKG_CONFIG(0.16)
+@@ -61,7 +62,6 @@
+ 
+ m4_include([m4/reorganization/libclamav-only.m4])
  
 -m4_include([m4/reorganization/build_tools.m4])
  m4_include([m4/reorganization/headers.m4])

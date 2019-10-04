@@ -18,13 +18,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.101.3
-Release:	1
+Version:	0.102.0
+Release:	0.1
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	1981c5bd299c1f3cbf3f74095a00524c
+# Source0-md5:	51e1dff512350284b4b11c3dc2d00da0
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -218,7 +218,7 @@ Biblioteki statyczne clamav.
 %patch3 -p1
 %endif
 #%patch4 -p1
-%patch5 -p1
+#%patch5 -p1
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
@@ -384,6 +384,7 @@ fi
 %attr(755,root,root) %{_bindir}/clambc
 %attr(755,root,root) %{_bindir}/clamdscan
 %attr(755,root,root) %{_bindir}/clamdtop
+%attr(755,root,root) %{_bindir}/clamonacc
 %attr(755,root,root) %{_bindir}/clamscan
 %attr(755,root,root) %{_bindir}/clamsubmit
 %attr(755,root,root) %{_bindir}/freshclam
@@ -419,12 +420,12 @@ fi
 %files milter
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamav-milter
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamav-milter.conf
+#%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamav-milter.conf
 %attr(754,root,root) /etc/rc.d/init.d/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
 #%{_sysconfdir}/log.d/conf/services/clamav-milter.conf
-%attr(755,root,root) %{_sbindir}/clamav-milter
+#%attr(755,root,root) %{_sbindir}/clamav-milter
 %{_mandir}/man5/clamav-milter*
 %{_mandir}/man8/clamav-milter.8*
 %attr(700,clamav,clamav) /var/spool/clamav
@@ -442,6 +443,8 @@ fi
 %attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.9
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.9
+%attr(755,root,root) %{_libdir}/libfreshclam.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfreshclam.so.2
 
 %files devel
 %defattr(644,root,root,755)
@@ -451,16 +454,20 @@ fi
 %attr(755,root,root) %{_libdir}/libclammspack.so
 %endif
 %attr(755,root,root) %{_libdir}/libclamunrar.so
+%attr(755,root,root) %{_libdir}/libfreshclam.so
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so
 %{_libdir}/libclamav.la
 %if %{without system_libmspack}
 %{_libdir}/libclammspack.la
 %endif
 %{_libdir}/libclamunrar.la
+%{_libdir}/libfreshclam.la
 %{_libdir}/libclamunrar_iface.la
 %dir %{_includedir}/clamav
 %{_includedir}/clamav/clamav.h
 %{_includedir}/clamav/clamav-types.h
+%{_includedir}/clamav/clamav-version.h
+%{_includedir}/clamav/libfreshclam.h
 %{_pkgconfigdir}/libclamav.pc
 
 %files static
@@ -470,4 +477,5 @@ fi
 %{_libdir}/libclammspack.a
 %endif
 %{_libdir}/libclamunrar.a
+%{_libdir}/libfreshclam.a
 %{_libdir}/libclamunrar_iface.a

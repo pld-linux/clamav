@@ -4,8 +4,8 @@
  pkgconfigdir = $(libdir)/pkgconfig
  pkgconfig_DATA = libclamav.pc
  
--nodist_include_HEADERS = clamav-types.h
-+pkginclude_HEADERS = clamav-types.h
+-nodist_include_HEADERS = clamav-types.h clamav-version.h
++pkginclude_HEADERS = clamav-types.h clamav-version.h
  
  # don't complain that configuration files and databases are not removed, this is intended
  distuninstallcheck_listfiles = find . -type f ! -name clamd.conf ! -name freshclam.conf ! -name daily.cvd ! -name main.cvd -print
@@ -51,3 +51,14 @@
         	;;
  
      --libs)
+--- clamav-0.102.0/libfreshclam/Makefile.am~	2019-10-01 19:24:09.000000000 +0200
++++ clamav-0.102.0/libfreshclam/Makefile.am	2019-10-04 09:08:07.702507579 +0200
+@@ -32,7 +32,7 @@
+ 
+ EXTRA_DIST = libfreshclam.map
+ 
+-include_HEADERS = libfreshclam.h
++pkginclude_HEADERS = libfreshclam.h
+ 
+ libfreshclam_la_SOURCES = \
+     $(top_srcdir)/shared/output.c \
