@@ -43,10 +43,9 @@ Patch2:		am-nosilentrules.patch
 %endif
 Patch3:		ac2.68.patch
 Patch4:		%{name}-openssl.patch
-Patch5:		%{name}-major.patch
-Patch6:		x32.patch
-Patch7:		%{name}-add-support-for-system-tomsfastmath.patch
-Patch8:		%{name}-headers.patch
+Patch5:		x32.patch
+Patch6:		%{name}-add-support-for-system-tomsfastmath.patch
+Patch7:		%{name}-headers.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.11
@@ -218,10 +217,9 @@ Biblioteki statyczne clamav.
 %patch3 -p1
 %endif
 #%patch4 -p1
-#%patch5 -p1
+%patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 
 %build
 export CFLAGS="%{rpmcflags} -Wall -W -Wmissing-prototypes -Wmissing-declarations -std=gnu99"
