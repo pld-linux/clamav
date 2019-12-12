@@ -19,7 +19,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.102.1
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
@@ -416,12 +416,12 @@ fi
 %files milter
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamav-milter
-#%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamav-milter.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamav-milter.conf
 %attr(754,root,root) /etc/rc.d/init.d/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
 #%{_sysconfdir}/log.d/conf/services/clamav-milter.conf
-#%attr(755,root,root) %{_sbindir}/clamav-milter
+%attr(755,root,root) %{_sbindir}/clamav-milter
 %{_mandir}/man5/clamav-milter*
 %{_mandir}/man8/clamav-milter.8*
 %attr(700,clamav,clamav) /var/spool/clamav
