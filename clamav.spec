@@ -19,7 +19,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.102.1
-Release:	2
+Release:	3
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download

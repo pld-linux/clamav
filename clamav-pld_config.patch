@@ -144,12 +144,7 @@ diff -ur clamav-0.97.1/etc//freshclam.conf.sample clamav-0.97.1.new/etc//freshcl
  
  # Path to the database directory.
  # WARNING: It must match clamd.conf's directive!
-@@ -30,11 +35,11 @@
- 
- # Enable verbose logging.
- # Default: no
--#LogVerbose yes
-+LogVerbose yes
+@@ -30,7 +35,7 @@
  
  # Use system logger (can work together with UpdateLogFile).
  # Default: no
