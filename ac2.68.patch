@@ -17,6 +17,15 @@ diff -uNr clamav-0.98.3/configure.ac clamav-0.98.3-ac2.68/configure.ac
  m4_include([m4/reorganization/headers.m4])
  
  AC_CONFIG_FILES([libltdl/Makefile])
+@@ -396,7 +396,7 @@
+     ])
+ fi
+ 
+-if test "x$clamonacc-curl" = "xdeprecated"; then
++if test "x$clamonacc_curl" = "xdeprecated"; then
+     AC_MSG_WARN([m4_normalize([
+ ****** your libcurl (e.g. libcurl-devel) is older than the recommended version. Installing ClamAV with clamonacc requires libcurl 7.40 or higher to use fdpassing.
+ ****** fdpassing with clamonacc will be disabled on your system.
 diff -uNr clamav-0.98.3/m4/reorganization/build_tools.m4 clamav-0.98.3-ac2.68/m4/reorganization/build_tools.m4
 --- clamav-0.98.3/m4/reorganization/build_tools.m4	2014-05-06 20:39:56.000000000 +0200
 +++ clamav-0.98.3-ac2.68/m4/reorganization/build_tools.m4	2014-05-09 10:53:30.800262620 +0200
@@ -26,13 +35,12 @@ diff -uNr clamav-0.98.3/m4/reorganization/build_tools.m4 clamav-0.98.3-ac2.68/m4
  AC_PROG_CC
  AC_PROG_INSTALL
  AC_PROG_LN_S
-diff -uNr clamav-0.98.3/m4/reorganization/clamdtop.m4 clamav-0.98.3-ac2.68/m4/reorganization/clamdtop.m4
---- clamav-0.98.3/m4/reorganization/clamdtop.m4	2014-05-06 20:39:56.000000000 +0200
-+++ clamav-0.98.3-ac2.68/m4/reorganization/clamdtop.m4	2014-05-09 10:51:06.963907781 +0200
-@@ -6,8 +6,8 @@
- if test "$enable_clamdtop" != "no"; then
+--- clamav-0.103.0/m4/reorganization/clamdtop.m4.orig	2020-09-13 02:27:10.000000000 +0200
++++ clamav-0.103.0/m4/reorganization/clamdtop.m4	2020-11-23 06:28:37.380116770 +0100
+@@ -13,8 +13,8 @@
  
- AC_LIB_FIND([ncurses], [ncurses/ncurses.h],
+ if test "X$HAVE_LIBNCURSES" != "Xyes"; then
+     AC_LIB_FIND([ncurses], [ncurses/ncurses.h],
 -	    AC_LANG_PROGRAM([#include <ncurses/ncurses.h>],
 -			    [initscr(); KEY_RESIZE;]),
 +	    [AC_LANG_PROGRAM([#include <ncurses/ncurses.h>],
@@ -40,7 +48,7 @@ diff -uNr clamav-0.98.3/m4/reorganization/clamdtop.m4 clamav-0.98.3-ac2.68/m4/re
  	    [CURSES_CPPFLAGS="$INCNCURSES"; CURSES_LIBS="$LTLIBNCURSES";
  	     CURSES_INCLUDE="<ncurses/ncurses.h>"],
  	    [])
-@@ -15,8 +15,8 @@
+@@ -23,8 +23,8 @@
  if test "X$HAVE_LIBNCURSES" != "Xyes"; then
      HAVE_LIBNCURSES=
      AC_LIB_FIND([ncurses], [ncurses.h],
@@ -51,7 +59,7 @@ diff -uNr clamav-0.98.3/m4/reorganization/clamdtop.m4 clamav-0.98.3-ac2.68/m4/re
  	    [CURSES_CPPFLAGS="$INCNCURSES"; CURSES_LIBS="$LTLIBNCURSES";
  	     CURSES_INCLUDE="<ncurses.h>"],
  	    [])
-@@ -24,8 +24,8 @@
+@@ -32,8 +32,8 @@
  
  if test "X$HAVE_LIBNCURSES" != "Xyes"; then
      AC_LIB_FIND([pdcurses],[curses.h],
@@ -73,4 +81,22 @@ diff -uNr clamav-0.98.3/m4/reorganization/code_checks/unit_tests.m4 clamav-0.98.
 +			[AC_LANG_PROGRAM([#include <check.h>],[srunner_create(0)])],
  			[CHECK_CPPFLAGS="$INCCHECK"; CHECK_LIBS="$LTLIBCHECK $LDFLAGS"],
  			[])
+ 
+--- clamav-0.103.0/m4/reorganization/libs/curl.m4.orig	2020-09-13 02:27:10.000000000 +0200
++++ clamav-0.103.0/m4/reorganization/libs/curl.m4	2020-11-23 20:23:04.812211547 +0100
+@@ -64,12 +64,12 @@
+     dnl end of section
+ 
+     AM_COND_IF([BUILD_CLAMONACC],
+-        $enable_clamonacc="yes"
++        enable_clamonacc="yes"
+ 
+-        clamonacc_curl = "current"
++        clamonacc_curl="current"
+         dnl if version less than to (7.40 0x072800)
+         [if test $curl_version -lt 468992; then
+-          clamonacc_curl = "deprecated" 
++          clamonacc_curl="deprecated" 
+         fi]
+     )
  

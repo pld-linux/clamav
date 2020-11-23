@@ -11,6 +11,7 @@
 %endif
 %bcond_without	system_libmspack	# system libmspack library
 %bcond_with	system_llvm		# system LLVM (< 3.7)
+%bcond_without	static_libs		# static libraries
 
 %ifarch x32
 %undefine with_llvm
@@ -18,13 +19,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.102.2
-Release:	2
+Version:	0.103.0
+Release:	1
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	ecf5dd2c5c43aeed1c4b458b2e689847
+# Source0-md5:	453a389e0147b5df8fae5601b390d7db
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -47,23 +48,23 @@ Patch5:		%{name}-add-support-for-system-tomsfastmath.patch
 Patch6:		%{name}-headers.patch
 URL:		http://www.clamav.net/
 BuildRequires:	autoconf >= 2.59
-BuildRequires:	automake >= 1:1.11
-BuildRequires:	bzip2-devel
+BuildRequires:	automake >= 1:1.11.1
+BuildRequires:	bzip2-devel >= 1.0.5
 BuildRequires:	check-devel
-BuildRequires:	curl-devel
+BuildRequires:	curl-devel >= 7.40
 BuildRequires:	gmp-devel
 BuildRequires:	json-c-devel
 BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 %{?with_system_libmspack:BuildRequires:	libmspack-devel}
 BuildRequires:	libstdc++-devel >= 5:3.4
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libxml2-devel >= 2
 %{?with_llvm:%{?with_system_llvm:BuildRequires:	llvm-devel < 3.7}}
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.8
-BuildRequires:	pcre2-8-devel
+BuildRequires:	pcre2-8-devel >= 10.30
 BuildRequires:	pkgconfig >= 1:0.16
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.647
@@ -151,6 +152,9 @@ Lista podstawowych możliwości:
 Summary:	Shared libraries for clamav
 Summary(pl.UTF-8):	Biblioteki dzielone clamav
 Group:		Libraries
+Requires:	bzip2-libs >= 1.0.5
+Requires:	curl-libs >= 7.40
+Requires:	pcre2-8 >= 10.30
 Requires:	zlib >= 1.2.2
 
 %description libs
@@ -179,10 +183,11 @@ Summary:	clamav - Development header files and libraries
 Summary(pl.UTF-8):	clamav - Pliki nagłówkowe i biblioteki dla programistów
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
-Requires:	bzip2-devel
-Requires:	curl-devel
+Requires:	bzip2-devel >= 1.0.5
+Requires:	curl-devel >= 7.40
 Requires:	gmp-devel
 Requires:	openssl-devel >= 0.9.8
+Requires:	pcre2-8-devel >= 10.30
 Requires:	zlib-devel >= 1.2.2
 
 %description devel
@@ -229,10 +234,12 @@ export CXXFLAGS="%{rpmcxxflags} -std=gnu++98"
 %{__automake}
 %configure \
 	--disable-clamav \
+	--enable-clamonacc \
 	--enable-clamdtop \
 	%{?with_llvm:--enable-llvm %{!?with_system_llvm:--with-system-llvm=no}} \
 	%{?with_milter:--enable-milter} \
 	--disable-silent-rules \
+	%{?with_static_libs:--enable-static} \
 	--disable-zlib-vcheck \
 	--with-dbdir=/var/lib/%{name} \
 	--with-ltdl-include=%{_includedir} \
@@ -240,8 +247,7 @@ export CXXFLAGS="%{rpmcxxflags} -std=gnu++98"
 	--with-no-cache \
 	%{?with_system_libmspack:--with-system-libmspack}
 
-%{__make} \
-	LIBTOOL=%{_bindir}/libtool
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -251,7 +257,6 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{systemdunitdir}
 
 %{__make} install \
-	LIBTOOL=%{_bindir}/libtool \
 	DESTDIR=$RPM_BUILD_ROOT
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
 
@@ -380,16 +385,17 @@ fi
 %attr(755,root,root) %{_bindir}/clambc
 %attr(755,root,root) %{_bindir}/clamdscan
 %attr(755,root,root) %{_bindir}/clamdtop
-%attr(755,root,root) %{_bindir}/clamonacc
 %attr(755,root,root) %{_bindir}/clamscan
 %attr(755,root,root) %{_bindir}/clamsubmit
 %attr(755,root,root) %{_bindir}/freshclam
 %attr(755,root,root) %{_bindir}/sigtool
 %attr(755,root,root) %{_bindir}/clamconf
-%attr(755,root,root) %{_sbindir}/clamd
 %attr(755,root,root) %{_sbindir}/clamav-cron-updatedb
 %attr(755,root,root) %{_sbindir}/clamav-post-updatedb
+%attr(755,root,root) %{_sbindir}/clamd
+%attr(755,root,root) %{_sbindir}/clamonacc
 %{systemdtmpfilesdir}/%{name}.conf
+%{systemdunitdir}/clamav-clamonacc.service
 %{systemdunitdir}/clamav-daemon.service
 %{systemdunitdir}/clamav-daemon.socket
 %{systemdunitdir}/clamav-freshclam.service
@@ -407,10 +413,18 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/clamd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/clamav
-%{_mandir}/man1/*
-%{_mandir}/man5/clamd*
-%{_mandir}/man5/freshclam*
-%{_mandir}/man8/clamd*
+%{_mandir}/man1/clambc.1*
+%{_mandir}/man1/clamconf.1*
+%{_mandir}/man1/clamdscan.1*
+%{_mandir}/man1/clamdtop.1*
+%{_mandir}/man1/clamscan.1*
+%{_mandir}/man1/clamsubmit.1*
+%{_mandir}/man1/freshclam.1*
+%{_mandir}/man1/sigtool.1*
+%{_mandir}/man5/clamd.conf.5*
+%{_mandir}/man5/freshclam.conf.5*
+%{_mandir}/man8/clamd.8*
+%{_mandir}/man8/clamonacc.8*
 
 %if %{with milter}
 %files milter
@@ -419,10 +433,8 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/clamav-milter.conf
 %attr(754,root,root) /etc/rc.d/init.d/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
-#%attr(755,root,root) %{_sysconfdir}/log.d/scripts/services/clamav-milter
-#%{_sysconfdir}/log.d/conf/services/clamav-milter.conf
 %attr(755,root,root) %{_sbindir}/clamav-milter
-%{_mandir}/man5/clamav-milter*
+%{_mandir}/man5/clamav-milter.conf.5*
 %{_mandir}/man8/clamav-milter.8*
 %attr(700,clamav,clamav) /var/spool/clamav
 %endif
