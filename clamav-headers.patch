@@ -1,6 +1,7 @@
---- clamav-0.101.0/Makefile.am~	2018-11-29 14:52:31.000000000 +0100
-+++ clamav-0.101.0/Makefile.am	2018-12-07 09:00:16.238721757 +0100
-@@ -34,7 +34,7 @@
+diff -urNp -x '*.orig' clamav-0.103.0.org/Makefile.am clamav-0.103.0/Makefile.am
+--- clamav-0.103.0.org/Makefile.am	2020-09-13 02:27:09.000000000 +0200
++++ clamav-0.103.0/Makefile.am	2021-04-06 16:40:36.893437739 +0200
+@@ -46,7 +46,7 @@ endif
  pkgconfigdir = $(libdir)/pkgconfig
  pkgconfig_DATA = libclamav.pc
  
@@ -9,30 +10,9 @@
  
  # don't complain that configuration files and databases are not removed, this is intended
  distuninstallcheck_listfiles = find . -type f ! -name clamd.conf ! -name freshclam.conf ! -name daily.cvd ! -name main.cvd -print
---- clamav-0.101.0/libclamav/Makefile.am~	2018-11-29 14:52:31.000000000 +0100
-+++ clamav-0.101.0/libclamav/Makefile.am	2018-12-07 09:00:16.312058931 +0100
-@@ -269,7 +269,7 @@
- libclamav_la_LDFLAGS += -Wl,@VERSIONSCRIPTFLAG@,@top_srcdir@/libclamav/libclamav.map
- endif
- 
--include_HEADERS = clamav.h
-+pkginclude_HEADERS = clamav.h
- 
- libclamav_la_SOURCES = \
-         matcher-ac.c \
---- clamav-0.101.0/libclamav.pc.in~	2018-11-29 14:52:31.000000000 +0100
-+++ clamav-0.101.0/libclamav.pc.in	2018-12-10 11:11:47.748327272 +0100
-@@ -1,7 +1,7 @@
- prefix=@prefix@
- exec_prefix=@exec_prefix@
- libdir=@libdir@
--includedir=@includedir@
-+includedir=@includedir@/clamav
- 
- Name: libclamav
- Description: A GPL virus scanner
---- clamav-0.101.0/clamav-config.in.orig	2018-11-29 14:52:31.000000000 +0100
-+++ clamav-0.101.0/clamav-config.in	2018-12-10 19:32:41.185456107 +0100
+diff -urNp -x '*.orig' clamav-0.103.0.org/clamav-config.in clamav-0.103.0/clamav-config.in
+--- clamav-0.103.0.org/clamav-config.in	2020-09-13 02:27:09.000000000 +0200
++++ clamav-0.103.0/clamav-config.in	2021-04-06 16:40:36.893437739 +0200
 @@ -3,7 +3,7 @@
  
  prefix=@prefix@
@@ -42,7 +22,7 @@
  libdir=@libdir@
  
  usage()
-@@ -55,7 +55,7 @@
+@@ -55,7 +55,7 @@ while test $# -gt 0; do
  	;;
  
      --cflags)
@@ -51,14 +31,39 @@
         	;;
  
      --libs)
---- clamav-0.102.0/libfreshclam/Makefile.am~	2019-10-01 19:24:09.000000000 +0200
-+++ clamav-0.102.0/libfreshclam/Makefile.am	2019-10-04 09:08:07.702507579 +0200
-@@ -32,7 +32,7 @@
+diff -urNp -x '*.orig' clamav-0.103.0.org/libclamav/Makefile.am clamav-0.103.0/libclamav/Makefile.am
+--- clamav-0.103.0.org/libclamav/Makefile.am	2021-04-06 16:40:36.403412280 +0200
++++ clamav-0.103.0/libclamav/Makefile.am	2021-04-06 16:40:36.893437739 +0200
+@@ -251,7 +251,7 @@ if VERSIONSCRIPT
+ libclamav_la_LDFLAGS += -Wl,@VERSIONSCRIPTFLAG@,@top_srcdir@/libclamav/libclamav.map
+ endif
  
- EXTRA_DIST = libfreshclam.map
+-include_HEADERS = clamav.h
++pkginclude_HEADERS = clamav.h
+ 
+ libclamav_la_SOURCES = \
+ 	matcher-ac.c \
+diff -urNp -x '*.orig' clamav-0.103.0.org/libclamav.pc.in clamav-0.103.0/libclamav.pc.in
+--- clamav-0.103.0.org/libclamav.pc.in	2020-09-13 02:27:09.000000000 +0200
++++ clamav-0.103.0/libclamav.pc.in	2021-04-06 16:40:36.893437739 +0200
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ libdir=@libdir@
+-includedir=@includedir@
++includedir=@includedir@/clamav
+ 
+ Name: libclamav
+ Description: A GPL virus scanner
+diff -urNp -x '*.orig' clamav-0.103.0.org/libfreshclam/Makefile.am clamav-0.103.0/libfreshclam/Makefile.am
+--- clamav-0.103.0.org/libfreshclam/Makefile.am	2020-09-13 02:27:10.000000000 +0200
++++ clamav-0.103.0/libfreshclam/Makefile.am	2021-04-06 16:40:36.893437739 +0200
+@@ -32,7 +32,7 @@ AM_LIBTOOLFLAGS = --tag CXX
+ 
+ EXTRA_DIST = libfreshclam.map libfreshclam_main.c
  
 -include_HEADERS = libfreshclam.h
 +pkginclude_HEADERS = libfreshclam.h
  
  libfreshclam_la_SOURCES = \
-     $(top_srcdir)/shared/output.c \
+     libfreshclam.c \

@@ -1,6 +1,6 @@
-diff -uNr clamav-0.98.3/m4/reorganization/code_checks/functions.m4 clamav-0.98.3.nolibs/m4/reorganization/code_checks/functions.m4
---- clamav-0.98.3/m4/reorganization/code_checks/functions.m4	2014-05-06 20:39:56.000000000 +0200
-+++ clamav-0.98.3.nolibs/m4/reorganization/code_checks/functions.m4	2014-05-09 10:38:20.376934561 +0200
+diff -urNp -x '*.orig' clamav-0.103.0.org/m4/reorganization/code_checks/functions.m4 clamav-0.103.0/m4/reorganization/code_checks/functions.m4
+--- clamav-0.103.0.org/m4/reorganization/code_checks/functions.m4	2020-09-13 02:27:10.000000000 +0200
++++ clamav-0.103.0/m4/reorganization/code_checks/functions.m4	2021-04-06 16:39:26.769794467 +0200
 @@ -1,6 +1,10 @@
  AX_CHECK_UNAME_SYSCALL
 +AC_CHECK_FUNC(socket,, [
@@ -10,5 +10,5 @@ diff -uNr clamav-0.98.3/m4/reorganization/code_checks/functions.m4 clamav-0.98.3
  AC_SEARCH_LIBS([gethostent],[nsl], [(LIBS="$LIBS -lnsl"; CLAMAV_MILTER_LIBS="$CLAMAV_MILTER_LIBS -lnsl"; FRESHCLAM_LIBS="$FRESHCLAM_LIBS -lnsl"; CLAMD_LIBS="$CLAMD_LIBS -lnsl")])
 +])
  
- AC_CHECK_FUNCS([poll setsid memcpy snprintf vsnprintf strerror_r strlcpy strlcat strcasestr inet_ntop setgroups initgroups ctime_r mkstemp mallinfo madvise])
- AC_FUNC_FSEEKO
+ AC_CHECK_FUNCS_ONCE([poll setsid memcpy snprintf vsnprintf strerror_r strlcpy strlcat strcasestr inet_ntop setgroups initgroups ctime_r mkstemp mallinfo madvise getnameinfo])
+ AC_CHECK_FUNCS([strndup])

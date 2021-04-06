@@ -13,11 +13,10 @@ Patch-Name: add-support-for-system-tomsfastmath.patch
  5 files changed, 28 insertions(+), 4 deletions(-)
  create mode 100644 m4/reorganization/libs/tomsfastmath.m4
 
-diff --git a/configure.ac b/configure.ac
-index 9ef4105..a286b44 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -82,6 +82,7 @@ m4_include([m4/reorganization/libs/xml.m4])
+diff -urNp -x '*.orig' clamav-0.103.0.org/configure.ac clamav-0.103.0/configure.ac
+--- clamav-0.103.0.org/configure.ac	2021-04-06 16:40:12.175486852 +0200
++++ clamav-0.103.0/configure.ac	2021-04-06 16:40:12.575507635 +0200
+@@ -94,6 +94,7 @@ m4_include([m4/reorganization/libs/opens
  m4_include([m4/reorganization/libs/json.m4])
  m4_include([m4/reorganization/libs/pcre.m4])
  m4_include([m4/reorganization/libs/libmspack.m4])
@@ -25,7 +24,7 @@ index 9ef4105..a286b44 100644
  
  if test "x$use_internal_mspack" = "xno"; then
      mspack_msg="External, $LIBMSPACK_CFLAGS $LIBMSPACK_LIBS"
-@@ -286,6 +287,7 @@ fi
+@@ -362,6 +363,7 @@ fi
  CL_MSG_STATUS([yara        ],[$enable_yara],[$enable_yara])
  CL_MSG_STATUS([fts         ],[yes],[$lfs_fts_msg])
  
@@ -33,9 +32,10 @@ index 9ef4105..a286b44 100644
  
  # Yep, downgrading the compiler avoids the bug too:
  # 4.0.x, and 4.1.0 are the known buggy versions
---- clamav-0.103.0/libclamav/Makefile.am.orig	2020-09-13 02:27:09.000000000 +0200
-+++ clamav-0.103.0/libclamav/Makefile.am	2020-11-23 06:32:13.715611447 +0100
-@@ -588,7 +588,10 @@
+diff -urNp -x '*.orig' clamav-0.103.0.org/libclamav/Makefile.am clamav-0.103.0/libclamav/Makefile.am
+--- clamav-0.103.0.org/libclamav/Makefile.am	2020-09-13 02:27:09.000000000 +0200
++++ clamav-0.103.0/libclamav/Makefile.am	2021-04-06 16:40:12.575507635 +0200
+@@ -588,7 +588,10 @@ libclamav_la_SOURCES += yara_arena.c \
  	yara_clam.h
  endif
  
@@ -47,7 +47,7 @@ index 9ef4105..a286b44 100644
  	bignum_fast.h\
  	tomsfastmath/addsub/fp_add.c\
  	tomsfastmath/addsub/fp_add_d.c\
-@@ -671,6 +674,10 @@
+@@ -671,6 +674,10 @@ libclamav_la_SOURCES += bignum.h\
  	tomsfastmath/sqr/fp_sqr_comba_generic.c\
  	tomsfastmath/sqr/fp_sqr_comba_small_set.c\
  	tomsfastmath/sqr/fp_sqrmod.c
@@ -58,10 +58,9 @@ index 9ef4105..a286b44 100644
  
  .PHONY2: version.h.tmp
  version.c: version.h
-diff --git a/libclamav/bignum.h b/libclamav/bignum.h
-index 9acb17b..56967b1 100644
---- a/libclamav/bignum.h
-+++ b/libclamav/bignum.h
+diff -urNp -x '*.orig' clamav-0.103.0.org/libclamav/bignum.h clamav-0.103.0/libclamav/bignum.h
+--- clamav-0.103.0.org/libclamav/bignum.h	2020-09-13 02:27:09.000000000 +0200
++++ clamav-0.103.0/libclamav/bignum.h	2021-04-06 16:40:12.578841141 +0200
 @@ -1,9 +1,13 @@
  #ifndef BIGNUM_H_
  #define BIGNUM_H_
@@ -76,12 +75,11 @@ index 9acb17b..56967b1 100644
 +
  typedef fp_int mp_int;
  #define mp_cmp fp_cmp
- #define mp_toradix_n(a,b,c,d) fp_toradix_n(a,b,c,d)
-diff --git a/libclamav/xdp.c b/libclamav/xdp.c
-index 00edfa8..674dc7c 100644
---- a/libclamav/xdp.c
-+++ b/libclamav/xdp.c
-@@ -57,7 +57,7 @@
+ #define mp_toradix_n(a, b, c, d) fp_toradix_n(a, b, c, d)
+diff -urNp -x '*.orig' clamav-0.103.0.org/libclamav/xdp.c clamav-0.103.0/libclamav/xdp.c
+--- clamav-0.103.0.org/libclamav/xdp.c	2020-09-13 02:27:10.000000000 +0200
++++ clamav-0.103.0/libclamav/xdp.c	2021-04-06 16:40:12.578841141 +0200
+@@ -52,7 +52,7 @@
  #include "scanners.h"
  #include "conv.h"
  #include "xdp.h"
@@ -90,11 +88,9 @@ index 00edfa8..674dc7c 100644
  #include "filetypes.h"
  
  static char *dump_xdp(cli_ctx *ctx, const char *start, size_t sz);
-diff --git a/m4/reorganization/libs/tomsfastmath.m4 b/m4/reorganization/libs/tomsfastmath.m4
-new file mode 100644
-index 0000000..2a821a1
---- /dev/null
-+++ b/m4/reorganization/libs/tomsfastmath.m4
+diff -urNp -x '*.orig' clamav-0.103.0.org/m4/reorganization/libs/tomsfastmath.m4 clamav-0.103.0/m4/reorganization/libs/tomsfastmath.m4
+--- clamav-0.103.0.org/m4/reorganization/libs/tomsfastmath.m4	1970-01-01 01:00:00.000000000 +0100
++++ clamav-0.103.0/m4/reorganization/libs/tomsfastmath.m4	2021-04-06 16:40:12.578841141 +0200
 @@ -0,0 +1,12 @@
 +dnl Check for system tomsfastmath
 +PKG_CHECK_MODULES([TOMSFASTMATH], [tomsfastmath], [have_system_tomsfastmath=yes], [have_system_tomsfastmath=no])
