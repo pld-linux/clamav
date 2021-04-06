@@ -171,7 +171,7 @@ diff -urNp -x '*.orig' clamav-0.103.0.org/etc/freshclam.conf.sample clamav-0.103
  
  # Proxy settings
  # The HTTPProxyServer may be prefixed with [scheme]:// to specify which kind
-@@ -145,7 +150,7 @@ DatabaseMirror database.clamav.net
+@@ -150,7 +150,7 @@ Checks 2
  
  # Send the RELOAD command to clamd.
  # Default: no
@@ -179,4 +179,4 @@ diff -urNp -x '*.orig' clamav-0.103.0.org/etc/freshclam.conf.sample clamav-0.103
 +#NotifyClamd /etc/clamd.conf
  
  # Run command after successful database update.
- # Default: disabled
+ # Use EXIT_1 to return 1 after successful database update.

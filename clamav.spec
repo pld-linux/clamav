@@ -19,13 +19,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.103.0
-Release:	2
+Version:	0.103.1
+Release:	1
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	453a389e0147b5df8fae5601b390d7db
+# Source0-md5:	f895e9a261937ed91f5cb3ead4791555
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -81,7 +81,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	systemd-units >= 38
-Requires(triggerpostun):	sed >= 4.0
+Requires(postun):	sed >= 4.0
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/sbin/usermod
 Requires:	rc-scripts >= 0.4.1.23
@@ -329,7 +329,7 @@ if [ "$1" = "0" ]; then
 fi
 %systemd_reload
 
-%triggerpostun -- %{name} < 0.80
+%triggerpostun -- %{name} < 0.99.2-2
 if [ -f /etc/clamav.conf.rpmsave ]; then
 	echo "Renaming config to new name /etc/clamd.conf"
 	mv -f /etc/clamd.conf /etc/clamd.conf.rpmnew
@@ -338,7 +338,6 @@ if [ -f /etc/clamav.conf.rpmsave ]; then
 	%{__sed} -i -e 's/clamav.conf/clamd.conf/' /etc/freshclam.conf
 fi
 
-%triggerpostun -- %{name} < 0.90-0.rc2.0.10
 %{__cp} -f /etc/clamd.conf{,.rpmsave}
 %{__sed} -i -e '
 		s,^LogSyslog$,& yes,
@@ -360,10 +359,8 @@ EOF
 touch /var/lock/subsys/clamd
 %service -q clamd restart
 
-%triggerpostun -- %{name} < 0.97.7-4
 %systemd_trigger clamd.service
 
-%triggerpostun -- %{name} < 0.99.2-2
 %systemd_service_enable cronjob-clamav.timer
 
 %post milter
