@@ -153,14 +153,14 @@ diff -urNp -x '*.orig' clamav-0.103.0.org/etc/freshclam.conf.sample clamav-0.103
  
  # Specify the type of syslog messages - please refer to 'man syslog'
  # for facility names.
-@@ -56,7 +61,7 @@ Example
+@@ -61,7 +61,7 @@ LogSyslog yes
  # By default when started freshclam drops privileges and switches to the
  # "clamav" user. This directive allows you to change the database owner.
  # Default: clamav (may depend on installation options)
 -#DatabaseOwner clamav
 +DatabaseOwner clamav
  
- # Use DNS to verify virus database version. Freshclam uses DNS TXT records
+ # Use DNS to verify virus database version. FreshClam uses DNS TXT records
  # to verify database and software versions. With this directive you can change
 @@ -115,7 +120,7 @@ DatabaseMirror database.clamav.net
  
