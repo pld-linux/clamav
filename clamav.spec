@@ -19,13 +19,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.103.3
-Release:	2
+Version:	0.104.0
+Release:	1
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	f8dcf678953f6af056ddd5917bcc50c3
+# Source0-md5:	3f4789c09f5a35e9ea580edd5c3e54b6
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -38,18 +38,11 @@ Source11:	clamd.service
 Source12:	cronjob-clamav.timer
 Source13:	cronjob-clamav.service.in
 Patch0:		%{name}-pld_config.patch
-Patch1:		%{name}-nolibs.patch
-%if "%{pld_release}" == "ac"
-Patch2:		am-nosilentrules.patch
-%endif
-Patch3:		ac2.68.patch
+
 Patch4:		x32.patch
 Patch5:		%{name}-add-support-for-system-tomsfastmath.patch
-Patch6:		%{name}-headers.patch
 URL:		http://www.clamav.net/
-BuildRequires:	autoconf >= 2.59
-BuildRequires:	automake >= 1:1.11.1
-BuildRequires:	bzip2-devel >= 1.0.5
+BuildRequires:	cmake
 BuildRequires:	check-devel
 BuildRequires:	curl-devel >= 7.40
 BuildRequires:	gmp-devel
@@ -58,7 +51,6 @@ BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 %{?with_system_libmspack:BuildRequires:	libmspack-devel}
 BuildRequires:	libstdc++-devel >= 5:3.4
-BuildRequires:	libtool >= 2:2
 %{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libxml2-devel >= 2
 %{?with_llvm:%{?with_system_llvm:BuildRequires:	llvm-devel < 3.7}}
@@ -213,40 +205,23 @@ Biblioteki statyczne clamav.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-%if "%{pld_release}" == "ac"
-%patch2 -p1
-%endif
-%if "%{pld_release}" != "ac"
-%patch3 -p1
-%endif
+
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 %build
-export CFLAGS="%{rpmcflags} -Wall -W -Wmissing-prototypes -Wmissing-declarations -std=gnu99"
-export CXXFLAGS="%{rpmcxxflags} -std=gnu++98"
-%{__libtoolize}
-%{__aclocal} -I m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	--disable-clamav \
-	--enable-clamonacc \
-	--enable-clamdtop \
-	%{?with_llvm:--enable-llvm %{!?with_system_llvm:--with-system-llvm=no}} \
-	%{?with_milter:--enable-milter} \
-	--disable-silent-rules \
-	%{?with_static_libs:--enable-static} \
-	--disable-zlib-vcheck \
-	--with-dbdir=/var/lib/%{name} \
-	--with-ltdl-include=%{_includedir} \
-	--with-ltdl-lib=%{_libdir} \
-	--with-no-cache \
-	%{?with_system_libmspack:--with-system-libmspack}
-
+install -d build
+cd build
+%{cmake} \
+	%{cmake_on_off system_libmspack ENABLE_EXTERNAL_MSPACK} \
+	%{cmake_on_off milter ENABLE_MILTER} \
+	%{cmake_on_off static_libs ENABLE_STATIC_LIB} \
+	-DENABLE_APP=ON \
+	-DENABLE_CLAMONACC=ON \
+	-DENABLE_FRESHCLAM_NO_CACHE=ON \
+	-DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/%{name} \
+	-DAPP_CONFIG_DIRECTORY=%{_sysconfdir} \
+	..
 %{__make}
 
 %install
@@ -256,9 +231,14 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir} \
 	$RPM_BUILD_ROOT%{systemdunitdir}
 
-%{__make} install \
+%{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
+
+%if %{with static_libs}
+mv $RPM_BUILD_ROOT%{_libdir}/libclamav{_static,}.a
+mv $RPM_BUILD_ROOT%{_libdir}/libfreshclam{_static,}.a
+%endif
 
 cat <<'EOF' >$RPM_BUILD_ROOT/etc/cron.d/%{name}
 5 * * * *	root	%{_sbindir}/clamav-cron-updatedb
@@ -461,13 +441,6 @@ fi
 %attr(755,root,root) %{_libdir}/libclamunrar.so
 %attr(755,root,root) %{_libdir}/libfreshclam.so
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so
-%{_libdir}/libclamav.la
-%if %{without system_libmspack}
-%{_libdir}/libclammspack.la
-%endif
-%{_libdir}/libclamunrar.la
-%{_libdir}/libfreshclam.la
-%{_libdir}/libclamunrar_iface.la
 %dir %{_includedir}/clamav
 %{_includedir}/clamav/clamav.h
 %{_includedir}/clamav/clamav-types.h
@@ -481,6 +454,4 @@ fi
 %if %{without system_libmspack}
 %{_libdir}/libclammspack.a
 %endif
-%{_libdir}/libclamunrar.a
 %{_libdir}/libfreshclam.a
-%{_libdir}/libclamunrar_iface.a

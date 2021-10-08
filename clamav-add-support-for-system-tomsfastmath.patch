@@ -13,51 +13,6 @@ Patch-Name: add-support-for-system-tomsfastmath.patch
  5 files changed, 28 insertions(+), 4 deletions(-)
  create mode 100644 m4/reorganization/libs/tomsfastmath.m4
 
-diff -urNp -x '*.orig' clamav-0.103.0.org/configure.ac clamav-0.103.0/configure.ac
---- clamav-0.103.0.org/configure.ac	2021-04-06 16:40:12.175486852 +0200
-+++ clamav-0.103.0/configure.ac	2021-04-06 16:40:12.575507635 +0200
-@@ -94,6 +94,7 @@ m4_include([m4/reorganization/libs/opens
- m4_include([m4/reorganization/libs/json.m4])
- m4_include([m4/reorganization/libs/pcre.m4])
- m4_include([m4/reorganization/libs/libmspack.m4])
-+m4_include([m4/reorganization/libs/tomsfastmath.m4])
- 
- if test "x$use_internal_mspack" = "xno"; then
-     mspack_msg="External, $LIBMSPACK_CFLAGS $LIBMSPACK_LIBS"
-@@ -362,6 +363,7 @@ fi
- CL_MSG_STATUS([yara        ],[$enable_yara],[$enable_yara])
- CL_MSG_STATUS([fts         ],[yes],[$lfs_fts_msg])
- 
-+CL_MSG_STATUS([tomsfastmath],[yes],[$tomsfastmath_msg])
- 
- # Yep, downgrading the compiler avoids the bug too:
- # 4.0.x, and 4.1.0 are the known buggy versions
-diff -urNp -x '*.orig' clamav-0.103.0.org/libclamav/Makefile.am clamav-0.103.0/libclamav/Makefile.am
---- clamav-0.103.0.org/libclamav/Makefile.am	2020-09-13 02:27:09.000000000 +0200
-+++ clamav-0.103.0/libclamav/Makefile.am	2021-04-06 16:40:12.575507635 +0200
-@@ -588,7 +588,10 @@ libclamav_la_SOURCES += yara_arena.c \
- 	yara_clam.h
- endif
- 
--libclamav_la_SOURCES += bignum.h\
-+libclamav_la_SOURCES += bignum.h
-+
-+if !SYSTEM_TOMSFASTMATH
-+libclamav_la_SOURCES += \
- 	bignum_fast.h\
- 	tomsfastmath/addsub/fp_add.c\
- 	tomsfastmath/addsub/fp_add_d.c\
-@@ -671,6 +674,10 @@ libclamav_la_SOURCES += bignum.h\
- 	tomsfastmath/sqr/fp_sqr_comba_generic.c\
- 	tomsfastmath/sqr/fp_sqr_comba_small_set.c\
- 	tomsfastmath/sqr/fp_sqrmod.c
-+else
-+libclamav_la_CFLAGS += $(TOMSFASTMATH_CFLAGS)
-+libclamav_la_LIBADD += $(TOMSFASTMATH_LIBS)
-+endif
- 
- .PHONY2: version.h.tmp
- version.c: version.h
 diff -urNp -x '*.orig' clamav-0.103.0.org/libclamav/bignum.h clamav-0.103.0/libclamav/bignum.h
 --- clamav-0.103.0.org/libclamav/bignum.h	2020-09-13 02:27:09.000000000 +0200
 +++ clamav-0.103.0/libclamav/bignum.h	2021-04-06 16:40:12.578841141 +0200
@@ -88,19 +43,153 @@ diff -urNp -x '*.orig' clamav-0.103.0.org/libclamav/xdp.c clamav-0.103.0/libclam
  #include "filetypes.h"
  
  static char *dump_xdp(cli_ctx *ctx, const char *start, size_t sz);
-diff -urNp -x '*.orig' clamav-0.103.0.org/m4/reorganization/libs/tomsfastmath.m4 clamav-0.103.0/m4/reorganization/libs/tomsfastmath.m4
---- clamav-0.103.0.org/m4/reorganization/libs/tomsfastmath.m4	1970-01-01 01:00:00.000000000 +0100
-+++ clamav-0.103.0/m4/reorganization/libs/tomsfastmath.m4	2021-04-06 16:40:12.578841141 +0200
-@@ -0,0 +1,12 @@
-+dnl Check for system tomsfastmath
-+PKG_CHECK_MODULES([TOMSFASTMATH], [tomsfastmath], [have_system_tomsfastmath=yes], [have_system_tomsfastmath=no])
-+
-+AM_CONDITIONAL([SYSTEM_TOMSFASTMATH], [test "x$have_system_tomsfastmath" = "xyes"])
-+
-+if test "x$have_system_tomsfastmath" = "xyes"; then
-+    AC_DEFINE([HAVE_SYSTEM_TOMSFASTMATH], [1], [link against system-wide tomsfastmath library])
-+    tomsfastmath_msg="External, $TOMSFASTMATH_CFLAGS $TOMSFASTMATH_LIBS"
-+else
-+    AC_DEFINE([HAVE_SYSTEM_TOMSFASTMATH], [0], [don't link against system-wide tomsfastmath library])
-+    tomsfastmath_msg="Internal"
-+fi
+
+--- clamav-0.104.0/libclamav/CMakeLists.txt~	2021-08-27 22:41:31.000000000 +0000
++++ clamav-0.104.0/libclamav/CMakeLists.txt	2021-10-08 14:11:34.629965363 +0000
+@@ -157,99 +157,6 @@ target_link_libraries( yara
+         PCRE2::pcre2
+         JSONC::jsonc )
+ 
+-add_library( tomsfastmath OBJECT )
+-target_sources( tomsfastmath
+-    PRIVATE
+-        tomsfastmath/addsub/fp_add.c
+-        tomsfastmath/addsub/fp_add_d.c
+-        tomsfastmath/addsub/fp_addmod.c
+-        tomsfastmath/addsub/fp_cmp.c
+-        tomsfastmath/addsub/fp_cmp_d.c
+-        tomsfastmath/addsub/fp_cmp_mag.c
+-        tomsfastmath/addsub/fp_sub.c
+-        tomsfastmath/addsub/fp_sub_d.c
+-        tomsfastmath/addsub/fp_submod.c
+-        tomsfastmath/addsub/s_fp_add.c
+-        tomsfastmath/addsub/s_fp_sub.c
+-        tomsfastmath/bin/fp_radix_size.c
+-        tomsfastmath/bin/fp_read_radix.c
+-        tomsfastmath/bin/fp_read_signed_bin.c
+-        tomsfastmath/bin/fp_read_unsigned_bin.c
+-        tomsfastmath/bin/fp_reverse.c
+-        tomsfastmath/bin/fp_s_rmap.c
+-        tomsfastmath/bin/fp_signed_bin_size.c
+-        tomsfastmath/bin/fp_to_signed_bin.c
+-        tomsfastmath/bin/fp_to_unsigned_bin.c
+-        tomsfastmath/bin/fp_toradix.c
+-        tomsfastmath/bin/fp_toradix_n.c
+-        tomsfastmath/bin/fp_unsigned_bin_size.c
+-        tomsfastmath/bit/fp_cnt_lsb.c
+-        tomsfastmath/bit/fp_count_bits.c
+-        tomsfastmath/bit/fp_div_2.c
+-        tomsfastmath/bit/fp_div_2d.c
+-        tomsfastmath/bit/fp_lshd.c
+-        tomsfastmath/bit/fp_mod_2d.c
+-        tomsfastmath/bit/fp_rshd.c
+-        tomsfastmath/divide/fp_div.c
+-        tomsfastmath/divide/fp_div_d.c
+-        tomsfastmath/divide/fp_mod.c
+-        tomsfastmath/divide/fp_mod_d.c
+-        tomsfastmath/exptmod/fp_2expt.c
+-        tomsfastmath/exptmod/fp_exptmod.c
+-        tomsfastmath/misc/fp_ident.c
+-        tomsfastmath/misc/fp_set.c
+-        tomsfastmath/mont/fp_montgomery_calc_normalization.c
+-        tomsfastmath/mont/fp_montgomery_reduce.c
+-        tomsfastmath/mont/fp_montgomery_setup.c
+-        tomsfastmath/mul/fp_mul.c
+-        tomsfastmath/mul/fp_mul_comba.c
+-        tomsfastmath/mul/fp_mul_2.c
+-        tomsfastmath/mul/fp_mul_2d.c
+-        tomsfastmath/mul/fp_mul_comba_12.c
+-        tomsfastmath/mul/fp_mul_comba_17.c
+-        tomsfastmath/mul/fp_mul_comba_20.c
+-        tomsfastmath/mul/fp_mul_comba_24.c
+-        tomsfastmath/mul/fp_mul_comba_28.c
+-        tomsfastmath/mul/fp_mul_comba_3.c
+-        tomsfastmath/mul/fp_mul_comba_32.c
+-        tomsfastmath/mul/fp_mul_comba_4.c
+-        tomsfastmath/mul/fp_mul_comba_48.c
+-        tomsfastmath/mul/fp_mul_comba_6.c
+-        tomsfastmath/mul/fp_mul_comba_64.c
+-        tomsfastmath/mul/fp_mul_comba_7.c
+-        tomsfastmath/mul/fp_mul_comba_8.c
+-        tomsfastmath/mul/fp_mul_comba_9.c
+-        tomsfastmath/mul/fp_mul_comba_small_set.c
+-        tomsfastmath/mul/fp_mul_d.c
+-        tomsfastmath/mul/fp_mulmod.c
+-        tomsfastmath/numtheory/fp_invmod.c
+-        tomsfastmath/sqr/fp_sqr.c
+-        tomsfastmath/sqr/fp_sqr_comba_12.c
+-        tomsfastmath/sqr/fp_sqr_comba_17.c
+-        tomsfastmath/sqr/fp_sqr_comba_20.c
+-        tomsfastmath/sqr/fp_sqr_comba_24.c
+-        tomsfastmath/sqr/fp_sqr_comba_28.c
+-        tomsfastmath/sqr/fp_sqr_comba_3.c
+-        tomsfastmath/sqr/fp_sqr_comba_32.c
+-        tomsfastmath/sqr/fp_sqr_comba_4.c
+-        tomsfastmath/sqr/fp_sqr_comba_48.c
+-        tomsfastmath/sqr/fp_sqr_comba_6.c
+-        tomsfastmath/sqr/fp_sqr_comba_64.c
+-        tomsfastmath/sqr/fp_sqr_comba_7.c
+-        tomsfastmath/sqr/fp_sqr_comba_8.c
+-        tomsfastmath/sqr/fp_sqr_comba_9.c
+-        tomsfastmath/sqr/fp_sqr_comba_generic.c
+-        tomsfastmath/sqr/fp_sqr_comba_small_set.c
+-        tomsfastmath/sqr/fp_sqrmod.c
+-    PUBLIC
+-        bignum.h
+-        bignum_fast.h )
+-target_include_directories( tomsfastmath
+-    PRIVATE ${CMAKE_BINARY_DIR}
+-    PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR} )
+-set_target_properties( tomsfastmath PROPERTIES
+-    COMPILE_FLAGS "${WARNCFLAGS}" )
+-
+ # Bytecode Runtime
+ add_library( bytecode_runtime OBJECT )
+ if(LLVM_FOUND)
+@@ -424,7 +424,7 @@ if(ENABLE_SHARED_LIB)
+             regex
+             lzma_sdk
+             yara
+-            tomsfastmath
++            tfm
+             bytecode_runtime
+             ${LIBMSPACK}
+             ClamAV::libunrar_iface_iface
+@@ -525,7 +525,7 @@ if(ENABLE_STATIC_LIB)
+             regex
+             lzma_sdk
+             yara
+-            tomsfastmath
++            tfm
+             bytecode_runtime
+             ${LIBMSPACK}
+             OpenSSL::SSL
+--- clamav-0.104.0/unit_tests/CMakeLists.txt~	2021-08-27 22:41:31.000000000 +0000
++++ clamav-0.104.0/unit_tests/CMakeLists.txt	2021-10-08 14:20:36.239965193 +0000
+@@ -52,7 +52,7 @@ if(ENABLE_APP)
+             regex
+             lzma_sdk
+             yara
+-            tomsfastmath
++            tfm
+             bytecode_runtime
+             JSONC::jsonc
+             ${LIBMSPACK}
+@@ -92,7 +92,7 @@ if(ENABLE_APP)
+             regex
+             lzma_sdk
+             yara
+-            tomsfastmath
++            tfm
+             bytecode_runtime
+             JSONC::jsonc
+             ${LIBMSPACK}
+@@ -144,7 +144,7 @@ target_link_libraries(check_clamav
+         regex
+         lzma_sdk
+         yara
+-        tomsfastmath
++        tfm
+         bytecode_runtime
+         JSONC::jsonc
+         ${LIBMSPACK}
