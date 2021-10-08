@@ -42,7 +42,8 @@ Patch0:		%{name}-pld_config.patch
 Patch4:		x32.patch
 Patch5:		%{name}-add-support-for-system-tomsfastmath.patch
 URL:		http://www.clamav.net/
-BuildRequires:	cmake
+BuildRequires:	bzip2-devel >= 1.0.5
+BuildRequires:	cmake >= 3.14
 BuildRequires:	check-devel
 BuildRequires:	curl-devel >= 7.40
 BuildRequires:	gmp-devel
@@ -59,7 +60,7 @@ BuildRequires:	openssl-devel >= 0.9.8
 BuildRequires:	pcre2-8-devel >= 10.30
 BuildRequires:	pkgconfig >= 1:0.16
 BuildRequires:	rpm >= 4.4.9-56
-BuildRequires:	rpmbuild(macros) >= 1.647
+BuildRequires:	rpmbuild(macros) >= 1.742
 BuildRequires:	systemd-devel
 BuildRequires:	tomsfastmath-devel >= 0.13.1-2
 BuildRequires:	zlib-devel >= 1.2.2
@@ -202,6 +203,17 @@ clamav static libraries.
 %description static -l pl.UTF-8
 Biblioteki statyczne clamav.
 
+%package doc
+Summary:	ClamAV documentation
+Summary(pl.UTF-8):	Dokumentacja do ClamAVa
+Group:		Documentation
+
+%description doc
+ClamAV documentation.
+
+%description doc -l pl.UTF-8
+Dokumentacja do ClamAVa.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -233,11 +245,14 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
+
 %{!?with_milter:rm -f $RPM_BUILD_ROOT%{_mandir}/man8/clamav-milter.8*}
+# packged as %doc
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/html
 
 %if %{with static_libs}
-mv $RPM_BUILD_ROOT%{_libdir}/libclamav{_static,}.a
-mv $RPM_BUILD_ROOT%{_libdir}/libfreshclam{_static,}.a
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/libclamav{_static,}.a
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/libfreshclam{_static,}.a
 %endif
 
 cat <<'EOF' >$RPM_BUILD_ROOT/etc/cron.d/%{name}
@@ -455,3 +470,7 @@ fi
 %{_libdir}/libclammspack.a
 %endif
 %{_libdir}/libfreshclam.a
+
+%files doc
+%defattr(644,root,root,755)
+%doc docs/html/*
