@@ -59,7 +59,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.8
 BuildRequires:	pcre2-8-devel >= 10.30
 BuildRequires:	pkgconfig >= 1:0.16
-BuildRequires:	rpm >= 4.4.9-56
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.742
 BuildRequires:	systemd-devel
 BuildRequires:	tomsfastmath-devel >= 0.13.1-2
@@ -207,6 +207,7 @@ Biblioteki statyczne clamav.
 Summary:	ClamAV documentation
 Summary(pl.UTF-8):	Dokumentacja do ClamAVa
 Group:		Documentation
+BuildArch:	noarch
 
 %description doc
 ClamAV documentation.
