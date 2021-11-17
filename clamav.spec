@@ -1,4 +1,5 @@
 # TODO:
+# - verify why system tomsfastmath lib fails to check integrity of database after update (as of 2021-11-17)
 # - Make freshclam package (script and daemon)
 # - restart amavis in triggers if group membership was modified?
 #
@@ -20,7 +21,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	0.104.1
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
@@ -220,7 +221,7 @@ Dokumentacja do ClamAVa.
 %patch0 -p1
 
 %patch4 -p1
-%patch5 -p1
+#%patch5 -p1
 
 %build
 install -d build
