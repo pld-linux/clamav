@@ -357,9 +357,7 @@ EOF
 touch /var/lock/subsys/clamd
 %service -q clamd restart
 
-%systemd_trigger clamd.service
-
-%systemd_service_enable cronjob-clamav.timer
+%systemd_trigger clamd.service cronjob-clamav.timer
 
 %post milter
 /sbin/chkconfig --add clamav-milter
