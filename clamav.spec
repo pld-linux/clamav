@@ -20,13 +20,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.104.2
-Release:	2
+Version:	0.105.0
+Release:	1
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	ad099675f2c09c07850e36496b06c552
+# Source0-md5:	f9994b5036da80f61d18d5941d49545d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -41,9 +41,9 @@ Source13:	cronjob-clamav.service.in
 Patch0:		%{name}-pld_config.patch
 
 Patch4:		x32.patch
-Patch5:		%{name}-add-support-for-system-tomsfastmath.patch
 URL:		http://www.clamav.net/
 BuildRequires:	bzip2-devel >= 1.0.5
+BuildRequires:	cargo
 BuildRequires:	cmake >= 3.14
 BuildRequires:	check-devel
 BuildRequires:	curl-devel >= 7.40
@@ -221,7 +221,6 @@ Dokumentacja do ClamAVa.
 %patch0 -p1
 
 %patch4 -p1
-#%patch5 -p1
 
 %build
 install -d build
@@ -233,6 +232,7 @@ cd build
 	-DENABLE_APP=ON \
 	-DENABLE_CLAMONACC=ON \
 	-DENABLE_FRESHCLAM_NO_CACHE=ON \
+	-DENABLE_EXTERNAL_TOMSFASTMATH=ON \
 	-DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/%{name} \
 	-DAPP_CONFIG_DIRECTORY=%{_sysconfdir} \
 	-DDATABASE_DIRECTORY="/var/lib/%{name}" \
