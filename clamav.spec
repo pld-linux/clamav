@@ -1,7 +1,10 @@
 # TODO:
-# - verify why system tomsfastmath lib fails to check integrity of database after update (as of 2021-11-17)
 # - Make freshclam package (script and daemon)
 # - restart amavis in triggers if group membership was modified?
+# NOTE:
+# ClamAV requires non-default build options for TomsFastMath to support bigger
+# floating point numbers. Without this change, database and Windows EXE/DLL
+# authenticode certificate validation may fail. Don't use system one.
 #
 # Conditional build:
 %bcond_without	milter			# milter interface subpackage
@@ -20,13 +23,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	0.105.1
+Version:        1.0.0
 Release:	1
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
 Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	fe4581fa6a0af8c1e8e782d88e80fa4d
+# Source0-md5:	f2a875c252bbfc2b29cafe4a23d2d5a3
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -63,7 +66,6 @@ BuildRequires:	pkgconfig >= 1:0.16
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.742
 BuildRequires:	systemd-devel
-BuildRequires:	tomsfastmath-devel >= 0.13.1-2
 BuildRequires:	zlib-devel >= 1.2.2
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -232,7 +234,6 @@ cd build
 	-DENABLE_APP=ON \
 	-DENABLE_CLAMONACC=ON \
 	-DENABLE_FRESHCLAM_NO_CACHE=ON \
-	-DENABLE_EXTERNAL_TOMSFASTMATH=ON \
 	-DRUST_COMPILER_TARGET=%{rust_target} \
 	-DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/%{name} \
 	-DAPP_CONFIG_DIRECTORY=%{_sysconfdir} \
@@ -436,15 +437,15 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libclamav.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamav.so.9
+%attr(755,root,root) %ghost %{_libdir}/libclamav.so.11
 %if %{without system_libmspack}
 %attr(755,root,root) %{_libdir}/libclammspack.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclammspack.so.0
 %endif
 %attr(755,root,root) %{_libdir}/libclamunrar.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.9
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar.so.11
 %attr(755,root,root) %{_libdir}/libclamunrar_iface.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.9
+%attr(755,root,root) %ghost %{_libdir}/libclamunrar_iface.so.11
 %attr(755,root,root) %{_libdir}/libfreshclam.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libfreshclam.so.2
 
