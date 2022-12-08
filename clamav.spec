@@ -23,7 +23,7 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:        1.0.0
+Version:	1.0.0
 Release:	1
 License:	GPL v2+
 Group:		Daemons
@@ -42,7 +42,6 @@ Source11:	clamd.service
 Source12:	cronjob-clamav.timer
 Source13:	cronjob-clamav.service.in
 Patch0:		%{name}-pld_config.patch
-
 Patch4:		x32.patch
 URL:		http://www.clamav.net/
 BuildRequires:	bzip2-devel >= 1.0.5
@@ -65,6 +64,7 @@ BuildRequires:	pcre2-8-devel >= 10.30
 BuildRequires:	pkgconfig >= 1:0.16
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.742
+BuildRequires:	rust >= 1.56
 BuildRequires:	systemd-devel
 BuildRequires:	zlib-devel >= 1.2.2
 Requires(post,preun):	/sbin/chkconfig
