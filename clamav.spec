@@ -254,6 +254,8 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig} \
 
 %if %{with static_libs}
 %{__mv} $RPM_BUILD_ROOT%{_libdir}/libclamav{_static,}.a
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/libclamunrar{_static,}.a
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/libclamunrar_iface{_static,}.a
 %{__mv} $RPM_BUILD_ROOT%{_libdir}/libfreshclam{_static,}.a
 %endif
 
@@ -391,6 +393,9 @@ fi
 %{systemdunitdir}/clamav-daemon.service
 %{systemdunitdir}/clamav-daemon.socket
 %{systemdunitdir}/clamav-freshclam.service
+# instead of cron?
+#%{systemdunitdir}/clamav-freshclam-once.service
+#%{systemdunitdir}/clamav-freshclam-once.timer
 %{systemdunitdir}/clamd.service
 %{systemdunitdir}/cronjob-clamav.service
 %{systemdunitdir}/cronjob-clamav.timer
@@ -466,9 +471,12 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libclamav.a
+%{_libdir}/libclamav_rust.a
 %if %{without system_libmspack}
 %{_libdir}/libclammspack.a
 %endif
+%{_libdir}/libclamunrar.a
+%{_libdir}/libclamunrar_iface.a
 %{_libdir}/libfreshclam.a
 
 %files doc
