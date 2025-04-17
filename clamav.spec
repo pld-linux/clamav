@@ -24,7 +24,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	1.4.2
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: http://www.clamav.net/download
@@ -41,6 +41,7 @@ Source10:	%{name}.tmpfiles
 Source11:	clamd.service
 Source12:	cronjob-clamav.timer
 Source13:	cronjob-clamav.service.in
+Source14:	clamav-milter.service
 Patch0:		%{name}-pld_config.patch
 URL:		http://www.clamav.net/
 BuildRequires:	bzip2-devel >= 1.0.5
@@ -219,7 +220,7 @@ Dokumentacja do ClamAVa.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 install -d build
@@ -282,6 +283,7 @@ cp -p %{SOURCE10} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 cp -p %{SOURCE11} $RPM_BUILD_ROOT%{systemdunitdir}
 cp -p %{SOURCE12} $RPM_BUILD_ROOT%{systemdunitdir}/cronjob-%{name}.timer
 sed -e's#@sbindir@#%{_sbindir}#' <  %{SOURCE13} > $RPM_BUILD_ROOT%{systemdunitdir}/cronjob-%{name}.service
+cp -p %{SOURCE14} $RPM_BUILD_ROOT%{systemdunitdir}
 
 # NOTE: clamd uses sane rights to it's clamd.pid file
 # So better keep it dir
@@ -363,12 +365,17 @@ touch /var/lock/subsys/clamd
 %post milter
 /sbin/chkconfig --add clamav-milter
 %service clamav-milter restart "Clam Antivirus daemon"
+%systemd_post clamav-milter.service
 
 %preun milter
 if [ "$1" = "0" ]; then
 	%service clamav-milter stop
 	/sbin/chkconfig --del clamav-milter
 fi
+%systemd_preun clamav-milter.service
+
+%postun milter
+%systemd_reload
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
@@ -431,6 +438,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/clamav-milter
 #%attr(755,root,root) %{_sysconfdir}/cron.daily/clamav-milter
 %attr(755,root,root) %{_sbindir}/clamav-milter
+%{systemdunitdir}/clamav-milter.service
 %{_mandir}/man5/clamav-milter.conf.5*
 %{_mandir}/man8/clamav-milter.8*
 %attr(700,clamav,clamav) /var/spool/clamav

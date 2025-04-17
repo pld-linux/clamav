@@ -1,0 +1,12 @@
+[Unit]
+Description='ClamAV Milter'
+Before=sendmail.service postfix.service
+After=clamd.service
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/sysconfig/clamav-milter
+ExecStart=/usr/sbin/clamav-milter $CLAMAV_FLAGS
+
+[Install]
+WantedBy=multi-user.target
