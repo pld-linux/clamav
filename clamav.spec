@@ -27,8 +27,8 @@ Version:	1.4.3
 Release:	2
 License:	GPL v2+
 Group:		Daemons
-#Source0Download: http://www.clamav.net/download
-Source0:	http://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
+#Source0Download: https://www.clamav.net/download
+Source0:	https://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
 # Source0-md5:	098ae7acb72ce3316c4e2c647f2aab66
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -43,7 +43,7 @@ Source12:	cronjob-clamav.timer
 Source13:	cronjob-clamav.service.in
 Source14:	clamav-milter.service
 Patch0:		%{name}-pld_config.patch
-URL:		http://www.clamav.net/
+URL:		https://www.clamav.net/
 BuildRequires:	bzip2-devel >= 1.0.5
 BuildRequires:	cargo
 BuildRequires:	cmake >= 3.14
