@@ -23,13 +23,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	1.5.2
+Version:	1.5.3
 Release:	1
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: https://www.clamav.net/download
 Source0:	https://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	8bdc1ac2bccb3f75ac3c1bbc711ada72
+# Source0-md5:	3ce0a474896b4aa230b59d378d945306
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -46,7 +46,7 @@ Patch0:		%{name}-pld_config.patch
 URL:		https://www.clamav.net/
 BuildRequires:	bzip2-devel >= 1.0.5
 BuildRequires:	cargo
-BuildRequires:	cmake >= 3.14
+BuildRequires:	cmake >= 3.17
 BuildRequires:	check-devel
 BuildRequires:	curl-devel >= 7.40
 BuildRequires:	gmp-devel
