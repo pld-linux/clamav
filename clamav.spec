@@ -24,7 +24,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	1.5.3
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: https://www.clamav.net/download
@@ -235,6 +235,7 @@ cd build
 	-DRUST_COMPILER_TARGET=%{rust_target} \
 	-DCMAKE_INSTALL_INCLUDEDIR=%{_includedir}/%{name} \
 	-DAPP_CONFIG_DIRECTORY=%{_sysconfdir} \
+	-DCVD_CERTS_DIRECTORY=%{_sysconfdir}/%{name}/certs \
 	-DDATABASE_DIRECTORY="/var/lib/%{name}" \
 	..
 %{__make}
@@ -446,6 +447,9 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
+%dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}/certs
+%config(noreplace) %{_sysconfdir}/%{name}/certs/clamav.crt
 %attr(755,root,root) %{_libdir}/libclamav.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libclamav.so.12
 %if %{without system_libmspack}
