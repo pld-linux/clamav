@@ -16,6 +16,7 @@
 %bcond_without	system_libmspack	# system libmspack library
 %bcond_with	system_llvm		# system LLVM (< 3.7)
 %bcond_without	static_libs		# static libraries
+%bcond_without	tests			# unit and feature tests
 
 %ifarch x32
 %undefine with_llvm
@@ -23,13 +24,13 @@
 Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
-Version:	1.5.4
+Version:	1.5.5
 Release:	1
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: https://www.clamav.net/download
 Source0:	https://www.clamav.net/downloads/production/%{name}-%{version}.tar.gz
-# Source0-md5:	1267f2386ed3c71d233d1e9cb53199f8
+# Source0-md5:	75e34ddf52e2dc18d53d7f50b77353d5
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-milter.init
@@ -47,15 +48,11 @@ URL:		https://www.clamav.net/
 BuildRequires:	bzip2-devel >= 1.0.5
 BuildRequires:	cargo
 BuildRequires:	cmake >= 3.17
-BuildRequires:	check-devel
 BuildRequires:	curl-devel >= 7.40
-BuildRequires:	gmp-devel
 BuildRequires:	json-c-devel
-BuildRequires:	libltdl-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 %{?with_system_libmspack:BuildRequires:	libmspack-devel}
 BuildRequires:	libstdc++-devel >= 5:3.4
-%{?with_milter:BuildRequires:	libwrap-devel}
 BuildRequires:	libxml2-devel >= 2
 %{?with_llvm:%{?with_system_llvm:BuildRequires:	llvm-devel < 3.7}}
 BuildRequires:	ncurses-devel
@@ -64,9 +61,15 @@ BuildRequires:	pcre2-8-devel >= 10.30
 BuildRequires:	pkgconfig >= 1:0.16
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.742
-BuildRequires:	rust >= 1.56
+# vendored zune-jpeg crate declares rust-version 1.87.0
+BuildRequires:	rust >= 1.87.0
 BuildRequires:	systemd-devel
 BuildRequires:	zlib-devel >= 1.2.2
+%if %{with tests}
+BuildRequires:	check-devel
+BuildRequires:	python3
+BuildRequires:	python3-pytest
+%endif
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -166,7 +169,6 @@ Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	postfix
 #Requires:	sendmail >= 8.11
-Requires:	tcp_wrappers
 
 %description milter
 ClamAV sendmail filter using MILTER interface.
@@ -181,7 +183,6 @@ Group:		Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel >= 1.0.5
 Requires:	curl-devel >= 7.40
-Requires:	gmp-devel
 Requires:	openssl-devel >= 0.9.8
 Requires:	pcre2-8-devel >= 10.30
 Requires:	zlib-devel >= 1.2.2
@@ -229,6 +230,8 @@ cd build
 	%{cmake_on_off system_libmspack ENABLE_EXTERNAL_MSPACK} \
 	%{cmake_on_off milter ENABLE_MILTER} \
 	%{cmake_on_off static_libs ENABLE_STATIC_LIB} \
+	%{cmake_on_off tests ENABLE_TESTS} \
+	-DCMAKE_DISABLE_FIND_PACKAGE_Valgrind=ON \
 	-DENABLE_APP=ON \
 	-DENABLE_CLAMONACC=ON \
 	-DENABLE_FRESHCLAM_NO_CACHE=ON \
@@ -239,6 +242,11 @@ cd build
 	-DDATABASE_DIRECTORY="/var/lib/%{name}" \
 	..
 %{__make}
+
+%if %{with tests}
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+%{__make} test ARGS=--output-on-failure
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
