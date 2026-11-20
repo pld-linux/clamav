@@ -25,7 +25,7 @@ Summary:	An anti-virus utility for Unix
 Summary(pl.UTF-8):	Narzędzie antywirusowe dla Uniksów
 Name:		clamav
 Version:	1.5.5
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Daemons
 #Source0Download: https://www.clamav.net/download
@@ -49,6 +49,8 @@ BuildRequires:	bzip2-devel >= 1.0.5
 BuildRequires:	cargo
 BuildRequires:	cmake >= 3.17
 BuildRequires:	curl-devel >= 7.40
+# _TIME_BITS=64
+BuildRequires:	glibc-devel >= 6:2.34
 BuildRequires:	json-c-devel
 %{?with_milter:BuildRequires:	libmilter-devel}
 %{?with_system_libmspack:BuildRequires:	libmspack-devel}
@@ -224,6 +226,10 @@ Dokumentacja do ClamAVa.
 %patch -P 0 -p1
 
 %build
+# on 32-bit arches: libclamav/libmspack.c does not include clamav-config.h, so its
+# seek/tell callbacks use 32-bit off_t against the 64-bit off_t of system libmspack;
+# asn1.c mktime() of certificate dates past 2038 fails with 32-bit time_t
+export CPPFLAGS="%{rpmcppflags} -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64"
 install -d build
 cd build
 %{cmake} \
